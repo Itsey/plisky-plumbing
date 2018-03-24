@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>edd6f14f-e7bb-4ab7-b992-39f0b64bc499</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Plisky.Library.NativeWin</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)NativeWin\HotkeyStore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NativeWin\HotkeySupport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NativeWin\MouseActivity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NativeWin\NativeMethods.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NativeWin\NativeMethods_Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NativeWin\NativeMethods_SystemHook.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NativeWin\NativeWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NativeWin\Win32Graphics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OSSupport\AsyncProcess.cs" />
+  </ItemGroup>
+</Project>

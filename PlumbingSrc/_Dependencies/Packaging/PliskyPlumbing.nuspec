@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Plisky.Plumbing</id>
+    <version>1.0.0.0</version>
+    <title>Plisky Infrastructure Plumbing Library</title>
+    <authors>Jim</authors>
+    <owners>Jim</owners>
+    <licenseUrl>https://opensource.org/licenses/MS-PL</licenseUrl>
+    <projectUrl>http://www.plisky.net/main/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Plisky Plumbing Functions including Hub, ConfigHub, CommandLineSupport.</description>
+    <releaseNotes>Initial release, onto Nuget.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>plisky plumbing hub messaging command line commandline</tags>
+  </metadata>
+  <files>
+    <file src="..\..\FrameworkVersions\Plisky.Plumbing.452\Bin\$configuration$\Plisky.Plumbing.Dll" target="lib\net452\"/>
+    <file src="..\..\FrameworkVersions\Plisky.Plumbing.452\Bin\$configuration$\Plisky.Plumbing.Pdb" target="lib\net452\"/>
+
+    <file src="..\..\FrameworkVersions\Plisky.Plumbing.46\Bin\$configuration$\Plisky.Plumbing.Dll" target="lib\net46\"/>
+    <file src="..\..\FrameworkVersions\Plisky.Plumbing.46\Bin\$configuration$\Plisky.Plumbing.Pdb" target="lib\net46\"/>
+
+    
+    <file src="..\..\FrameworkVersions\Plisky.Plumbing.47\Bin\$configuration$\Plisky.Plumbing.Dll" target="lib\net47\"/>
+    <file src="..\..\FrameworkVersions\Plisky.Plumbing.47\Bin\$configuration$\Plisky.Plumbing.Pdb" target="lib\net47\"/>
+
+    <!-- Net Standard 2.0-->
+    <file src="..\..\FrameworkVersions\Plisky.Plumbing.Standard\Bin\$configuration$\netstandard2.0\Plisky.Plumbing.Dll" target="lib\netstandard2.0\"/>
+    <file src="..\..\FrameworkVersions\Plisky.Plumbing.Standard\Bin\$configuration$\netstandard2.0\Plisky.Plumbing.Pdb" target="lib\netstandard2.0\"/>
+
+  </files>
+</package>
+
