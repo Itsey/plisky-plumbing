@@ -10,7 +10,7 @@ nuget pack PliskyPlumbing.nuspec  -properties configuration=Debug
 ::goto eof
 
 ::nuget push Plisky.Listeners.2.0.7.nupkg -Source https://www.nuget.org/api/v2/package
-nuget push Plisky.Plumbing.1.0.0.nupkg -apiKey oy2guijbuix4bqf6i6mayp3vipctybpunopwgq3icvtlqy -Source https://www.nuget.org/api/v2/package
+nuget push Plisky.Plumbing.1.1.0.nupkg -apiKey oy2guijbuix4bqf6i6mayp3vipctybpunopwgq3icvtlqy -Source https://www.nuget.org/api/v2/package
 
 goto eof
 

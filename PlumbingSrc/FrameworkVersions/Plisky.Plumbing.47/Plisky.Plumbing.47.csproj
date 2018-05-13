@@ -29,6 +29,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>plisky_keyfile.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Plisky.Diagnostics, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>C:\Users\Jim\AppData\Roaming\NuGet\packages\Plisky.Diagnostics.2.0.4\lib\net47\Plisky.Diagnostics.dll</HintPath>
@@ -48,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="plisky_keyfile.snk" />
   </ItemGroup>
   <Import Project="..\..\PlumbingShared\Plumbing.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
