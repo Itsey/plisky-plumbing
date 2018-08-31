@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.1.1.0</version>
+    <version>1.2.0.0</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -14,7 +14,7 @@
     <copyright>Copyright 2017</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>
     <dependencies>
-      <dependency id="Plisky.Diagnostics" version="2.1.0"/>
+      <dependency id="Plisky.Diagnostics" version="2.2.0"/>
     </dependencies>
   </metadata>
   <files>
@@ -28,6 +28,10 @@
     <file src="..\..\FrameworkVersions\Plisky.Plumbing.47\Bin\$configuration$\Plisky.Plumbing.Dll" target="lib\net47\"/>
     <file src="..\..\FrameworkVersions\Plisky.Plumbing.47\Bin\$configuration$\Plisky.Plumbing.Pdb" target="lib\net47\"/>
 
+    <!-- Latest -->
+    <file src="..\..\Plumbing\Bin\$configuration$\Plisky.Plumbing.Dll" target="lib\net471\"/>
+    <file src="..\..\Plumbing\Bin\$configuration$\Plisky.Plumbing.Pdb" target="lib\net471\"/>
+    
     <!-- Net Standard 2.0-->
     <file src="..\..\FrameworkVersions\Plisky.Plumbing.Standard\Bin\$configuration$\netstandard2.0\Plisky.Plumbing.Dll" target="lib\netstandard2.0\"/>
     <file src="..\..\FrameworkVersions\Plisky.Plumbing.Standard\Bin\$configuration$\netstandard2.0\Plisky.Plumbing.Pdb" target="lib\netstandard2.0\"/>

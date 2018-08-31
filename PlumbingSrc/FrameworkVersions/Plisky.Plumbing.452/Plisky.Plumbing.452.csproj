@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Plisky.Diagnostics, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
-      <HintPath>C:\Users\Jim\AppData\Roaming\NuGet\packages\Plisky.Diagnostics.2.1.0\lib\net452\Plisky.Diagnostics.dll</HintPath>
+      <HintPath>C:\Users\Jim\AppData\Roaming\NuGet\packages\Plisky.Diagnostics.2.2.0\lib\net452\Plisky.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

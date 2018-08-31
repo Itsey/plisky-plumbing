@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Plisky.Library")]
-[assembly: AssemblyDescription("Plisky Librarry Net56 Edition")]
+[assembly: AssemblyDescription("Plisky Library Net46 Edition")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Plisky.net")]
 [assembly: AssemblyProduct("Plisky.Library")]

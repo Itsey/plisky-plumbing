@@ -23,8 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.452", "Fram
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing.Standard", "FrameworkVersions\Plisky.Plumbing.Standard\Plisky.Plumbing.Standard.csproj", "{73287A0E-5084-4E71-A7F0-676544B068F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.47", "FrameworkVersions\Plisky.Plumbing.47\Plisky.Plumbing.47.csproj", "{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PlumbingShared\Plumbing.Shared.projitems*{76c8f9f5-05f2-4251-be0c-50abc65f80f9}*SharedItemsImports = 4
 		PlumbingShared\Plumbing.Shared.projitems*{aab5d441-24a1-4b45-ae82-a041fee3475a}*SharedItemsImports = 4
 		PlumbingShared\Plumbing.Shared.projitems*{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}*SharedItemsImports = 4
 		PlumbingShared\Plumbing.Shared.projitems*{d37a44a0-db6e-4945-b904-7aa00c2d8e34}*SharedItemsImports = 4
@@ -77,6 +80,12 @@ Global
 		{73287A0E-5084-4E71-A7F0-676544B068F6}.Develop|Any CPU.Build.0 = Debug|Any CPU
 		{73287A0E-5084-4E71-A7F0-676544B068F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73287A0E-5084-4E71-A7F0-676544B068F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Develop|Any CPU.Build.0 = Debug|Any CPU
+		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +94,7 @@ Global
 		{D37A44A0-DB6E-4945-B904-7AA00C2D8E34} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 		{AAB5D441-24A1-4B45-AE82-A041FEE3475A} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 		{73287A0E-5084-4E71-A7F0-676544B068F6} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
+		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FDF37E7-BBEF-4A79-8975-0DDA5195F4BC}

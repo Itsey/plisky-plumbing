@@ -8,6 +8,28 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
   <PropertyGroup />
+  <ItemGroup>
+    <Compile Include="CommandLineParameters\CmdLineArgs_Attributes.cs" />
+    <Compile Include="CommandLineParameters\CommandLineArgumentSupport.cs" />
+    <Compile Include="CommandLineParameters\FieldToArgumentMapping.cs" />
+    <Compile Include="Diagnostics.cs" />
+    <Compile Include="Messaging\ConfigHub.cs" />
+    <Compile Include="Messaging\ConfigHubMissingConfigException.cs" />
+    <Compile Include="Messaging\Hub.cs" />
+    <Compile Include="Messaging\HubMessageBase.cs" />
+    <Compile Include="Messaging\IDecryptStuff.cs" />
+    <Compile Include="Messaging\IPHub.cs" />
+    <Compile Include="Messaging\MessageReaderSimple.cs" />
+    <Compile Include="Messaging\SimpleCryptoConfigProvider.cs" />
+    <Compile Include="Messaging\StrongMessageReader.cs" />
+    <Compile Include="Messaging\TimedHub.cs" />
+    <Compile Include="Messaging\TimePeriodTrigger.cs" />
+    <Compile Include="Messaging\WeakMessageReader.cs" />
+    <Compile Include="Security\CryptoHelper.cs" />
+    <Compile Include="Security\PasswordSalt.cs" />
+    <Compile Include="Security\SaltedPassword.cs" />
+    <Compile Include="UnitTestHelper.cs" />
+  </ItemGroup>
   <Import Project="PliskyLibShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>

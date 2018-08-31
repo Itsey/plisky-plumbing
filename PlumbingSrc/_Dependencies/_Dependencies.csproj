@@ -90,7 +90,6 @@
     <CodeAnalysisDictionary Include="Dictionary.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packaging\CreatePackLocal.cmd" />
     <None Include="Packaging\PliskyPlumbing.nuspec">
       <SubType>Designer</SubType>
     </None>
