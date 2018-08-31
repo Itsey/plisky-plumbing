@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Plumbing Functions including Hub, ConfigHub, CommandLineSupport.</description>
     <releaseNotes>Initial release, onto Nuget.</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright 2018</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>
     <dependencies>
       <dependency id="Plisky.Diagnostics" version="2.2.0"/>
