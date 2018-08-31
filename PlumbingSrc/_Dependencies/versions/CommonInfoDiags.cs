@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -6,5 +6,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Plisky Diagnostics library, including Bilge.")]
 [assembly: AssemblyProduct("Plisky.Diagnostics")]
 [assembly: CLSCompliant(true)]
-
+*/
 

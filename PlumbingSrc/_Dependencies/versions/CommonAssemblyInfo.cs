@@ -2,14 +2,19 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+[assembly: AssemblyCompany("Plisky.net")]
+[assembly: AssemblyProduct("Plisky.Library")]
+[assembly: AssemblyTitle("Plisky.Library")]
 
-[assembly: AssemblyVersion("1.0")]
-[assembly: AssemblyInformationalVersion("1.0-Unicorn.21")]
 
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyCulture("")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyInformationalVersion("1.3-Unicorn.21")]
 
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+[assembly: AssemblyVersion("1.4")]
+[assembly: AssemblyFileVersion("1.4.0.0")]
+
 
 [assembly: ComVisible(false)]
