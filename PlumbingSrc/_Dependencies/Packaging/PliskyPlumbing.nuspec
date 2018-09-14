@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.4.0.0</version>
+    <version>1.4.1.0</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -10,7 +10,7 @@
     <projectUrl>http://www.plisky.net/main/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Plumbing Functions including Hub, ConfigHub, CommandLineSupport.</description>
-    <releaseNotes>1.4 Corrects versioning fault in different targettted frameworks, all previous versions deprecated.</releaseNotes>
+    <releaseNotes>1.4 Corrects versioning fault in different targettted frameworks, all previous versions deprecated. 1.4.1 Corrects Signing.</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>
     <dependencies>
