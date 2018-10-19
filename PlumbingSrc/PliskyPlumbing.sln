@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plumbing", "Plumbing\Plumbi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plumbing.Tests", "Plumbing.Tests\Plumbing.Tests.csproj", "{79784982-59C1-46A4-9BB2-BFD83FA8FE6E}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Plumbing.Shared", "PlumbingShared\Plumbing.Shared.shproj", "{DAE6E04C-ABE4-427E-962E-934331DC2808}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.46", "FrameworkVersions\Plisky.Plumbing.46\Plisky.Plumbing.46.csproj", "{D37A44A0-DB6E-4945-B904-7AA00C2D8E34}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.452", "FrameworkVersions\Plisky.Plumbing.452\Plisky.Plumbing.452.csproj", "{AAB5D441-24A1-4B45-AE82-A041FEE3475A}"
@@ -25,12 +23,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing.Standard", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.47", "FrameworkVersions\Plisky.Plumbing.47\Plisky.Plumbing.47.csproj", "{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Plumbing.Shared", "Plumbing.Shared\Plumbing.Shared.shproj", "{A94681E7-2D80-4C40-9D6C-0DB22E5823EB}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		PlumbingShared\Plumbing.Shared.projitems*{76c8f9f5-05f2-4251-be0c-50abc65f80f9}*SharedItemsImports = 4
-		PlumbingShared\Plumbing.Shared.projitems*{aab5d441-24a1-4b45-ae82-a041fee3475a}*SharedItemsImports = 4
-		PlumbingShared\Plumbing.Shared.projitems*{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}*SharedItemsImports = 4
-		PlumbingShared\Plumbing.Shared.projitems*{d37a44a0-db6e-4945-b904-7aa00c2d8e34}*SharedItemsImports = 4
+		Plumbing.Shared\Plumbing.Shared.projitems*{a94681e7-2d80-4c40-9d6c-0db22e5823eb}*SharedItemsImports = 13
+		Plumbing.Shared\Plumbing.Shared.projitems*{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

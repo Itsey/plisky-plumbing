@@ -1,5 +1,6 @@
 ﻿namespace Plisky.Test {
     using Plisky.Diagnostics;
+    using Plisky.Plumbing;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -13,7 +14,8 @@
     public sealed class UnitTestHelper {
         private Bilge b = new Bilge("UTH");
         private Random rand;
-        
+        private HttpHelper hh;
+
         /// <summary>
         /// Provides access to a Random class stored within the unit test helper.  No benefit to using it over a normal one
         /// just saves having to create them or store them.

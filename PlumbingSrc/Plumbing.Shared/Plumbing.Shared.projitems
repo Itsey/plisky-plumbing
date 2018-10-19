@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a94681e7-2d80-4c40-9d6c-0db22e5823eb</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Plumbing.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\CmdLineArgs_Attributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\CommandLineArgumentSupport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\FieldToArgumentMapping.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Diagnostics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpHelper\HttpHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHub.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHubMissingConfigException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Hub.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\HubMessageBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IDecryptStuff.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IPHub.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageReaderSimple.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\SimpleCryptoConfigProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\StrongMessageReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\TimedHub.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\TimePeriodTrigger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\WeakMessageReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\CryptoHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\PasswordSalt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\SaltedPassword.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UnitTestHelper.cs" />
+  </ItemGroup>
+</Project>

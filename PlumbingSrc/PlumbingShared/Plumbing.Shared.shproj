@@ -13,6 +13,7 @@
     <Compile Include="CommandLineParameters\CommandLineArgumentSupport.cs" />
     <Compile Include="CommandLineParameters\FieldToArgumentMapping.cs" />
     <Compile Include="Diagnostics.cs" />
+    <Compile Include="HttpHelper.cs" />
     <Compile Include="Messaging\ConfigHub.cs" />
     <Compile Include="Messaging\ConfigHubMissingConfigException.cs" />
     <Compile Include="Messaging\Hub.cs" />
@@ -29,6 +30,9 @@
     <Compile Include="Security\PasswordSalt.cs" />
     <Compile Include="Security\SaltedPassword.cs" />
     <Compile Include="UnitTestHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HttpHelper\" />
   </ItemGroup>
   <Import Project="PliskyLibShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />

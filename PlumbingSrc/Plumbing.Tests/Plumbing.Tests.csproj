@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.core.2.4.0\build\xunit.core.props" Condition="Exists('C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.core.2.4.0\build\xunit.core.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -8,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Plisky.PliskyLibTests</RootNamespace>
     <AssemblyName>PliskyLib.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TestProjectType>UnitTest</TestProjectType>
@@ -55,6 +57,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="HttpHelperTests.cs" />
     <Compile Include="CommandLineTests\cmdline_basictests.cs" />
     <Compile Include="CommandLineTests\cmdline_sampleclasses.cs" />
     <Compile Include="CommandLineTests\cmdline_tbtoolsample.cs" />
@@ -75,17 +78,44 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IOTests\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Plisky.Library\Plisky.Library.csproj">
-      <Project>{ddae851b-4180-47b8-8724-9a8b58e6c965}</Project>
-      <Name>Plisky.Library</Name>
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.abstractions.2.0.2\lib\net35\xunit.abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.assert, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.assert.2.4.0\lib\netstandard2.0\xunit.assert.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.extensibility.core.2.4.0\lib\net452\xunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.extensibility.execution.2.4.0\lib\net452\xunit.execution.desktop.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Plumbing\Plumbing.csproj">
+      <Project>{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}</Project>
+      <Name>Plumbing</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.core.2.4.0\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', 'C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.core.2.4.0\build\xunit.core.props'))" />
+    <Error Condition="!Exists('C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.core.2.4.0\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.core.2.4.0\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', 'C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props'))" />
+  </Target>
+  <Import Project="C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.core.2.4.0\build\xunit.core.targets" Condition="Exists('C:\Users\Jim\AppData\Roaming\NuGet\packages\xunit.core.2.4.0\build\xunit.core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
