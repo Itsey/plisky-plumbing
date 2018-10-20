@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Plisky.Plumbing</AssemblyName>
     <RootNamespace>Plisky.Plumbing</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>D:\Fsync\plisky_keyfile.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>c:\files\\keyfiles\plisky_keyfile.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
@@ -13,7 +13,7 @@
   <Import Project="..\..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />
 
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\..\Fsync\plisky_keyfile.snk" Link="plisky_keyfile.snk" />
+    <None Include="c:\files\keyfiles\plisky_keyfile.snk" Link="plisky_keyfile.snk" />
   </ItemGroup>
 
   <ItemGroup>
