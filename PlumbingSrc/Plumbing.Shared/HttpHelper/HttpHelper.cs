@@ -5,7 +5,7 @@
 
     public class HttpHelper {
         public string BaseUri { get; set; }
-        
+        public int RetryCount { get; set; }
 
         public HttpHelper(string val) {
             if (val==null) { throw new ArgumentNullException(nameof(val)); }

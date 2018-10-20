@@ -1,5 +1,6 @@
 ﻿namespace Plisky.Test {
     using Plisky.Plumbing;
+    using Plisky.Test.Mocks;
     using System;
     using System.Diagnostics;
     using System.Text;
@@ -31,14 +32,28 @@
             });
         }
 
+        [Fact]
+        [Trait("xunit", "regression")]
+        public void Exploratory_CreateHelper() {
+            var hh = new MockHttpHelper();
+            hh.SetResponse(404);
+            //Assert.Throws<HttpException>(() => {
+            //    hh.ActualCall();
+            //});
+        }
+
+
 
         [Fact][Trait("xunit","regression")]
         public void Exploratory_CreateHelper() {
-            HttpHelper hh = new HttpHelper();
-            
-            
- 
+            var hh = new MockHttpHelper();
+            HttpHelper sut = hh;
 
+            hh.SetResponse(404);
+            sut.RetryCount = 5;
+
+            Assert.Equal(0, hh.CallsMade);
+            Assert.Equal(5, hh.CallsMade);
         }
     }
 

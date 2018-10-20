@@ -67,6 +67,7 @@
     <Compile Include="HotKeySupportTests.cs" />
     <Compile Include="MessagingTests\ConfigHubTests.cs" />
     <Compile Include="MessagingTests\HubTests.cs" />
+    <Compile Include="Mocks\MockHttpHelper.cs" />
     <Compile Include="Mocks\MockSimpleCrypto.cs" />
     <Compile Include="Mocks\MockTimedHub.cs" />
     <Compile Include="MessagingTests\TestMemLeak.cs" />
