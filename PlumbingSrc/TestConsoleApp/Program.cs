@@ -66,18 +66,20 @@ namespace Plisky.Test {
             var bd = File.ReadAllText(Path.Combine(dir, "cobol_bod.txt"));
             var tl = File.ReadAllText(Path.Combine(dir, "cobol_tail.txt"));
 
-            JObject jo = JObject.Parse(wcr.ResponseText);
-            jo["model"]["cobol_template_head"] = hd;
+            string s = File.ReadAllText(@"d:\temp\adam.json");
+            JObject jo = JObject.Parse(s);
+            /*jo["model"]["cobol_template_head"] = hd;
             jo["model"]["cobol_template_tail"] = tl;
-            jo["model"]["cobol_template"] = bd;
+            jo["model"]["cobol_template"] = bd;*/
             // jo["model"]["allowedLanguages"] = "csharp,cobol";
 
-            hh.BaseUri = "https://www.hackerrank.com/x/api/v3/";
+            hh.BaseUri = "https://www.hackerrank.com/x/api/v1/";
 
-            hh.Execute("",jo.ToString(), HttpMethod.Post);
+            var f = await hh.Execute("",jo.ToString(), HttpMethod.Post);
 
+            Console.WriteLine(f.Status);
             File.WriteAllText(@"D:\Temp\_DelWorking\QuestionContent\quest2.json", jo.ToString());
-            Console.WriteLine(wcr.ResponseText);
+            //Console.WriteLine(wcr.ResponseText);
             Console.ReadLine();
             return 0;
         }
