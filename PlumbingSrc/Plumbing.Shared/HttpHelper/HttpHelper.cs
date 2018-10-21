@@ -2,6 +2,7 @@
     using Plisky.Diagnostics;
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Diagnostics;
     using System.IO;
     using System.Net;
@@ -11,7 +12,7 @@
 
     public class HttpHelper {
         protected Bilge b;
-        protected List<Tuple<string, string>> headers = new List<System.Tuple<string, string>>();
+        protected NameValueCollection headers = new NameValueCollection();
         public string BaseUri { get; set; }
         public string Stem { get; set; }
 
@@ -30,15 +31,36 @@
             var request = (HttpWebRequest)WebRequest.Create(wcr.FullUri);
             request.Method = wcr.Verb.Method;
 
+            request.Headers.Add(wcr.AllHeaders);
+
             try {
                 b.Verbose.Log(wcr.DiagnosticSummary());
+
+
+                if (!string.IsNullOrEmpty(wcr.Body)) {
+                    var encoding = new UTF8Encoding();
+                    var byteArray = encoding.GetBytes(wcr.Body);
+
+                    request.ContentLength = byteArray.Length;
+                    request.ContentType = @"application/json";
+
+                    using (Stream dataStream = request.GetRequestStream()) {
+                        dataStream.Write(byteArray, 0, byteArray.Length);
+                    }
+                } else {
+                    request.ContentLength = 0;
+                }
+
+
+
                 var req = request.GetResponseAsync();
+                Stream responseStream = null;
                 try {
-
-                    var response = await req.ConfigureAwait(false);
-
-                    var responseStream = response.GetResponseStream();
                     try {
+                        var response = await req.ConfigureAwait(false);
+
+                        responseStream = response.GetResponseStream();
+
 
                         using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8)) {
                             responseStream = null;
@@ -83,16 +105,18 @@
         }
 
 
-        public async Task<WebCallResponse> Execute(string param, HttpMethod verboverride = null) {
+        public async Task<WebCallResponse> Execute(string qString, string exBody=null, HttpMethod exVerb = null) {
             int retries = 0;
 
             var wcr = new WebCallRequest {
-                FullUri = GetUri(BaseUri, Stem, param),
-                Verb = verboverride ?? Verb
+                FullUri = GetUri(BaseUri, Stem, qString),
+                Verb = exVerb ?? Verb,
+                Body = exBody,
+                AllHeaders = new NameValueCollection(headers)
             };
 
             var f = await ActualCall(wcr);
-            while ((f.Status != System.Net.HttpStatusCode.OK) && (f.Status != System.Net.HttpStatusCode.NotFound)) {
+            while ((f.Status != HttpStatusCode.OK) && (f.Status != HttpStatusCode.NotFound)) {
                 retries++;
                 if (retries >= RetryCount) {
                     break;
@@ -133,49 +157,24 @@
 
         public void AddBearerAuthHeader(string secret) {
 
-            headers.Add(new Tuple<string, string>(AUTH_HEADER_NAME, $"{AUTH_BEARER_VALUE} {secret}"));
+             
+            headers.Add(AUTH_HEADER_NAME, $"{AUTH_BEARER_VALUE} {secret}");
         }
 
         public void AddBasicAuthHeader(string secret) {
             secret = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(secret));
-            headers.Add(new Tuple<string, string>(AUTH_HEADER_NAME, $"{AUTH_BASIC_VALUE} {secret}"));
+            headers.Add(AUTH_HEADER_NAME, $"{AUTH_BASIC_VALUE} {secret}");
+        }
+
+        public void AddHeader(string v1, string v2) {
+            headers.Add(v1, v2);
         }
 
 
         /*
          
 
-        var uri = @"https://www.hackerrank.com/x/api/v1/";
-var qstem = "questions/";
-string method = "GET";
-string secret = "9674c8fdc7a43b8ef9662879c20063d89a9fc507484e23afc0ac90359c027e8e";
-string body = null;
-string qparam = null;
-
-//
-
-int whatToDo = 3;
-
-if (whatToDo == 1) {
-    // add question
-    method = "GET";
-    body = null;
-    qparam = "232646";
-} else if (whatToDo == 2) {
-    method = "POST";
-    body = null;
-    qparam = "232646";
-    //string strversionofq = File.ReadAllText(@"C:\temp\q.json");
-   //var f = JObject.Parse(strversionofq);
-
-} else if (whatToDo== 3) {
-    method="GET";
-    qstem = "tests/291241/questions/232646/testcases/";
-    qparam = "0";
-    body = "";
-}
-
-
+   
 
 
 

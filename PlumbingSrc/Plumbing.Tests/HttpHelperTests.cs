@@ -77,7 +77,8 @@
 
 
         [Theory(DisplayName = nameof(GetUri_ReturnsUri))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         [InlineData("https://test","test","test", "https://test/test/test")]
         [InlineData("https://www.google.co.uk/", "monkey", "fish", "https://www.google.co.uk/monkey/fish")]
         [InlineData("http://1", "/2", "3?4&5&6", "http://1/2/3?4&5&6")]
@@ -94,7 +95,8 @@
 
 
         [Fact(DisplayName = nameof(GetUri_BaseCanNotBeNull))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void GetUri_BaseCanNotBeNull() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -110,30 +112,33 @@
 
 
         [Fact(DisplayName = nameof(Verb_ExecuteSet_Arrives))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void Verb_ExecuteSet_Arrives() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
 
-            _ = sut.Execute("p", HttpMethod.Get);
+            _ = sut.Execute("p", exVerb:HttpMethod.Delete);
 
-            Assert.Equal(hh.LastUsedVerb, "GET");
+            Assert.Equal("DELETE",hh.LastUsedVerb);
         }
 
 
         [Fact(DisplayName = nameof(Verb_DefaultIs_Get))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void Verb_DefaultIs_Get() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
             _ = sut.Execute("p");
 
-            Assert.Equal(hh.LastUsedVerb, "GET");
+            Assert.Equal("GET", hh.LastUsedVerb);
         }
 
 
         [Fact(DisplayName = nameof(Verb_PropSet_Persists))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void Verb_PropSet_Persists() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -146,27 +151,29 @@
 
 
         [Fact(DisplayName = nameof(CustomVerb_Works))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void CustomVerb_Works() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
 
-            _ = sut.Execute("p", new HttpMethod("customMethodThatDoesNotExist"));
+            _ = sut.Execute("p", exVerb: new HttpMethod("customMethodThatDoesNotExist"));
             Assert.Equal("customMethodThatDoesNotExist", hh.LastUsedVerb);
         }
 
 
 
         [Fact(DisplayName = nameof(Verb_ArivesUpperCase))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void Verb_ArivesUpperCase() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
             
-            _ = sut.Execute("p", HttpMethod.Post);
+            _ = sut.Execute("p", exVerb: HttpMethod.Post);
             Assert.Equal("POST", hh.LastUsedVerb );
 
-            _ = sut.Execute("p", HttpMethod.Get);
+            _ = sut.Execute("p", exVerb: HttpMethod.Get);
             Assert.Equal("GET", hh.LastUsedVerb);
 
             sut.Verb = HttpMethod.Delete;
@@ -176,7 +183,8 @@
 
 
         [Fact(DisplayName = nameof(Auth_Basic_AddsB64Creds))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void Auth_Basic_AddsB64Creds() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -184,12 +192,13 @@
 
             var s = hh.GetHeaderValue("Authorization");
 
-            Assert.True(s.Contains("Basic"));
+            Assert.Contains("Basic", s);
             Assert.True(!s.Contains("secret"));  // cant contain it in plain text.
         }
 
         [Fact(DisplayName = nameof(Auth_Bearer_AddsCreds))]
-        [Trait("age", "fresh")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void Auth_Bearer_AddsCreds() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -201,9 +210,36 @@
             Assert.True(s.Contains("secret"));  // cant contain it in plain text.
         }
 
+
+        [Fact(DisplayName = nameof(Header_IsPresent))]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
+        public void Header_IsPresent() {
+            var hh = new MockHttpHelper("dummyuri");
+            HttpHelper sut = hh;
+            sut.AddHeader("name", "value");
+
+            var s = hh.GetHeaderValue("name");
+            Assert.Equal("value", s);
+        }
+
+
+        [Fact(DisplayName = nameof(Body_IsPresent))]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
+        public void Body_IsPresent() {
+            var hh = new MockHttpHelper("dummyuri");
+            HttpHelper sut = hh;
+            sut.Execute("qparam", "body");
+
+            var s = hh.GetBodyValue();
+            Assert.Equal("body", s);
+        }
+
+
         [Fact(DisplayName = nameof(MockHelper_StartsZeroCallsMade))]
-        [Trait("age", "fresh")]
-        [Trait("type", "exploratory")]
+        [Trait("age", "current")]
+        [Trait("type", "regression")]
         public void MockHelper_StartsZeroCallsMade() {
             var hh = new MockHttpHelper("dummy");
             Assert.Equal(0, hh.CallsMade);

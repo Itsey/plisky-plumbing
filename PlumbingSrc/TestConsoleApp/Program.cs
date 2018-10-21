@@ -1,8 +1,10 @@
-﻿using Plisky.Diagnostics;
+﻿using Newtonsoft.Json.Linq;
+using Plisky.Diagnostics;
 using Plisky.Diagnostics.Listeners;
 using Plisky.Plumbing;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -16,19 +18,67 @@ namespace Plisky.Test {
             b.Info.Log("Online");
            // Original();
             NewOne();
+            /*
+            var uri = @"https://www.hackerrank.com/x/api/v1/";
+            var qstem = "questions/";
+            string method = "GET";
+            string secret = "9674c8fdc7a43b8ef9662879c20063d89a9fc507484e23afc0ac90359c027e8e";
+            string body = null;
+            string qparam = null;
+
+            //
+
+            int whatToDo = 3;
+
+            if (whatToDo == 1) {
+                // add question
+                method = "GET";
+                body = null;
+                qparam = "232646";
+            } else if (whatToDo == 2) {
+                method = "POST";
+                body = null;
+                qparam = "232646";
+                //string strversionofq = File.ReadAllText(@"C:\temp\q.json");
+                //var f = JObject.Parse(strversionofq);
+
+            } else if (whatToDo == 3) {
+                method = "GET";
+                qstem = "tests/291241/questions/232646/testcases/";
+                qparam = "0";
+                body = "";
+            }
+            */
+
+
 
             b.Info.Log("Go!");
-            HttpHelper hh = new HttpHelper("http://myos.azurewebsites.net/");
-            HttpHelper h2 = new HttpHelper("http://www.justsoballoons.co.uk/");
-            hh.Stem = "home/carmen";
-            hh.Verb = HttpMethod.Get;
-            var wcr = await hh.Execute("");
-            var jsb = await h2.Execute("");
+            HttpHelper hh = new HttpHelper("https://www.hackerrank.com/x/api/v1/");
+            hh.AddBearerAuthHeader("9674c8fdc7a43b8ef9662879c20063d89a9fc507484e23afc0ac90359c027e8e");
+            hh.Stem = "questions/";
+            var wcr = await hh.Execute("232646");
+            string dir = @"D:\Temp\_DelWorking\QuestionContent";
 
-            Console.WriteLine("Done");
+            File.WriteAllText(@"D:\Temp\_DelWorking\QuestionContent\quest.json", wcr.ResponseText);
+
+            //  "cobol_template_head": "",  "cobol_template_tail": "",  "cobol_template": 
+            var hd = File.ReadAllText(Path.Combine(dir, "cobol_head.txt"));
+            var bd = File.ReadAllText(Path.Combine(dir, "cobol_bod.txt"));
+            var tl = File.ReadAllText(Path.Combine(dir, "cobol_tail.txt"));
+
+            JObject jo = JObject.Parse(wcr.ResponseText);
+            jo["model"]["cobol_template_head"] = hd;
+            jo["model"]["cobol_template_tail"] = tl;
+            jo["model"]["cobol_template"] = bd;
+            // jo["model"]["allowedLanguages"] = "csharp,cobol";
+
+            hh.BaseUri = "https://www.hackerrank.com/x/api/v3/";
+
+            hh.Execute("",jo.ToString(), HttpMethod.Post);
+
+            File.WriteAllText(@"D:\Temp\_DelWorking\QuestionContent\quest2.json", jo.ToString());
             Console.WriteLine(wcr.ResponseText);
-            Console.WriteLine(jsb.ResponseText);
-            //Console.ReadLine();
+            Console.ReadLine();
             return 0;
         }
 
