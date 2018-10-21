@@ -1,11 +1,35 @@
-﻿namespace Plisky.Test {
+﻿using Plisky.Diagnostics;
+using Plisky.Diagnostics.Listeners;
+using Plisky.Plumbing;
+using System;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+namespace Plisky.Test {
 
     internal class Program {
 
-        private static int Main(string[] args) {
+        static async Task<int> Main(string[] args) {
+            var b = new Bilge("TestPRog", tl: TraceLevel.Verbose);
+            b.AddHandler(new TCPHandler("127.0.0.1", 9060));
+            b.Info.Log("Online");
            // Original();
             NewOne();
-            return 5;
+
+            b.Info.Log("Go!");
+            HttpHelper hh = new HttpHelper("http://myos.azurewebsites.net/");
+            HttpHelper h2 = new HttpHelper("http://www.justsoballoons.co.uk/");
+            hh.Stem = "home/carmen";
+            hh.Verb = HttpMethod.Get;
+            var wcr = await hh.Execute("");
+            var jsb = await h2.Execute("");
+
+            Console.WriteLine("Done");
+            Console.WriteLine(wcr.ResponseText);
+            Console.WriteLine(jsb.ResponseText);
+            //Console.ReadLine();
+            return 0;
         }
 
         private static void NewOne() {

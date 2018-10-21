@@ -2,7 +2,7 @@
 using Plisky.Plumbing;
 using System;
 
-namespace Plisky.PliskyLibTests.MessagingTests {
+namespace Plisky.Test.Mocks {
 
     public class MockTimedHub : TimedHub {
         public DateTime ReturnDate { get; set; }

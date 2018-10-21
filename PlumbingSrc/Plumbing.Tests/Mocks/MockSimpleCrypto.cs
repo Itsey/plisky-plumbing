@@ -1,7 +1,7 @@
 ﻿#if false
 using Plisky.Plumbing;
 
-namespace Plisky.PliskyLibTests.Mocks {
+namespace Plisky.Test.Mocks {
 
     public class MockSimpleCrypto : IDecryptStuff {
         private string retval = "yyy";

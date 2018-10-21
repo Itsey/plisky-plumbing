@@ -14,6 +14,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\FieldToArgumentMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpHelper\HttpHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpHelper\WebCallRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpHelper\WebCall.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpHelper\WebCallResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHub.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHubMissingConfigException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Hub.cs" />
