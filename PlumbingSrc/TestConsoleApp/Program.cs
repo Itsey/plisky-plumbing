@@ -49,39 +49,79 @@ namespace Plisky.Test {
                 body = "";
             }
             */
+            string workingPath = @"C:\temp\Hrnk";
 
+            b.Info.Log("Retrieving Question");
+            string pth = Path.Combine(workingPath, "quest.json");
+            string s;
+            JObject jo;
 
+            if (false) {
+                s = await GetQuestionById(232646);
+                 jo = JObject.Parse(s);
+                var newobj = jo["model"];
+                s = newobj.ToString();
 
-            b.Info.Log("Go!");
-            HttpHelper hh = new HttpHelper("https://www.hackerrank.com/x/api/v1/");
-            hh.AddBearerAuthHeader("9674c8fdc7a43b8ef9662879c20063d89a9fc507484e23afc0ac90359c027e8e");
-            hh.Stem = "questions/";
-            var wcr = await hh.Execute("232646");
-            string dir = @"D:\Temp\_DelWorking\QuestionContent";
+                File.WriteAllText(pth, s);
+            }
 
-            File.WriteAllText(@"D:\Temp\_DelWorking\QuestionContent\quest.json", wcr.ResponseText);
+            s = File.ReadAllText(pth);
+            jo = JObject.Parse(s);
+            jo["name"] = "[copy] - " + jo["name"];
 
+            var hd = File.ReadAllText(Path.Combine(workingPath, "cobol_head.txt"));
+            var bd = File.ReadAllText(Path.Combine(workingPath, "cobol.txt"));
+            var tl = File.ReadAllText(Path.Combine(workingPath, "cobol_tail.txt"));
+            jo["cobol_template_head"] = hd;
+            jo["cobol_template_tail"] = tl;
+            jo["cobol_template"] = bd;
+                
+                
+                s = jo.ToString();
+            //File.WriteAllText(pth, s);
+
+            s = await SaveQuestion(s);
+
+            
+            return 0;
+            string dir;
             //  "cobol_template_head": "",  "cobol_template_tail": "",  "cobol_template": 
-            var hd = File.ReadAllText(Path.Combine(dir, "cobol_head.txt"));
-            var bd = File.ReadAllText(Path.Combine(dir, "cobol_bod.txt"));
-            var tl = File.ReadAllText(Path.Combine(dir, "cobol_tail.txt"));
+  
 
-            string s = File.ReadAllText(@"d:\temp\adam.json");
-            JObject jo = JObject.Parse(s);
+            string s2 = File.ReadAllText(@"d:\temp\adam.json");
+            JObject jo2 = JObject.Parse(s);
             /*jo["model"]["cobol_template_head"] = hd;
             jo["model"]["cobol_template_tail"] = tl;
             jo["model"]["cobol_template"] = bd;*/
             // jo["model"]["allowedLanguages"] = "csharp,cobol";
 
-            hh.BaseUri = "https://www.hackerrank.com/x/api/v1/";
+            //hh.BaseUri = "https://www.hackerrank.com/x/api/v1/";
 
-            var f = await hh.Execute("",jo.ToString(), HttpMethod.Post);
+            //f = await hh.Execute("",jo.ToString(), HttpMethod.Post);
 
-            Console.WriteLine(f.Status);
+            //Console.WriteLine(f.Status);
             File.WriteAllText(@"D:\Temp\_DelWorking\QuestionContent\quest2.json", jo.ToString());
             //Console.WriteLine(wcr.ResponseText);
             Console.ReadLine();
             return 0;
+        }
+
+        private static async Task<string> SaveQuestion(string s) {
+            HttpHelper hh = new HttpHelper("https://www.hackerrank.com/x/api/v1/");
+            hh.AddBearerAuthHeader("9674c8fdc7a43b8ef9662879c20063d89a9fc507484e23afc0ac90359c027e8e");
+            hh.Stem = "questions/";
+            var f= await hh.Execute("", s, HttpMethod.Post);
+            return f.ResponseText;
+        }
+
+        private static async Task<string> GetQuestionById(int v) {
+            HttpHelper hh = new HttpHelper("https://www.hackerrank.com/x/api/v1/");
+            hh.AddBearerAuthHeader("9674c8fdc7a43b8ef9662879c20063d89a9fc507484e23afc0ac90359c027e8e");
+            hh.Stem = "questions/";
+            var wcr = await hh.Execute("232646");
+
+
+            return wcr.ResponseText;
         }
 
         private static void NewOne() {

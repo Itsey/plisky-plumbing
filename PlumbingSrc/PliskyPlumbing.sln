@@ -25,6 +25,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.47", "Frame
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Plumbing.Shared", "Plumbing.Shared\Plumbing.Shared.shproj", "{A94681E7-2D80-4C40-9D6C-0DB22E5823EB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{A556861D-E3CC-4FD0-8D43-0C2514B7EE8E}"
+	ProjectSection(SolutionItems) = preProject
+		..\NuGet.Config = ..\NuGet.Config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Plumbing.Shared\Plumbing.Shared.projitems*{a94681e7-2d80-4c40-9d6c-0db22e5823eb}*SharedItemsImports = 13
