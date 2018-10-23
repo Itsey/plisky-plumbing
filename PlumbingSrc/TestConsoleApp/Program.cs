@@ -65,6 +65,8 @@ namespace Plisky.Test {
                 File.WriteAllText(pth, s);
             }
 
+
+            
             s = File.ReadAllText(pth);
             jo = JObject.Parse(s);
             jo["name"] = "[copy] - " + jo["name"];
@@ -75,9 +77,12 @@ namespace Plisky.Test {
             jo["cobol_template_head"] = hd;
             jo["cobol_template_tail"] = tl;
             jo["cobol_template"] = bd;
-                
-                
-                s = jo.ToString();
+            jo["template_type"] = "2";
+            jo["functionReturn"] = "";
+            jo["functionName"] = "";
+            jo["functionParams"] = "";
+
+            s = jo.ToString();
             //File.WriteAllText(pth, s);
 
             s = await SaveQuestion(s);

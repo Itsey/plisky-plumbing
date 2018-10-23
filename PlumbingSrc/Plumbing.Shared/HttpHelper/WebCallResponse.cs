@@ -1,8 +1,6 @@
 ﻿namespace Plisky.Plumbing {
     using System;
-    using System.Collections.Generic;
     using System.Net;
-    using System.Text;
 
     public class WebCallResponse {
         private HttpStatusCode hsc;
@@ -30,7 +28,7 @@
             }
             set {
                 ex = value;
-                Success = false;
+                Success = (ex == null);
             }
         }
     }

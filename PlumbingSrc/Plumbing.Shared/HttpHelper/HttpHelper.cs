@@ -61,6 +61,7 @@
 
                         responseStream = response.GetResponseStream();
 
+                        
 
                         using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8)) {
                             responseStream = null;
@@ -68,6 +69,9 @@
                             // TODO : Dont log what could be a massive string out  b.Log.Summarise();
                             b.Verbose.Log(result.ResponseText);
                         }
+
+                        result.Status = HttpStatusCode.OK;
+                        result.Exception = null;
 
                     } catch (WebException wx) {
                         result.Exception = wx;

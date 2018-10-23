@@ -39,6 +39,21 @@
             });
         }
 
+
+        [Fact(DisplayName = nameof(HttpSucces_ReturnsSuccess))]
+        [Trait("age", "fresh")]
+        public async void HttpSucces_ReturnsSuccess() {
+            var hh = new MockHttpHelper("dummy");
+            hh.SetResponse(HttpStatusCode.OK);
+
+            var f = await hh.Execute("");
+
+            Assert.True(f.Success);
+            Assert.True(f.Status == HttpStatusCode.OK);
+                
+        }
+
+
         [Fact(DisplayName = nameof(MockHelper_SetResponse_ReturnsResponse))]
         [Trait("age", "current")]
         [Trait("type", "regression")]
