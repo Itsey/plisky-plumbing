@@ -1,5 +1,4 @@
-﻿#if false
-namespace Plisky.Test {
+﻿namespace Plisky.Test {
     using Plisky.Helpers;
     using System;
 
@@ -45,5 +44,16 @@ namespace Plisky.Test {
         [CommandLineArg("LONGVALUE")]
         public long NumberParam2 { get; set; }
     }
+
+
+    [CommandLineArguments]
+    public class SampleCommandLine_C3 {
+        
+
+        [CommandLineArg("IntArray")]
+        public int[] NumArray { get; set; }
+
+        [CommandLineArg("StrArray")]
+        public string[] StrArray { get; set; }
+    }
 }
-#endif

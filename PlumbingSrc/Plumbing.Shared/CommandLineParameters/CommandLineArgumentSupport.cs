@@ -14,7 +14,7 @@
     /// </summary>
     /// <remarks> Developed in conjunction with Nemingalator, therefore may not be suitable for reuse</remarks>
     public class CommandArgumentSupport {
-        private Bilge b = new Bilge("CommandLineArguments");
+        private Bilge b;
         private List<string> argumentErrorsDuringLastParse = new List<string>();
 
         /// <summary>
@@ -28,7 +28,10 @@
         /// <summary>
         /// Creates a new instance of the CommandArgumentSupport class.
         /// </summary>
-        public CommandArgumentSupport() {
+        public CommandArgumentSupport(Bilge useThisTrace = null) {
+            if (useThisTrace == null) {
+                b = new Bilge("CommandLineArguments");
+            }
             ArgumentPostfix = string.Empty;
         }
 
@@ -96,12 +99,12 @@
                 b.Verbose.Log("Prefix:" + argumentPrefix, "PostFix:" + ArgumentPostfix);
                 argumentErrorsDuringLastParse.Clear();
 
-                Type argumentClass = argumentValuesClassInstance.GetType();
-                List<MemberInfo> allMembersThatCanBeUpdated = GetMembersFromArgumentClassAndVerify(argumentClass);
+                var argumentClass = argumentValuesClassInstance.GetType();
+                var allMembersThatCanBeUpdated = GetMembersFromArgumentClassAndVerify(argumentClass);
 
                 // We now have a list of all of the fields that we are expecting to find command line argument
                 // information on.  We run through this trying to find which argument for which field.
-                List<FieldArgumentMapping> mappingsOfFieldsToArguments = new List<FieldArgumentMapping>();
+                var mappingsOfFieldsToArguments = new List<FieldArgumentMapping>();
 
                 PopulateFieldMappings(allMembersThatCanBeUpdated, mappingsOfFieldsToArguments);
 
@@ -143,7 +146,7 @@
                 // then there should be a default field.
                 foreach (FieldArgumentMapping fam in mappingsOfFieldsToArguments) {
                     if (fam.MatchesAllUnmatchedArguments) {
-                        CommandArgumentSupport.AssignValueToMember(fam.TargetField, argumentValuesClassInstance, unmatchedParameters.ToArray());
+                        DirectAssginValue(fam.TargetField, argumentValuesClassInstance, unmatchedParameters.ToArray());
                         break;
                     }
                 }
@@ -172,29 +175,95 @@
             return result;
         }
 
+
+
+        private object GetValue(Type memberType, string theValue) {
+            try {
+                // If the target field is a boolean we also support y and yes for true values.
+                object result = theValue;
+
+                if (memberType == typeof(bool)) {
+                    result = StringToBool(theValue);
+                    return result;
+                }
+
+                // If the target field is an integer....
+                if (memberType == typeof(int)) {
+                    result = int.Parse(theValue);
+                    return result;
+                }
+
+                // if the target field is a long
+                if (memberType == typeof(long)) {
+                    result = long.Parse(theValue);
+                    return result;
+                }
+
+                if (memberType.IsArray) {
+
+                    string theSep = ",";
+                    if (theValue.StartsWith(theSep)) {
+                        theValue = theValue.Substring(1);
+                    }
+                    if (theValue.EndsWith(theSep)) {
+                        theValue = theValue.Substring(0, theValue.Length - 1);
+                    }
+
+                    var s = theValue.Split(theSep.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                    // Cant work out a good way to do this so just hardcoding it
+                    if (memberType.FullName.ToLower() == "system.int32[]") {
+                        var res = new List<int>();
+                        for (int i = 0; i < s.Length; i++) {
+                            res.Add(int.Parse(s[i]));
+                        }
+                        result = res.ToArray();
+                    } else {
+                        result = s;
+                    }
+
+                }
+                return result;
+            } catch (OverflowException ofx) {
+                b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
+                throw new ArgumentException("The value could not be parsed to a " + memberType.ToString(), nameof(theValue), ofx);
+            } catch (FormatException fex) {
+                // Do this to make it consistant with the error from SetValue
+                b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
+                throw new ArgumentException("The value could not be parsed to a " + memberType.ToString(), nameof(theValue), fex);
+            }
+        }
+
         /// <summary>
-        /// This is the default assignment which attepmts to put the value in as an object
+        /// This is the default assignment which attempts to put the value in as an object
         /// </summary>
         /// <param name="theMember">The field on the object to set</param>
         /// <param name="theObject">The object containing the field</param>
-        /// <param name="theValue">The value to set it to.</param>
-        private void AssignValueToMember(MemberInfo theMember, object theObject, string theValue) {
+        /// <param name="argumentValueToParse">The value to set it to.</param>
+        private void AssignValueToMember(MemberInfo theMember, object theObject, string argumentValueToParse) {
+            Type t = null;
+            var f = theMember as FieldInfo;
+            if (f != null) {
+                t = f.FieldType;
+            }
+            var x = theMember as PropertyInfo;
+            if (x != null) {
+                t = x.PropertyType;
+            }
+
+            var o = GetValue(t, argumentValueToParse);
+            DirectAssginValue(theMember, theObject, o);
+        }
+
+        private void DirectAssginValue(MemberInfo theMember, object theObject, object argumentValueToParse) {
             if (theMember.MemberType == MemberTypes.Field) {
-                AssignValueToField((FieldInfo)theMember, theObject, theValue);
+                AssignValueToField((FieldInfo)theMember, theObject, argumentValueToParse);
             } else {
-                AssignValueToProperty((PropertyInfo)theMember, theObject, theValue);
+                AssignValueToProperty((PropertyInfo)theMember, theObject, argumentValueToParse);
             }
         }
 
-        private static void AssignValueToMember(MemberInfo theMember, object theObject, object theValue) {
-            if (theMember.MemberType == MemberTypes.Field) {
-                AssignValueToField((FieldInfo)theMember, theObject, theValue);
-            } else {
-                AssignValueToProperty((PropertyInfo)theMember, theObject, theValue);
-            }
-        }
-
-        private  void AssignValueToProperty(PropertyInfo prop, object theObject, string theValue) {
+        private void AssignValueToProperty(PropertyInfo prop, object theObject, object theValue) {
             #region entry code
 
             if (theValue == null) { theValue = string.Empty; }
@@ -202,45 +271,10 @@
 
             #endregion
 
-            try {
-                b.Verbose.Log("AssignValueToField called for property type " + prop.ToString() + " assigning value " + theValue);
 
-                if (prop.PropertyType == typeof(bool)) {
-                    bool tbool = StringToBool(theValue);             // Booleans also support y and n as well as true and false
-                    prop.SetValue(theObject, tbool, null);
-                    return;
-                }
-
-                if (prop.PropertyType == typeof(int)) {
-                    int tint = int.Parse(theValue);
-                    prop.SetValue(theObject, tint, null);
-                    return;
-                }
-
-                if (prop.PropertyType == typeof(long)) {
-                    long tlong = long.Parse(theValue);
-                    prop.SetValue(theObject, tlong, null);
-                    return;
-                }
-
-                b.Verbose.Log("No special type identified for the field, going to try string assignment");
-                prop.SetValue(theObject, theValue, null);
-            } catch (OverflowException ofx) {
-                b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
-                throw new ArgumentException("The value could not be parsed to a " + prop.PropertyType.ToString(), "theValue", ofx);
-            } catch (FormatException fex) {
-                // Do this to make it consistant with the error from SetValue
-                b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
-                throw new ArgumentException("The value could not be parsed to a " + prop.PropertyType.ToString(), "theValue", fex);
-            }
-        }
-
-        private static void AssignValueToProperty(PropertyInfo prop, object theObject, object theValue) {
+            b.Verbose.Log("AssignValueToField called for property type " + prop.ToString() + " assigning value " + theValue);
             prop.SetValue(theObject, theValue, null);
-        }
 
-        private static void AssignValueToField(FieldInfo theField, object theObject, object theValue) {
-            theField.SetValue(theObject, theValue);
         }
 
         /// <summary>
@@ -253,7 +287,7 @@
         /// <param name="theField">The reflected FieldInfo type describing the field that is to be filled/</param>
         /// <param name="theObject">The object which is to have the value passed into it</param>
         /// <param name="theValue">The string representation of the value</param>
-        private void AssignValueToField(FieldInfo theField, object theObject, string theValue) {
+        private void AssignValueToField(FieldInfo theField, object theObject, object theValue) {
 
             #region entry code
 
@@ -264,28 +298,6 @@
             try {
                 b.Verbose.Log("AssignValueToField called for field type " + theField.ToString() + " assigning value " + theValue);
 
-                // If the target field is a boolean we also support y and yes for true values.
-                if (theField.FieldType == typeof(bool)) {
-                    bool tbool = StringToBool(theValue);
-                    theField.SetValue(theObject, tbool);
-                    return;
-                }
-
-                // If the target field is an integer....
-                if (theField.FieldType == typeof(int)) {
-                    int tint = int.Parse(theValue);
-                    theField.SetValue(theObject, tint);
-                    return;
-                }
-
-                // if the target field is a long
-                if (theField.FieldType == typeof(long)) {
-                    long tlong = long.Parse(theValue);
-                    theField.SetValue(theObject, tlong);
-                    return;
-                }
-
-                b.Verbose.Log("No special type identified for the field, going to try string assignment");
                 theField.SetValue(theObject, theValue);
             } catch (OverflowException ofx) {
                 b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
@@ -335,8 +347,8 @@
 
             #region entry code
 
-            // TODO Bilge.Assert(members != null, "The array of fieldInfos can not be null");
-            // TODO Bilge.Assert(fim != null, "the list of fieldArgumentMappings can not be null");
+            //b.Assert.True(members != null, "The array of fieldInfos can not be null");
+            //b.Assert.True(fim != null, "the list of fieldArgumentMappings can not be null");
 
             #endregion
 
@@ -344,19 +356,20 @@
             // map parameters to the values.
             foreach (MemberInfo f in members) {
                 // Each field in the class will be mapped to a FieldArgumenMapping allowing us to describe how tof ill it.
-                FieldArgumentMapping nextMapping = new FieldArgumentMapping(b);
-                nextMapping.TargetField = f;
+                var nextMapping = new FieldArgumentMapping(b) {
+                    TargetField = f
+                };
 
-                CommandLineArgumentBaseAttribute[] custAttribs = (CommandLineArgumentBaseAttribute[])f.GetCustomAttributes(typeof(CommandLineArgumentBaseAttribute), true);
+                var custAttribs = (CommandLineArgumentBaseAttribute[])f.GetCustomAttributes(typeof(CommandLineArgumentBaseAttribute), true);
                 foreach (CommandLineArgumentBaseAttribute claba in custAttribs) {
-                    // TODO Bilge.Assert(claba.Description != null, "The description should be empty or full, never null");
-                    // TODO Bilge.Assert(claba.FullDescription != null, "The description should be empty or full, never null");
+                    //b.Assert.True(claba.Description != null, "The description should be empty or full, never null");
+                    //b.Assert.True(claba.FullDescription != null, "The description should be empty or full, never null");
 
                     nextMapping.ShortDescription = claba.Description;
                     nextMapping.LongDescription = claba.FullDescription;
 
                     if (claba is CommandLineArgAttribute argAtt) {
-                        // TODO Bilge.Assert(argumentPrefix != null, "The argument prefix should be empty if it is not required");
+                        //b.Assert.True(argumentPrefix != null, "The argument prefix should be empty if it is not required");
 
                         nextMapping.IsDefaultSingleArgument = argAtt.IsSingleParameterDefault;
 
@@ -415,11 +428,11 @@
                 b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
 
                 Type argumentClass = argumentValues.GetType();
-                List<MemberInfo> membersToCheckForHelp = GetMembersFromArgumentClassAndVerify(argumentClass);
+                var membersToCheckForHelp = GetMembersFromArgumentClassAndVerify(argumentClass);
 
                 // We now have a list of all of the fields that we are expecting to find command line argument
                 // information on.  We run through this trying to find which argument for which field.
-                List<FieldArgumentMapping> fams = new List<FieldArgumentMapping>();
+                var fams = new List<FieldArgumentMapping>();
 
                 // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
                 // to the parameters that are passed in.

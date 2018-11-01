@@ -1,4 +1,4 @@
-﻿#if false
+﻿
 namespace Plisky.Test {
     using Plisky.Diagnostics;
     using Plisky.Helpers;
@@ -51,10 +51,11 @@ namespace Plisky.Test {
             Assert.Equal(0, sc.NumberParameterTwo);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact(DisplayName = nameof(TFSUseCaseRemainderCheck))]
+        [Trait("type","regression")]
         public void TFSUseCaseRemainderCheck() {
-            TestingKevsClass tcc = new TestingKevsClass();
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var tcc = new TestingKevsClass();
+            var clas = new CommandArgumentSupport();
 
             string[] expectedArgs = new string[] {
                 "/BUILDNAME:TFSSupport_DevDesktopPack_Main_Certified_20090423.8",
@@ -73,11 +74,11 @@ namespace Plisky.Test {
             Assert.Equal("RemainderTwo", tcc.Remainder[1]);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait("type","regression")]
         public void TFSUseCaseOptionalPrefix() {
-            TestingKevsClass tcc1 = new TestingKevsClass();
-            TestingKevsClass tcc2 = new TestingKevsClass();
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var tcc1 = new TestingKevsClass();
+            var tcc2 = new TestingKevsClass();
+            var clas = new CommandArgumentSupport();
 
             string[] expectedArgs = new string[] {
                 "/BUILDNAME:TFSSupport_DevDesktopPack_Main_Certified_20090423.8",
@@ -103,10 +104,10 @@ namespace Plisky.Test {
             Assert.Equal(tcc1.Attachment, tcc2.Attachment);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait("type","regression")]
         public void TFSUseCaseUsesProperties() {
-            TestingKevsClass tcc = new TestingKevsClass();
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var tcc = new TestingKevsClass();
+            var clas = new CommandArgumentSupport();
 
             string[] expectedArgs = new string[] {
                 "/BUILDNAME:TFSSupport_DevDesktopPack_Main_Certified_20090423.8",
@@ -123,18 +124,18 @@ namespace Plisky.Test {
             b.Info.Log(tcc.Attachment);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait("type","regression")]
         public void TestingKevsUseCase2() {
-            TestingKevsClass tcc = new TestingKevsClass();
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var tcc = new TestingKevsClass();
+            var clas = new CommandArgumentSupport();
             string longHelp = clas.GenerateHelp(tcc, "Bugger");
             Assert.True(longHelp.Contains("Bugger"), "The application name was not present in long help");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait("type","regression")]
         public void TestingKevsUseCase3() {
-            TestingKevsClass tcc = new TestingKevsClass();
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var tcc = new TestingKevsClass();
+            var clas = new CommandArgumentSupport();
 
             string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
 
@@ -143,7 +144,7 @@ namespace Plisky.Test {
             Assert.True(shortHelp.Contains("Pass a filename"), "one of the descriptions did not make it into short help");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait("type","regression")]
         public void UseCase1_BasicFilenameParameter() {
             b.Info.Log("Starting Usecase1 Basic testing");
 
@@ -181,7 +182,7 @@ namespace Plisky.Test {
             Assert.True(uc1Class.OverwriteOutput, "The boolean overwrite flag did not get passed correctly");
         } 
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait("type","regression")]
         public void UseCase2_OptionalParameterDefaultFilenames() {
             b.Info.Log("Starting UseCase2 Testing");
 
@@ -220,11 +221,11 @@ namespace Plisky.Test {
             Assert.True(uc2Class.Overwrite, "The overwrite paramteter was not passed correctly");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait("type","regression")]
         public void UseCase3_TFSBuildToolSampleArguments() {
             b.Info.Log("Starting UseCase3 - TBuildtool Sample UseCase");
 
-            CommandArgumentSupport argsupport = new CommandArgumentSupport();
+            var argsupport = new CommandArgumentSupport();
             argsupport.ArgumentPrefix = "-";
             argsupport.ArgumentPostfix = "=";
             TFSBuildToolArgs parsedArgs = new TFSBuildToolArgs();
@@ -249,4 +250,3 @@ namespace Plisky.Test {
         }
     }
 }
-#endif

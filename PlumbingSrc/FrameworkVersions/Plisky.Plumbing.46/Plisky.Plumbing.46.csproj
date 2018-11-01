@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET40;NET452;NET46</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -26,7 +26,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NET40;NET452;NET46</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Plisky.Diagnostics, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
-      <HintPath>c:\files\NuGet\packages\Plisky.Diagnostics.2.2.1\lib\net452\Plisky.Diagnostics.dll</HintPath>
+      <HintPath>..\..\..\Packages\Plisky.Diagnostics.2.2.1\lib\net452\Plisky.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -62,5 +62,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="..\..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

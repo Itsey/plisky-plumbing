@@ -83,8 +83,8 @@
         /// <exception cref="ArgumentOutOfRangeException">When the argumentIdentifier length is 0.</exception>
         /// <param name="argumentIdentifier">The string to match on the command line</param>
         public CommandLineArgAttribute(string argumentIdentifier) {
-            if (argumentIdentifier == null) { throw new ArgumentNullException("argumentIdentifier", "The identifier for a parameter can not be null, for default parameters use default=true"); }
-            if (argumentIdentifier.Length == 0) { throw new ArgumentOutOfRangeException("argumentIdentifier", "The identifier for a parameter can not have a length of zero.  For default parameters use Default=true"); }
+            if (argumentIdentifier == null) { throw new ArgumentNullException(nameof(argumentIdentifier), "The identifier for a parameter can not be null, for default parameters use default=true"); }
+            if (argumentIdentifier.Length == 0) { throw new ArgumentOutOfRangeException(nameof(argumentIdentifier), "The identifier for a parameter can not have a length of zero.  For default parameters use Default=true"); }
 
             m_argumentDescriptor = argumentIdentifier;
         }
@@ -105,9 +105,12 @@
         /// a filename without a prefix and have it route through to the decorated field or property.  It is therefore not possible to
         /// have more than one Default decorated field or property for a class.
         /// </summary>
-        public bool IsSingleParameterDefault {
-            get { return m_isSingleParameterDefaultArgument; }
-            set { m_isSingleParameterDefaultArgument = value; }
-        }
+        public bool IsSingleParameterDefault { get; set; }
+
+        /// <summary>
+        /// Where the argument is an array then this must be used to indicate the separator char, therefore arrays of ints can be
+        /// passed using int,int,int if the separator char is set to ,
+        /// </summary>
+        public string ArraySeparatorChar { get; set; }
     }
 }

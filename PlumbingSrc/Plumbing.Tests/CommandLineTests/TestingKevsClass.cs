@@ -1,4 +1,4 @@
-﻿#if false
+﻿
 namespace Plisky.Test {
 
     using Plisky.Helpers;
@@ -16,4 +16,3 @@ namespace Plisky.Test {
         public string[] Remainder { get; set; }
     }
 }
-#endif

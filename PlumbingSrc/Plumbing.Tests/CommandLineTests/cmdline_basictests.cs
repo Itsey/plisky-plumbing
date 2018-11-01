@@ -1,4 +1,4 @@
-﻿#if false
+﻿
 namespace Plisky.Test {
     using Plisky.Diagnostics;
     using Plisky.Helpers;
@@ -11,31 +11,8 @@ namespace Plisky.Test {
         }
 
 
-#region Additional test attributes
 
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-
-#endregion
-
-#region TestMethod Helpers
+        #region TestMethod Helpers
 
         /// <summary>
         /// Used so that when we change the definition of SampleCommandLine_C1 we dont break all of the unit tests in a strange way.
@@ -56,16 +33,17 @@ namespace Plisky.Test {
             Assert.True(sc.Filename == null, "The filename for SC2 is not null, when it should be");
         }
 
-#endregion
+        #endregion
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+        [Fact(DisplayName = nameof(IntegerParameter_TooLarge_ReturnsCorrectError))]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void IntegerParameter_TooLarge_ReturnsCorrectError() {
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var clas = new CommandArgumentSupport();
             clas.ArgumentPostfix = ":";
             clas.ArgumentPrefix = "";
             clas.ArgumentPrefixOptional = true;
 
-            SampleCommandLine_C2 argsClass = new SampleCommandLine_C2();
+            var argsClass = new SampleCommandLine_C2();
             string[] args = new string[] {
                 "filename:this is the filename",
                 "INTVALUE:2200000000",
@@ -79,7 +57,8 @@ namespace Plisky.Test {
             Assert.True(erroredArguments[0].Contains("too large"), "The incorrect reason was found");
         }
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+        [Fact(DisplayName = nameof(TestIntAndLogMaxValues))]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void TestIntAndLogMaxValues() {
             CommandArgumentSupport clas = new CommandArgumentSupport();
             clas.ArgumentPostfix = ":";
@@ -97,9 +76,75 @@ namespace Plisky.Test {
             Assert.Equal(long.MaxValue, argsClass.NumberParam2);
         }
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+
+
+        [Fact(DisplayName = nameof(Basic_ArrayOfInts_Works))]
+        [Trait("type", "exploratory")] // Legacy Tests, replace when working on them.
+        public void Basic_ArrayOfInts_Works() {
+
+            var clas = new CommandArgumentSupport {
+                ArgumentPostfix = ":",
+                ArgumentPrefix = "",
+                ArgumentPrefixOptional = true
+            };
+
+            int[] nums = new int[] { 1, 2, 3, 4, 5 };
+            string numsAsParam = "";
+            foreach (var f in nums) {
+                numsAsParam += f + ",";
+            }
+
+            var argsClass = new SampleCommandLine_C3();
+            string[] args = new string[] {
+                $"IntArray:{numsAsParam}",
+            };
+
+            clas.ProcessArguments(argsClass, args);
+
+            Assert.Equal(nums.Length, argsClass.NumArray.Length);
+            for (int i = 0; i < nums.Length; i++) {
+                Assert.Equal(nums[i], argsClass.NumArray[i]);
+            }
+
+
+        }
+
+
+        [Fact(DisplayName = nameof(Basic_ArrayOfStrs_Works))]
+        [Trait("type", "exploratory")] // Legacy Tests, replace when working on them.
+        public void Basic_ArrayOfStrs_Works() {
+
+            var clas = new CommandArgumentSupport {
+                ArgumentPostfix = ":",
+                ArgumentPrefix = "",
+                ArgumentPrefixOptional = true
+            };
+
+            string[] parms = new string[] { "one", "two", "three", "four", "five" };
+
+            string strArrayConcat = "";
+            foreach (var f in parms) {
+                strArrayConcat += f + ",";
+            }
+
+
+            var argsClass = new SampleCommandLine_C3();
+            string[] args = new string[] {
+                $"StrArray:{strArrayConcat}",
+            };
+            clas.ProcessArguments(argsClass, args);
+
+            Assert.Equal(parms.Length, argsClass.StrArray.Length);
+            for (int i = 0; i < parms.Length; i++) {
+                Assert.Equal(parms[i], argsClass.StrArray[i]);
+            }
+        }
+
+
+        [Fact(DisplayName = nameof(BasicTest_GetAndSetProperties))]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void BasicTest_GetAndSetProperties() {
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var clas = new CommandArgumentSupport();
             Assert.Equal(string.Empty, clas.ArgumentPostfix);
             Assert.Equal("-", clas.ArgumentPrefix);
             Assert.False(clas.ArgumentPrefixOptional);
@@ -117,13 +162,14 @@ namespace Plisky.Test {
             Assert.Equal("Xx1;@~#+==--!2", clas.ArgumentPrefix);
         }
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+        [Fact]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void BasicTest_BooleanParameters() {
             b.Info.Log("Starting  Testing boolean behaviour");
 
-            SampleCommandLine_C1 sc1 = new SampleCommandLine_C1();
-            SampleCommandLine_C1 sc2 = new SampleCommandLine_C1();
-            SampleCommandLine_C1 sc3 = new SampleCommandLine_C1();
+            var sc1 = new SampleCommandLine_C1();
+            var sc2 = new SampleCommandLine_C1();
+            var sc3 = new SampleCommandLine_C1();
 
             VerifySampleCommandLine1_InitialState(sc1);
             VerifySampleCommandLine1_InitialState(sc2);
@@ -166,20 +212,21 @@ namespace Plisky.Test {
             Assert.False(sc1.OptionParameterTwo);
         }
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+        [Fact]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void BasicTest_NumberStringAndBoolParams() {
             b.Info.Log("Starting test for SimpleArguments");
 
             const string STRINGPAR1 = "StringParameter1";
             const string STRINGPAR2 = "StrnigParameter2";
             const int NUMVALUE = 12;
-            SampleCommandLine_C1 sc1 = new SampleCommandLine_C1();
+            var sc1 = new SampleCommandLine_C1();
 
             VerifySampleCommandLine1_InitialState(sc1);
 
             string[] args = new string[] { "/N:" + STRINGPAR1, "/A:" + STRINGPAR2, "/C:" + NUMVALUE.ToString(), "/OP1" };
 
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var clas = new CommandArgumentSupport();
             clas.ArgumentPrefix = "/";
 
             clas.ProcessArguments(sc1, args);
@@ -194,7 +241,8 @@ namespace Plisky.Test {
             Assert.Equal(0, sc1.NumberParameterTwo);
         }
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+        [Fact]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void BasicTest_ArgumentPrefix() {
             b.Info.Log("Starting  Testing Argument prefix behaviour");
 
@@ -231,9 +279,11 @@ namespace Plisky.Test {
             b.Info.Log("TESTOK: Finished Testing ArgumentPrefix");
         }
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+
+        [Fact(DisplayName = nameof(BasicTest_DefaultArguments))]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void BasicTest_DefaultArguments() {
-            SampleCommandLine_C2 c2 = new SampleCommandLine_C2();
+            var c2 = new SampleCommandLine_C2();
             VerifySampleCommandLine2_InitialSate(c2);
             string[] args = new string[] { "filename.txt" };
 
@@ -252,24 +302,26 @@ namespace Plisky.Test {
             Assert.Equal("filename.txt", c2.Filename);
         }
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+        [Fact]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void BasicTest_GenerateShortHelp() {
-            CommandArgumentSupport clas = new CommandArgumentSupport();
-            SampleCommandLine_C2 c2 = new SampleCommandLine_C2();
+            var clas = new CommandArgumentSupport();
+            var c2 = new SampleCommandLine_C2();
 
             string help = clas.GenerateShortHelp(c2, "Tests");
             b.Info.Log("Help: " + help);
             Assert.True(help.Contains("~~MatchShortDescrFilename~~"), "The help message does not contain the short string");
         }
 
-        [Fact][Trait("xunit","regression")] // Legacy Tests, replace when working on them.
+        [Fact(DisplayName = nameof(BasicTest_MultipleArgumentsSameValue))]
+        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
         public void BasicTest_MultipleArgumentsSameValue() {
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var clas = new CommandArgumentSupport();
             clas.ArgumentPrefix = "/";
             clas.ArgumentPostfix = "=";
 
-            TFSBuildToolArgs tbta1 = new TFSBuildToolArgs();
-            TFSBuildToolArgs tbta2 = new TFSBuildToolArgs();
+            var tbta1 = new TFSBuildToolArgs();
+            var tbta2 = new TFSBuildToolArgs();
 
             string[] args = new string[] { "/tfs=first", "/agent=second", "/teamproject=acme" };
             string[] args2 = new string[] { "/tfs=first", "/agenturi=second", "/teamproject=acme" };
@@ -281,4 +333,3 @@ namespace Plisky.Test {
         }
     }
 }
-#endif
