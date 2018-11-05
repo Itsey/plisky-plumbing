@@ -3,6 +3,7 @@
     using Plisky.Diagnostics;
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -117,7 +118,7 @@
                     bool matchOccuredForThisArgument = false;  // Determines whether any match occured for this argument
 
                     foreach (FieldArgumentMapping singleArgumentMapping in mappingsOfFieldsToArguments) {
-                        if (singleArgumentMapping.MatchArgumentToField(individualArgument)) {
+                        if (singleArgumentMapping.MatchArgumentToField(individualArgument,ArgumentPostfix)) {
                             matchOccuredForThisArgument = true;
                             b.Verbose.Log("Match discovered for " + singleArgumentMapping.TargetField.Name + " trying to assign value now ", " using value " + individualArgument);
 
@@ -149,6 +150,21 @@
                         DirectAssginValue(fam.TargetField, argumentValuesClassInstance, unmatchedParameters.ToArray());
                         break;
                     }
+                }
+
+                // Now validate that all required arguments are present.
+                foreach (FieldArgumentMapping fam in mappingsOfFieldsToArguments) {
+                    foreach(var f in fam.TargetField.CustomAttributes) {
+                        var nargs = f.NamedArguments.Where(a => a.MemberName == "IsRequired");
+                        foreach(var p in nargs) {
+                            if (((bool)p.TypedValue.Value) && (!fam.HasBeenMatchedToArgument)) {
+                                // Required argument was not matched!
+                                throw new ArgumentNullException(fam.ParameterMatches.First(), "The parameter was not specified.");
+                            }
+                        }
+                    }
+                    
+                    
                 }
             } finally {
                 b.Info.X();
@@ -187,16 +203,22 @@
                     return result;
                 }
 
-                // If the target field is an integer....
                 if (memberType == typeof(int)) {
                     result = int.Parse(theValue);
                     return result;
                 }
 
-                // if the target field is a long
                 if (memberType == typeof(long)) {
                     result = long.Parse(theValue);
                     return result;
+                }
+
+                if (memberType == typeof(DateTime)) {
+                    string format = "dd-MM-yyyy";
+                    if (DateTime.TryParseExact(theValue, format, null, DateTimeStyles.None, out DateTime parsedOk)) {
+                        result = parsedOk;
+                        return result;
+                    }
                 }
 
                 if (memberType.IsArray) {

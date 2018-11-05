@@ -48,9 +48,8 @@
         /// <summary>
         /// Determines whether this field has already been matched and therefoer should not be checked again.
         /// </summary>
-        internal bool HasBeenMatchedToArgument; // Autoinit to false, CA1805
-
-        // TODO: Make this never return true for multimatches such as arrays
+        internal bool HasBeenMatchedToArgument; 
+        
 
         /// <summary>
         /// This is the short description which describes the parameter.  This should be around 50 characters in length to allow it to fit on
@@ -75,14 +74,14 @@
         /// If the mapping represents the default match case then all of the arguments that have not been assigned to the other matches
         /// will be put into
         /// </summary>
-        internal bool MatchesAllUnmatchedArguments; // CA1823, removed initialisation.
+        internal bool MatchesAllUnmatchedArguments; 
 
         /// <summary>
         /// Determines whether this parameter is the match for a single unnamed argument, this alows you to pass across filenames and so on
         /// without a prefix.  Once this has been matched to the first non prefixed arguments then all of the rest will go into the
         /// unmatched store.
         /// </summary>
-        internal bool IsDefaultSingleArgument;  // CA1823, removed initialisation.
+        internal bool IsDefaultSingleArgument;  
 
         /// <summary>
         /// Method attempts to match an argument passed in against the field parameterMatches that have been specified.  If no
@@ -91,7 +90,7 @@
         /// <remarks> Specify both parameterMatches and TargetField before calling this method.</remarks>
         /// <param name="argument"></param>
         /// <returns></returns>
-        internal bool MatchArgumentToField(string argument) {
+        internal bool MatchArgumentToField(string argument,string activePostfix) {
 
             #region entry code
 
@@ -105,14 +104,28 @@
 
             #endregion
 
-            if (HasBeenMatchedToArgument) { return false; }  // Only match once.
+            if (HasBeenMatchedToArgument) { return false; }  
 
             //Parameter matches must be sorted longest first....
 
             // Check each of the possible parameter matches and if one is found then assign the value to the field and report
             // that the match has been made.  Case must be handled outside of this method.
             foreach (string s in ParameterMatches) {
-                if (argument.StartsWith(s, StringComparison.OrdinalIgnoreCase)) {
+
+                string thingToCompare = s.ToLowerInvariant();
+                string argumentText = argument.ToLowerInvariant();
+
+                if ((!string.IsNullOrEmpty(activePostfix) && (argument.IndexOf(activePostfix)>=0)) {
+                    // The postfix indicates the lenght of the argument.
+                    argumentText = argument.Substring(0, argument.IndexOf(activePostfix)).ToLowerInvariant();
+                } else {
+                    if (argument.Length >= s.Length) {
+                        argumentText = argument.Substring(0, s.Length).ToLowerInvariant();
+                    }
+                }
+               
+                
+                if (string.CompareOrdinal(argumentText,thingToCompare)==0) { 
                     // Match made on the argument.
 
                     m_lastArgVal = argument.Substring(s.Length);

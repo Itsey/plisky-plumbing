@@ -56,4 +56,38 @@
         [CommandLineArg("StrArray")]
         public string[] StrArray { get; set; }
     }
+
+
+    [CommandLineArguments]
+    public class SampleCommandLine_C4 {
+
+        [CommandLineArg("dt1")]
+        public DateTime datey1 { get; set; }
+
+    }
+
+    [CommandLineArguments]
+    public class SampleCommandLine_C5 {
+
+        [CommandLineArg("first",IsRequired =true)]
+        public string first { get; set; }
+
+        [CommandLineArg("second", IsRequired = true)]
+        public int second { get; set; }
+
+    }
+
+
+    [CommandLineArguments]
+    public class SampleCommandLine_C6 {
+
+        [CommandLineArg("first")]
+        public string first { get; set; }
+
+        [CommandLineArg("firstone")]
+        public string second { get; set; }
+
+        [CommandLineArg("firstonethenanother")]
+        public string third { get; set; }
+    }
 }

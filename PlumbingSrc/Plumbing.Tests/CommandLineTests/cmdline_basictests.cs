@@ -2,6 +2,7 @@
 namespace Plisky.Test {
     using Plisky.Diagnostics;
     using Plisky.Helpers;
+    using System;
     using Xunit;
 
     public class CommandLineSupportUnitTests {
@@ -34,6 +35,94 @@ namespace Plisky.Test {
         }
 
         #endregion
+
+
+
+        [Fact(DisplayName = nameof(Bug_IfPostfixSpecified_ItMustBeUsed))]
+        [Trait("age", "fresh")]
+        public void Bug_IfPostfixSpecified_ItMustBeUsed() {
+            b.Info.Flow();
+            var clas = new CommandArgumentSupport();
+            clas.ArgumentPostfix = ":";
+            clas.ArgumentPrefix = "";
+            clas.ArgumentPrefixOptional = true;
+
+
+            var argsClass = new SampleCommandLine_C6();
+            string[] args = new string[] {
+                "firstonethenanother:gloop",
+                "firstone:barfle",
+                "first:arfle"
+
+            };
+
+            clas.ProcessArguments(argsClass, args);
+
+            Assert.Equal("arfle", argsClass.first);
+            Assert.Equal("barfle", argsClass.second);
+            Assert.Equal("gloop", argsClass.third);
+        }
+
+
+
+        [Fact(DisplayName = nameof(Required_ThrowsIfNotPresent))]
+        [Trait("age", "fresh")]
+        public void Required_ThrowsIfNotPresent() {
+            b.Info.Flow();
+
+            var clas = new CommandArgumentSupport();
+            clas.ArgumentPostfix = ":";
+            clas.ArgumentPrefix = "";
+            clas.ArgumentPrefixOptional = true;
+
+
+            var argsClass = new SampleCommandLine_C5();
+            string[] args = new string[] {
+                "firstx:hello",
+                "second:1"
+            };
+
+
+            Assert.Throws<ArgumentNullException>(() => {
+                clas.ProcessArguments(argsClass, args);
+
+                if (argsClass.first != null) {
+                    throw new InvalidOperationException("This cant be right, the value should not be set");
+                }
+            });
+
+
+
+        }
+
+
+        [Theory(DisplayName = nameof(DateTime_BasicParse_Works))]
+        [Trait("age", "fresh")]
+        [InlineData(2018, 11, 22)]
+        [InlineData(2000, 1, 1)]
+        [InlineData(1945, 11, 11)]
+        [InlineData(2099, 12, 12)]
+        public void DateTime_BasicParse_Works(int year, int month, int day) {
+            b.Info.Flow();
+
+            DateTime target = new DateTime(year, month, day);
+
+            var clas = new CommandArgumentSupport();
+            clas.ArgumentPostfix = ":";
+            clas.ArgumentPrefix = "";
+            clas.ArgumentPrefixOptional = true;
+
+
+            var argsClass = new SampleCommandLine_C4();
+            string[] args = new string[] {
+                "dt1:"+target.ToString("dd-MM-yyyy")
+            };
+
+            clas.ProcessArguments(argsClass, args);
+
+            Assert.Equal<DateTime>(target, argsClass.datey1);
+        }
+
 
         [Fact(DisplayName = nameof(IntegerParameter_TooLarge_ReturnsCorrectError))]
         [Trait("type", "regression")] // Legacy Tests, replace when working on them.

@@ -72,7 +72,7 @@
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public sealed class CommandLineArgAttribute : CommandLineArgumentBaseAttribute {
         private string m_argumentDescriptor = string.Empty;
-        private bool m_isSingleParameterDefaultArgument;
+        
 
         /// <summary>
         /// The CmdLineArgAttribute is applied to a field or a property within a class to indicate that it can be initialised from
@@ -112,5 +112,10 @@
         /// passed using int,int,int if the separator char is set to ,
         /// </summary>
         public string ArraySeparatorChar { get; set; }
+
+        /// <summary>
+        /// When set to true then an exception will be thrown if the parameter has not been specified on the command line.
+        /// </summary>
+        public bool IsRequired { get; set; }
     }
 }
