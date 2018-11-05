@@ -37,6 +37,21 @@ namespace Plisky.Test {
         #endregion
 
 
+        [Fact(DisplayName = nameof(Bug_IfBilgePassed_NullRefException))]
+        [Trait("age", "fresh")]
+        public void Bug_IfBilgePassed_NullRefException() {
+            b.Info.Flow();
+            var clas = new CommandArgumentSupport(b);
+            clas.ArgumentPostfix = ":";
+            string[] args = new string[] {
+                "firstonethenanother:gloop",
+            };
+
+            var argsClass = new SampleCommandLine_C6();
+            clas.ProcessArguments(argsClass, args);
+        }
+
+
 
         [Fact(DisplayName = nameof(Bug_IfPostfixSpecified_ItMustBeUsed))]
         [Trait("age", "fresh")]

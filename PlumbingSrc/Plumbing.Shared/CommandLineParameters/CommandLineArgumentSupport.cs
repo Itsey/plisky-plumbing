@@ -32,6 +32,8 @@
         public CommandArgumentSupport(Bilge useThisTrace = null) {
             if (useThisTrace == null) {
                 b = new Bilge("CommandLineArguments");
+            } else {
+                b = useThisTrace;
             }
             ArgumentPostfix = string.Empty;
         }

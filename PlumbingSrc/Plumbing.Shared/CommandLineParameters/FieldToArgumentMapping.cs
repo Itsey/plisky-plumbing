@@ -115,7 +115,7 @@
                 string thingToCompare = s.ToLowerInvariant();
                 string argumentText = argument.ToLowerInvariant();
 
-                if ((!string.IsNullOrEmpty(activePostfix) && (argument.IndexOf(activePostfix)>=0)) {
+                if ((!string.IsNullOrEmpty(activePostfix) && (argument.IndexOf(activePostfix)>=0))) {
                     // The postfix indicates the lenght of the argument.
                     argumentText = argument.Substring(0, argument.IndexOf(activePostfix)).ToLowerInvariant();
                 } else {
