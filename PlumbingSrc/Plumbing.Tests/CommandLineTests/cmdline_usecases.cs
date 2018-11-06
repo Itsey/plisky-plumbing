@@ -2,6 +2,7 @@
 namespace Plisky.Test {
     using Plisky.Diagnostics;
     using Plisky.Helpers;
+    using System;
     using Xunit;
 
 
@@ -9,10 +10,10 @@ namespace Plisky.Test {
         private Bilge b = new Bilge();
 
         public CommandLineSupport_UseCases() {
-            
+
         }
 
-#region Additional test attributes
+        #region Additional test attributes
 
         //
         // You can use the following additional attributes as you write your tests:
@@ -34,7 +35,33 @@ namespace Plisky.Test {
         // public void MyTestCleanup() { }
         //
 
-#endregion
+        #endregion
+
+
+
+        [Fact(DisplayName = nameof(Sean_DateTime_UseCase))]
+        [Trait("age", "fresh")]
+        public void Sean_DateTime_UseCase() {
+            b.Info.Flow();
+
+            var suc = new Sean_DateUseCase();
+            var clas = new CommandArgumentSupport();
+            clas.ArgumentPrefix = "/";
+            
+            DateTime first = new DateTime(2018, 11, 22);
+            DateTime to = new DateTime(2018, 12, 30);
+
+            string[] expectedArgs = new string[] {
+                "/f22-11-2018",
+                "/t30-12-2018"
+            };
+            clas.ProcessArguments(suc, expectedArgs);
+
+            Assert.Equal(first, suc.from);
+            Assert.Equal(to, suc.to);
+
+        }
+
 
         /// <summary>
         /// Used so that when we change the definition of SampleCommandLine_C1 we dont break all of the unit tests in a strange way.
@@ -52,9 +79,9 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(TFSUseCaseRemainderCheck))]
-        [Trait("type","regression")]
+        [Trait("type", "regression")]
         public void TFSUseCaseRemainderCheck() {
-            var tcc = new TestingKevsClass();
+            var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
 
             string[] expectedArgs = new string[] {
@@ -74,10 +101,11 @@ namespace Plisky.Test {
             Assert.Equal("RemainderTwo", tcc.Remainder[1]);
         }
 
-        [Fact][Trait("type","regression")]
+        [Fact]
+        [Trait("type", "regression")]
         public void TFSUseCaseOptionalPrefix() {
-            var tcc1 = new TestingKevsClass();
-            var tcc2 = new TestingKevsClass();
+            var tcc1 = new Kev_TFS_UseCase();
+            var tcc2 = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
 
             string[] expectedArgs = new string[] {
@@ -100,13 +128,14 @@ namespace Plisky.Test {
             Assert.Equal("TFSSupport_DevDesktopPack_Main_Certified_20090423.8", tcc1.BuildName);
             Assert.Equal("\"c:\\temp\\list.txt\"", tcc1.Attachment);
 
-            Assert.Equal(tcc1.BuildName, tcc2.BuildName );
+            Assert.Equal(tcc1.BuildName, tcc2.BuildName);
             Assert.Equal(tcc1.Attachment, tcc2.Attachment);
         }
 
-        [Fact][Trait("type","regression")]
+        [Fact]
+        [Trait("type", "regression")]
         public void TFSUseCaseUsesProperties() {
-            var tcc = new TestingKevsClass();
+            var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
 
             string[] expectedArgs = new string[] {
@@ -124,17 +153,19 @@ namespace Plisky.Test {
             b.Info.Log(tcc.Attachment);
         }
 
-        [Fact][Trait("type","regression")]
+        [Fact]
+        [Trait("type", "regression")]
         public void TestingKevsUseCase2() {
-            var tcc = new TestingKevsClass();
+            var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
             string longHelp = clas.GenerateHelp(tcc, "Bugger");
             Assert.True(longHelp.Contains("Bugger"), "The application name was not present in long help");
         }
 
-        [Fact][Trait("type","regression")]
+        [Fact]
+        [Trait("type", "regression")]
         public void TestingKevsUseCase3() {
-            var tcc = new TestingKevsClass();
+            var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
 
             string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
@@ -144,28 +175,29 @@ namespace Plisky.Test {
             Assert.True(shortHelp.Contains("Pass a filename"), "one of the descriptions did not make it into short help");
         }
 
-        [Fact][Trait("type","regression")]
+        [Fact]
+        [Trait("type", "regression")]
         public void UseCase1_BasicFilenameParameter() {
             b.Info.Log("Starting Usecase1 Basic testing");
 
-#region string constants used to avoid types
+            #region string constants used to avoid types
 
             const string FILENAME1 = "Test1.Xslt";
             const string FILENAME2 = "Test2.xslt";
             const string FILENAME3 = "Test.xml";
 
-#endregion
+            #endregion
 
             UC1_BasicFilenameParameters uc1Class = new UC1_BasicFilenameParameters();
 
-#region verify the initial state of the class
+            #region verify the initial state of the class
 
             Assert.True(uc1Class.TransformFilename1.Length == 0, "The initial state of filename 1 is wrong");
             Assert.True(uc1Class.TransformFilename2.Length == 0, "The initial state of filename 2 is wrong");
             Assert.True(uc1Class.OutputFilename.Length == 0, "The initial state of output filename is wrong");
             Assert.False(uc1Class.OverwriteOutput, "The initial state of overwrite is wrong");
 
-#endregion
+            #endregion
 
             string[] expectedArguments = new string[] { "/X1:" + FILENAME1, "/x2:" + FILENAME2, "/o:" + FILENAME3, "/Y" };
 
@@ -180,27 +212,28 @@ namespace Plisky.Test {
             Assert.Equal(uc1Class.TransformFilename2, FILENAME2);
             Assert.Equal(uc1Class.OutputFilename, FILENAME3);
             Assert.True(uc1Class.OverwriteOutput, "The boolean overwrite flag did not get passed correctly");
-        } 
+        }
 
-        [Fact][Trait("type","regression")]
+        [Fact]
+        [Trait("type", "regression")]
         public void UseCase2_OptionalParameterDefaultFilenames() {
             b.Info.Log("Starting UseCase2 Testing");
 
-#region string constants used to avoid typos
+            #region string constants used to avoid typos
 
             string[] FILENAMES = new string[] { "file1.xml", "file2arflebarfleglooopmakethestringmuchlongerifwecan.xml", "c:\\temp\\files\\file3.xml", "\\s816244\\c$\\afile\\file4.xml", "file://testingfile/file5.xml" };
 
-#endregion
+            #endregion
 
             UC2_OptionPlusDefaultFilenames uc2Class = new UC2_OptionPlusDefaultFilenames();
 
-#region verify the initial state of the class
+            #region verify the initial state of the class
 
             b.Info.Log("About to verify the initial state of the UC2 Class");
             Assert.True(uc2Class.Filenames.Length == 0, "The initial state of the default array is wrong");
             Assert.True(uc2Class.Overwrite == false, "the initial state of the overwrite flag is false");
 
-#endregion
+            #endregion
 
             string[] expectedArguments = new string[] { FILENAMES[0], FILENAMES[1], FILENAMES[2], FILENAMES[3], FILENAMES[4], "/O" };
             b.Info.Log("About to perform the actual test case");
@@ -221,7 +254,8 @@ namespace Plisky.Test {
             Assert.True(uc2Class.Overwrite, "The overwrite paramteter was not passed correctly");
         }
 
-        [Fact][Trait("type","regression")]
+        [Fact]
+        [Trait("type", "regression")]
         public void UseCase3_TFSBuildToolSampleArguments() {
             b.Info.Log("Starting UseCase3 - TBuildtool Sample UseCase");
 

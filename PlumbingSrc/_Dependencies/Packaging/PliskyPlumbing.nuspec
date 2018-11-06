@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.5.2.0</version>
+    <version>1.5.3.0</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -14,6 +14,7 @@
                   Adds int and string array support to command line arguments.  Comma separated only.
                   1.5.1  Adds DateTime as a supported format.  Adds required option to attributes.
                   1.5.2  Fixes NullRef Exception when using bilge.
+                  1.5.3  Adds formatting for DateTime parsing.
                   </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>

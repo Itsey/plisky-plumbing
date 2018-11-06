@@ -36,6 +36,7 @@
                 b = useThisTrace;
             }
             ArgumentPostfix = string.Empty;
+            DateTimeParseFormat = "dd-MM-yyyy";
         }
 
         private string argumentPrefix = "-";
@@ -66,6 +67,11 @@
         /// any prefix that is specified.
         /// </summary>
         public bool ArgumentPrefixOptional { get; set; }
+
+        /// <summary>
+        /// The date time format used to parse date times - default. dd-MM-yyyy.
+        /// </summary>
+        public string DateTimeParseFormat { get; set; }
 
         /// <summary>
         /// ProcessArguments will process the command line arguments and pass the values into the class passed as argumentVals, assuming
@@ -216,7 +222,7 @@
                 }
 
                 if (memberType == typeof(DateTime)) {
-                    string format = "dd-MM-yyyy";
+                    string format = this.DateTimeParseFormat;
                     if (DateTime.TryParseExact(theValue, format, null, DateTimeStyles.None, out DateTime parsedOk)) {
                         result = parsedOk;
                         return result;

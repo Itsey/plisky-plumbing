@@ -63,7 +63,7 @@
     <Compile Include="CommandLineTests\cmdline_tbtoolsample.cs" />
     <Compile Include="CommandLineTests\cmdline_usecaseclass.cs" />
     <Compile Include="CommandLineTests\cmdline_usecases.cs" />
-    <Compile Include="CommandLineTests\TestingKevsClass.cs" />
+    <Compile Include="CommandLineTests\usecase_suppor.cs" />
     <Compile Include="HotKeySupportTests.cs" />
     <Compile Include="MessagingTests\ConfigHubTests.cs" />
     <Compile Include="MessagingTests\HubTests.cs" />
