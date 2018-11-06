@@ -38,7 +38,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Bug_IfBilgePassed_NullRefException))]
-        [Trait("age", "fresh")]
+        [Trait("type", "regression")]
         public void Bug_IfBilgePassed_NullRefException() {
             b.Info.Flow();
             var clas = new CommandArgumentSupport(b);
@@ -54,7 +54,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Bug_IfPostfixSpecified_ItMustBeUsed))]
-        [Trait("age", "fresh")]
+        [Trait("type", "regression")]
         public void Bug_IfPostfixSpecified_ItMustBeUsed() {
             b.Info.Flow();
             var clas = new CommandArgumentSupport();
@@ -81,7 +81,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Required_ThrowsIfNotPresent))]
-        [Trait("age", "fresh")]
+        [Trait("type", "regression")]
         public void Required_ThrowsIfNotPresent() {
             b.Info.Flow();
 
@@ -106,13 +106,11 @@ namespace Plisky.Test {
                 }
             });
 
-
-
         }
 
 
         [Theory(DisplayName = nameof(DateTime_BasicParse_Works))]
-        [Trait("age", "fresh")]
+        [Trait("type", "regression")]
         [InlineData(2018, 11, 22)]
         [InlineData(2000, 1, 1)]
         [InlineData(1945, 11, 11)]
