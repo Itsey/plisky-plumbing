@@ -17,6 +17,8 @@
     public class CommandArgumentSupport {
         private Bilge b;
         private List<string> argumentErrorsDuringLastParse = new List<string>();
+        private List<Tuple<string, string>> Examples = new List<Tuple<string, string>>();
+
 
         /// <summary>
         /// Returns the name(s) of arguments that errored (rather than were not matched at all) and a brief description
@@ -36,7 +38,7 @@
                 b = useThisTrace;
             }
             ArgumentPostfix = string.Empty;
-            DateTimeParseFormat = "dd-MM-yyyy";
+            DateTimeParseFormat = "d-M-yyyy";
         }
 
         private string argumentPrefix = "-";
@@ -426,6 +428,15 @@
         }
 
         /// <summary>
+        /// Adds an example to the help text that is generated.  Each example should have a one line syntactically correct option and a secondary
+        /// description option
+        /// </summary>
+        /// <param name="example">The syntactic example</param>
+        /// <param name="description">The description</param>
+        public void AddExample(string example,string description) {
+            Examples.Add(new Tuple<string,string>(example, description));
+        }
+        /// <summary>
         /// Generates the short form of help which is typically shown when the program is called with no arguments.  The short help is generated
         /// by specifying the Description attribute on the decoration of the command line arguments class.
         /// </summary>
@@ -486,6 +497,10 @@
                     }
                 }
 
+                if (Examples.Count>0) {
+                    sb.Append("Example: " + Examples[0].Item1+Environment.NewLine);
+                    sb.Append(Examples[0].Item2 + Environment.NewLine);
+                }
                 return sb.ToString();
             } finally {
                 b.Info.X();
@@ -554,6 +569,10 @@
                     }
                 }
 
+                foreach(var f in Examples) {
+                    sb.Append("Example: " + Examples[0].Item1 + Environment.NewLine);
+                    sb.Append(Examples[0].Item2 + Environment.NewLine);
+                }
                 return sb.ToString();
             } finally {
                 b.Info.X();

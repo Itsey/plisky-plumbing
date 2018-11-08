@@ -13,11 +13,22 @@ namespace Plisky.Test {
     internal class Program {
 
         static async Task<int> Main(string[] args) {
+            Console.WriteLine("online");
             var b = new Bilge("TestPRog", tl: TraceLevel.Verbose);
             b.AddHandler(new TCPHandler("127.0.0.1", 9060));
             b.Info.Log("Online");
-           // Original();
-            NewOne();
+            // Original();
+
+            CommandLineArgs cla = new CommandLineArgs();
+
+            Plisky.Helpers.CommandArgumentSupport clas = new Helpers.CommandArgumentSupport();
+            clas.ProcessArguments(cla,args);
+            clas.AddExample("TestConsoleApp.exe -x", "Runs it with an x parameter");
+            string sa = clas.GenerateShortHelp(cla, "TestConsoleApp");
+            Console.WriteLine("sec");
+            Console.WriteLine(sa);
+            //NewOne();
+            throw new NotImplementedException();
             /*
             var uri = @"https://www.hackerrank.com/x/api/v1/";
             var qstem = "questions/";

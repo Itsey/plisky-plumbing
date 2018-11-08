@@ -3,6 +3,7 @@ namespace Plisky.Test {
     using Plisky.Diagnostics;
     using Plisky.Helpers;
     using System;
+    using System.Collections.Generic;
     using Xunit;
 
     public class CommandLineSupportUnitTests {
@@ -106,6 +107,47 @@ namespace Plisky.Test {
                 }
             });
 
+        }
+
+
+        public static IEnumerable<object[]> DateTimeData {
+            get {
+                // Or this could read from a file. :)
+                return new[]
+                {
+                new object[] { new DateTime(2018,1, 1), "1-1-2018" },
+                new object[] { new DateTime(2018,1, 1), "01-1-2018" },
+                new object[] { new DateTime(2018,1, 1), "01-01-2018" },
+                new object[] { new DateTime(2018,1, 1), "1-01-2018" },
+                new object[] { new DateTime(2018, 12, 31), "31-12-2018" },
+                new object[] { new DateTime(2018, 1, 30), "30-1-2018" }
+            };
+            }
+        }
+
+
+        [Theory(DisplayName = nameof(DateTime_StringParse_Works))]
+        [Trait("age", "fresh")]
+        [Trait("type", "exploratory")]
+        [MemberData(nameof(DateTimeData))]
+        public void DateTime_StringParse_Works(DateTime exp, string text) {
+            b.Info.Flow();
+
+            var clas = new CommandArgumentSupport();
+            clas.DateTimeParseFormat = "d-M-yyyy";
+            clas.ArgumentPostfix = ":";
+            clas.ArgumentPrefix = "";
+            clas.ArgumentPrefixOptional = true;
+
+
+            var argsClass = new SampleCommandLine_C4();
+            string[] args = new string[] {
+                $"dt1:{text}"
+            };
+
+            clas.ProcessArguments(argsClass, args);
+
+            Assert.Equal(exp, argsClass.datey1);
         }
 
 
