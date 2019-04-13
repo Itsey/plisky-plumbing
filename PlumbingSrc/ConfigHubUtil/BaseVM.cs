@@ -114,7 +114,7 @@
 
         private static BooleanToVisibilityConverter boolVisConverter = new BooleanToVisibilityConverter();
 
-        public virtual void BindMe(DependencyObject view) {
+        public override void BindMe(DependencyObject view) {
             b.Info.Log(PliskyBindingSwitch, "BindMe called, binding VM to View");
 
             if (InitialiseRequired && InitaliseOnBind) {

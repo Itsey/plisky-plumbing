@@ -1,8 +1,8 @@
-﻿#if false
+﻿
 namespace Plisky.Test {
-
+    using Plisky.Diagnostics;
     using Plisky.Helpers;
-    using Plisky.PliskyLibTests.Mocks;
+//    using Plisky.PliskyLibTests.Mocks;
     using Plisky.Plumbing;
     using System;
     using System.Collections.Generic;
@@ -12,15 +12,15 @@ namespace Plisky.Test {
 
     public class ConfigHubTests {
         private UnitTestHelper uth = new UnitTestHelper();
-
+        protected Bilge b = new Bilge();
         
         ~ConfigHubTests() {
             uth.ClearUpTestFiles();
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfigCurrentInstance_SingleProvider_ReturnsCorrectly() {
-            string returnString = UnitTestHelper.GenericString1;
+            string returnString = TestData.GenericString1;
 
             ConfigHub.Current.RegisterProvider("test", () => {
                 return returnString;
@@ -31,7 +31,7 @@ namespace Plisky.Test {
             Assert.Equal(returnString, actual);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_SingleProvider_ReturnsCorrectly() {
             string returnString = "arflebarflegloop";
 
@@ -45,7 +45,7 @@ namespace Plisky.Test {
             Assert.Equal(returnString, actual);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackProvider_ReturnsCorrectly() {
             string returnString = "arflebarflegloop";
 
@@ -61,20 +61,20 @@ namespace Plisky.Test {
             Assert.Equal(returnString, actual);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_NoProvider_ReturnsNullIfNotRequired() {
             ConfigHub sut = new ConfigHub();
             string res = sut.GetSetting("arflebarfle");
             Assert.Null(res);
         }
 
-        [Fact][Trait("xunit","regression")]        
+        [Fact][Trait(Traits.Age,Traits.Regression)]        
         public void GetConfig_NoProvider_ThrowsIfRequired() {
             ConfigHub sut = new ConfigHub();
             Assert.Throws<ConfigHubMissingConfigException>( () => sut.GetSetting("arflebarfle", true));
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackProviderLoaded_DoesNotReturnForNotSpecified() {
             string returnString = "arflebarflegloop";
 
@@ -90,7 +90,71 @@ namespace Plisky.Test {
             Assert.Null(actual);
         }
 
-        [Fact][Trait("xunit","regression")]
+
+#if DEBUG
+        [Fact(DisplayName = nameof(EmptyDirectory_DefaultsToCurrent))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Developer)]
+        public void EmptyDirectory_DefaultsToCurrent() {
+            b.Info.Flow();
+
+            ConfigHub sut = new ConfigHub();
+            
+            var cd = sut.Test_GetDirectoryName(string.Empty);            
+            Assert.False(string.IsNullOrWhiteSpace(cd));
+            
+        }
+
+        [Fact(DisplayName = nameof(Directory_ResolvesEnvironmentVariable))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Developer)]
+        public void Directory_ResolvesEnvironmentVariable() {
+            b.Info.Flow();
+
+            var par = Environment.GetEnvironmentVariable("PLISKYAPPROOT");
+            Assert.NotNull(par);  // Validation check that this machine is configured correct.
+
+            ConfigHub sut = new ConfigHub();
+            
+            var dn = sut.Test_GetDirectoryName("%PLISKYAPPROOT%\\MyDir");
+            Assert.Equal(par + "\\MyDir", dn);
+        }
+#endif
+
+        [Fact(DisplayName = nameof(Directory_FullConfigStringRetrieval))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Integration)]
+        public void Directory_FullConfigStringRetrieval() {
+            b.Info.Flow();
+
+            
+            ConfigHub sut = new ConfigHub();
+
+            sut.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config","tests.xml");
+            var str = sut.GetSetting("testconstr",true);
+
+            Assert.Equal("CONSTR-Value", str);
+        }
+
+
+        [Fact(DisplayName = nameof(Directory_FullConfigStringRetrievalCrypto))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Integration)]
+        public void Directory_FullConfigStringRetrievalCrypto() {
+            b.Info.Flow();
+            const string PLAINTEXT = "ItAllWorked";
+
+            ConfigHub sut = new ConfigHub();
+            var mcr = new MockSimpleCrypto();
+            mcr.AddDecryption("CONSTR-Value", PLAINTEXT);
+            sut.CryptoProvider = mcr;
+            sut.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config", "tests.xml");
+            var str = sut.GetSetting("testconstr", true,true);
+
+            Assert.Equal(PLAINTEXT, str);
+        }
+
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_DirectoryFallbackProvider_Works() {
             const string testData = "bannana";
             string tmp = Path.GetTempPath() + Environment.MachineName + ".chcfg";
@@ -105,7 +169,7 @@ namespace Plisky.Test {
             Assert.Equal(testData, res);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackProvider_CalledForAllRequests() {
             Dictionary<string, bool> testSettings = new Dictionary<string, bool>();
 
@@ -135,8 +199,9 @@ namespace Plisky.Test {
             }
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackProvider_CalledForAllStrings() {
+            TestData td = new TestData();
             ConfigHub sut = new ConfigHub();
             int hits = 0;
 
@@ -145,7 +210,7 @@ namespace Plisky.Test {
                 return "test";
             });
 
-            int totalHits = uth.RandomStore.Next(100) + 1;
+            int totalHits = td.RandomStore.Next(100) + 1;
 
             int i;
             for (i = 0; i < totalHits; i++) {
@@ -155,7 +220,7 @@ namespace Plisky.Test {
             Assert.Equal<int>(i, hits);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_TwoProviders_SpecificOverridesFallback() {
             ConfigHub sut = new ConfigHub();
             sut.RegisterFallbackProvider((pName) => {
@@ -171,7 +236,7 @@ namespace Plisky.Test {
             Assert.Equal("result2", actual);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackAppConfigProvider_Returnsconfiguration() {
             ConfigHub sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
@@ -179,14 +244,14 @@ namespace Plisky.Test {
             Assert.Equal("arfleBARFLEgloop", val);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackAppConfigProvider_NotInstalledByDefault() {
             ConfigHub sut = new ConfigHub();
             string val = sut.GetSetting("testSettingValue");
             Assert.Null(val);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackAppConfigProvider_IsCaseInsensitive() {
             ConfigHub sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
@@ -194,7 +259,7 @@ namespace Plisky.Test {
             Assert.Equal("arfleBARFLEgloop", val);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_CustomType_ReturnsCorrectly() {
             ConfigHub sut = new ConfigHub();
             sut.RegisterProvider<TestMessage>("settingVal", () => {
@@ -205,7 +270,7 @@ namespace Plisky.Test {
             Assert.Equal("HelloWorld", result.Data);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackAppConfig_NestedIsEmptyWhenNotPresent() {
             string combinedString = "ARFLEUSBarfleyGloopify";
             ConfigHub sut = new ConfigHub();
@@ -215,7 +280,7 @@ namespace Plisky.Test {
             Assert.Equal(combinedString, val);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackAppConfig_SupportsNestedReplacements() {
             string combinedString = "contactinatedIntoARFLEUSBarfleyGloopify";
             ConfigHub sut = new ConfigHub();
@@ -226,7 +291,7 @@ namespace Plisky.Test {
             Assert.Equal(combinedString, val);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_GetSetting_SpecificOveridesFallback() {
             ConfigHub sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
@@ -237,7 +302,7 @@ namespace Plisky.Test {
             Assert.Equal("NothingHere", val);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void RegisterMachineFallback_CallBackOccursForThisMachine() {
             ConfigHub sut = new ConfigHub();
             string MachineName = Environment.MachineName;
@@ -254,7 +319,7 @@ namespace Plisky.Test {
             Assert.Equal(expected, result);
         }
 
-        [Fact][Trait("xunit","regression")]        
+        [Fact][Trait(Traits.Age,Traits.Regression)]        
         public void RegisterMachineFallback_DuplicateName_CausesException() {
             ConfigHub sut = new ConfigHub();
             string MachineName = "MachineName";
@@ -268,7 +333,7 @@ namespace Plisky.Test {
               }));
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void RegisterFallbacks_ExcutedInOrderOfRegistration() {
             ConfigHub sut = new ConfigHub();
             string machineName = Environment.MachineName;
@@ -290,7 +355,7 @@ namespace Plisky.Test {
             Assert.False(secondExecuted, "The second one should not have been executed");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void RegisterMachineFallback_NoMachineMatches_DefaultIsCalled() {
             ConfigHub sut = new ConfigHub();
 
@@ -312,7 +377,7 @@ namespace Plisky.Test {
             Assert.True(secondExecuted, "The second one should have been executed as a default");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetTypedSetting_DoesExecuteFallback() {
             ConfigHub sut = new ConfigHub();
             bool fallbackExecuted = false;
@@ -325,7 +390,7 @@ namespace Plisky.Test {
             Assert.True(fallbackExecuted, "The fallback was not execued");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsBool() {
             ConfigHub sut = new ConfigHub();
             sut.AddMachineFallbackProvider(ConfigHub.DefaultMachineName, (settingName) => {
@@ -336,7 +401,7 @@ namespace Plisky.Test {
             Assert.True(val, "The incorrect value was returned");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsInt() {
             ConfigHub sut = new ConfigHub();
             sut.AddMachineFallbackProvider(ConfigHub.DefaultMachineName, (settingName) => {
@@ -347,7 +412,7 @@ namespace Plisky.Test {
             Assert.Equal(12367, val);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsDouble() {
             ConfigHub sut = new ConfigHub();
             sut.AddMachineFallbackProvider(ConfigHub.DefaultMachineName, (settingName) => {
@@ -358,7 +423,7 @@ namespace Plisky.Test {
             Assert.Equal(1236754, val);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Crypto_DecryptorPresent_ChangesValue() {
             ConfigHub sut = new ConfigHub();
             MockSimpleCrypto msc = new MockSimpleCrypto();
@@ -373,7 +438,7 @@ namespace Plisky.Test {
             Assert.Equal(msc.AlwaysThisValue, s);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Crypto_DecryptorPresent_NoChangeNonEncrypted() {
             string inputVal = "xxx";
             ConfigHub sut = new ConfigHub();
@@ -388,7 +453,7 @@ namespace Plisky.Test {
             Assert.Equal(s, inputVal);
         }
 
-        [Fact][Trait("xunit","regression")]        
+        [Fact][Trait(Traits.Age,Traits.Regression)]        
         public void Crypto_DecryptNeeded_NoCrypto_ThrowsException() {
             ConfigHub sut = new ConfigHub();
 
@@ -401,7 +466,7 @@ namespace Plisky.Test {
             );
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Crypto_SimpleCryptoWorks() {
             ConfigHub sut = new ConfigHub();
             SimpleCryptoConfigProvider scc = new SimpleCryptoConfigProvider(12);
@@ -420,4 +485,3 @@ namespace Plisky.Test {
         }
     }
 }
-#endif

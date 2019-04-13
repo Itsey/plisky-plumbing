@@ -1,4 +1,4 @@
-﻿#if false
+﻿
 namespace Plisky.Test {
 
     /// <summary>
@@ -16,4 +16,3 @@ namespace Plisky.Test {
         }
     }
 }
-#endif

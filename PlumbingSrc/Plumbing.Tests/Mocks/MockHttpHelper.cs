@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Plisky.Test.Mocks {
+namespace Plisky.Test {
     internal class MockHttpHelper : HttpHelper {
         private HttpStatusCode responseCode;
         private string responseBody;

@@ -13,37 +13,8 @@
     /// </summary>
     public sealed class UnitTestHelper {
         private Bilge b = new Bilge("UTH");
-        private Random rand;
         
-
-        /// <summary>
-        /// Provides access to a Random class stored within the unit test helper.  No benefit to using it over a normal one
-        /// just saves having to create them or store them.
-        /// </summary>
-        public Random RandomStore {
-            get {
-                if (rand == null) {
-                    rand = new Random();
-                }
-
-                return rand;
-            }
-        }
-
-        /// <summary>
-        /// Generic string used in unit testing, when any old token string will do.
-        /// </summary>
-        public const string GenericString1 = "arflebarflegloop";
-
-        /// <summary>
-        /// Second Generic string used in unit testing, when any old token string will do.
-        /// </summary>
-        public const string GenericString2 = "BilgeAndFlimflam";
-
-        /// <summary>
-        /// Third Generic string used in unit testing, when any old token string will do.
-        /// </summary>
-        public const string GenericString3 = "spontralification of the spire";
+      
 
         /// <summary>
         /// Creates a new instance of the UnitTestHelper class
@@ -96,7 +67,7 @@
             if ((target1 == null) && (target2 != null)) { return false; }
             if ((target2 == null) && (target1 != null)) { return false; }
             // Now they must be of the same type
-            Type t = target1.GetType();
+            var t = target1.GetType();
             if (t != target2.GetType()) { return false; }
 
             if (target1.GetType().IsArray) {
@@ -111,7 +82,7 @@
                 return target1.Equals(target2);
             }
 
-            foreach (PropertyInfo pi in t.GetProperties()) {
+            foreach (var pi in t.GetProperties()) {
                 if (pi.GetIndexParameters().Length == 0) {
                     // Non indexed properties
 
@@ -132,7 +103,7 @@
                 }
             }
 
-            foreach (FieldInfo fi in t.GetFields()) {
+            foreach (var fi in t.GetFields()) {
                 object v1 = fi.GetValue(target1);
                 object v2 = fi.GetValue(target2);
 
@@ -169,28 +140,30 @@
         /// <param name="target">The value to change</param>
         /// <returns>A new value for the object val</returns>
         public object AlterValue(object target) {
+            var td = new TestData();
+
             if (target == null) { return null; }
 
-            Type t = target.GetType();
+            var t = target.GetType();
             if (t == typeof(long)) {
-                return (long)target + 1;
+                return (long)target + td.RandomStore.Next(5);
             }
             if (t == typeof(uint)) {
-                return (uint)target + 1;
+                return (uint)target + td.RandomStore.Next(5);
             }
             if (t == typeof(double)) {
-                return (double)target + 1;
+                return (double)target + td.RandomStore.Next(5);
             }
             if (t == typeof(int)) {
-                return (int)target + 1;
+                return (int)target + td.RandomStore.Next(5);
             }
 
             if (t == typeof(bool)) {
                 return (!(bool)target);  // Invert it for bools
             }
             if (t == typeof(string)) {
-                string s = GenerateFriendlyString();
-                int length = RandomStore.Next(5);
+                string s = td.GenerateFriendlyString();
+                int length = td.RandomStore.Next(5);
                 if (s.Length < length) {
                     length = s.Length;
                 }
@@ -199,141 +172,7 @@
             return target;
         }
 
-        private int m_limitStringsTo = 2000;
-
-        /// <summary>
-        /// The maximum length which random strings are returned for any method which is called without
-        /// specifying the maximum
-        /// </summary>
-        public int LimitStringsTo {
-            get { return m_limitStringsTo; }
-            set { m_limitStringsTo = value; }
-        }
-
-        /// <summary>
-        /// Returns a generated filename safe string between the lengths of 3 and 30 characters.
-        /// </summary>
-        /// <returns>A random, filename friendly string between 3 and 30 characters long</returns>
-        public string GenerateFriendlyString() {
-            return GenerateSpecificRandomString(3, 30, false, true);
-        }
-
-        /// <summary>
-        /// Generates a random string between the specified minimum and maximum lengths,
-        /// </summary>
-        /// <param name="minLength">The minimum length of the returned string, can be 0 or greater</param>
-        /// <param name="maxLength">The maximum length of the returned string must be >= minLength</param>
-        /// <param name="makeFileNameSafe">If true only filename safe characters are returned</param>
-        /// <returns>A randomly generated string between minLength and maxLength characters in length.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if min length is less than zero or greater than max length</exception>
-        public string GenerateString(int minLength, int maxLength, bool makeFileNameSafe) {
-            if (makeFileNameSafe) {
-                return GenerateSpecificRandomString(minLength, maxLength, false, true);
-            } else {
-                return GenerateSpecificRandomString(minLength, maxLength, false, true);
-            }
-        }
-
-        public string GenerateString(int minLength, int maxLength, bool makeFileNameSafe, bool useNumbers) {
-            return GenerateSpecificRandomString(minLength, maxLength, makeFileNameSafe, useNumbers);
-        }
-
-        private string GenerateSpecificRandomString(int minLength, int maxLength, bool allowPunctuation, bool allowNumbers) {
-
-            #region entry code
-
-            if (minLength < 0) {
-                throw new ArgumentOutOfRangeException("minLength", "minLength must be 0 or greater");
-            }
-            if (minLength > maxLength) {
-                throw new ArgumentOutOfRangeException("minLength", "minLength must be less than maxLength");
-            }
-            if (maxLength == 0) {
-                return string.Empty;
-            }
-
-            #endregion
-
-            string sampleRange = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            if (allowPunctuation) {
-                sampleRange += ",.<>;':@#/~?+_-=!\"£$%^&*()`¬|\\";
-            }
-            if (allowNumbers) {
-                sampleRange += "1234567890";
-            }
-
-            char[] possibleCharacters = sampleRange.ToCharArray();
-
-            int characters = rand.Next(minLength, maxLength);
-
-            StringBuilder result = new StringBuilder(characters);   // I seriously doubt this is faster.
-
-            for (; characters > 0; characters--) {
-                result.Append(possibleCharacters[rand.Next(0, possibleCharacters.Length)]);
-            }
-
-            return result.ToString();
-        }
-
-        private string GenerateRandomString(int minLength, int maxLength) {
-            int characters = RandomStore.Next(minLength, maxLength);
-
-            StringBuilder result = new StringBuilder(characters);   // I seriously doubt this is faster.
-
-            for (; characters > 0; characters--) {
-                result.Append((char)RandomStore.Next(15, 125));
-            }
-
-            return result.ToString();
-        }
-
-        /// <summary>
-        /// Generates a random string with which testing can be performed.  This string will contain a variety
-        /// of characters within the ASCII caharacter range 15-125 ish.
-        /// </summary>
-        /// <returns>A random length generated string</returns>
-        public string GenerateString() {
-            return GenerateRandomString(1, m_limitStringsTo);
-        }
-
-        /// <summary>
-        /// Generates a random string with which testing can be performed.  This string will contain a variety
-        /// of characters within the ASCII caharacter range 15-125 ish.
-        /// </summary>
-        /// <param name="minimumLength"> The minimum length of this string</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the minimum Length specified is less than 0 or > LimitStringsTo</exception>
-        /// <returns>A random length generated string</returns>
-        public string GenerateString(int minimumLength) {
-            if (minimumLength < 0) {
-                throw new ArgumentOutOfRangeException("minimumLength", "The minimum length for a generated string can not be less than zero");
-            }
-            if (minimumLength > m_limitStringsTo) {
-                throw new ArgumentOutOfRangeException("minimumLength", "The minimum length for a generated string exceeds the LimitStringsTo property length");
-            }
-            return GenerateRandomString(minimumLength, m_limitStringsTo);
-        }
-
-        /// <summary>
-        /// Generates a random string with which testing can be performed.  This string will contain a variety
-        /// of characters within the ASCII caharacter range 15-125 ish.
-        /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the minimum length or maximum length are specified as less than zero</exception>
-        /// <param name="minimumLength">The minimum length of this string</param>
-        /// <param name="maximumLength">The maximum length of this string</param>
-        /// <returns>A random length generated string</returns>
-        public string GenerateString(int minimumLength, int maximumLength) {
-            if (minimumLength < 0) {
-                throw new ArgumentOutOfRangeException("minimumLength", "The minimum length for a generated string can not be less than zero");
-            }
-            if (maximumLength < 0) {
-                throw new ArgumentOutOfRangeException("minimumLength", "The maximum length for a generated string can not be less than zero");
-            }
-            if (maximumLength < minimumLength) {
-                throw new ArgumentOutOfRangeException("maximumLength", "The maximum length must be greater than the minimum length");
-            }
-
-            return GenerateRandomString(minimumLength, maximumLength);
-        }
+       
 
         /// <summary>
         /// Attempts to delete all of the test files that are used.
@@ -356,18 +195,18 @@
         /// </summary>
         /// <param name="target">The object to alter.</param>
         public void AlterAllValuesOnType(object target) {
-            Type t = target.GetType();
+            var t = target.GetType();
             object val;
             object newOne;
 
-            foreach (PropertyInfo pi in t.GetProperties()) {
+            foreach (var pi in t.GetProperties()) {
                 if (pi.CanWrite) {
                     val = pi.GetValue(target, null);
                     newOne = AlterValue(val);
                     pi.SetValue(target, newOne, null);
                 }
             }
-            foreach (FieldInfo fi in t.GetFields()) {
+            foreach (var fi in t.GetFields()) {
                 val = fi.GetValue(target);
                 newOne = AlterValue(val);
                 fi.SetValue(target, newOne);
@@ -427,7 +266,7 @@
             if ((fileNameToCheck == null) || (fileNameToCheck.Length == 0)) {
                 throw new ArgumentException("The fileName must be valid.", "fileNameToCheck");
             }
-            FileAttributes fa = File.GetAttributes(fileNameToCheck);
+            var fa = File.GetAttributes(fileNameToCheck);
             return ((fa & FileAttributes.ReadOnly) == FileAttributes.ReadOnly);
         }
 
@@ -530,7 +369,7 @@
         /// <param name="data">The string to have its case reversed</param>
         /// <returns>The string with its case reversed.</returns>
         public static string ReverseCase(string data) {
-            StringBuilder result = new StringBuilder(data.Length);
+            var result = new StringBuilder(data.Length);
 
             foreach (char c in data) {
                 result.Append(char.IsUpper(c) ? char.ToLower(c) : char.ToUpper(c));
@@ -574,8 +413,8 @@
         private object CloneObjectImplementation(object source) {
             if (source == null) { return null; }
 
-            Type srcType = source.GetType();
-            BindingFlags flgs = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            var srcType = source.GetType();
+            var flgs = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             object result;
 
             if (srcType == typeof(string)) {
@@ -585,9 +424,9 @@
 
             if (srcType.IsArray) {
                 //Again must check before clas.
-                Type arrayelementType = Type.GetTypeArray((object[])source)[0];
-                Array sauce = (Array)source;
-                Array newArray = Array.CreateInstance(arrayelementType, sauce.Length);
+                var arrayelementType = Type.GetTypeArray((object[])source)[0];
+                var sauce = (Array)source;
+                var newArray = Array.CreateInstance(arrayelementType, sauce.Length);
                 for (int idx = 0; idx < newArray.Length; idx++) {
                     newArray.SetValue(CloneObjectImplementation(sauce.GetValue(idx)), idx);
                 }

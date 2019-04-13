@@ -11,7 +11,7 @@
     /// A class responsible for managing access to configuration information that may be required by an application.  Providers can place information into
     /// the hub and recievers can call GetSetting to retrieve single pieces of information.
     /// </summary>
-    public class ConfigHub {
+    public partial class ConfigHub {
         public const string DateTimeSettingName = "defaultdatetimevalue";
         public const string DefaultMachineName = "defaultmachinename";
         public IDecryptStuff CryptoProvider { get; set; }
@@ -74,13 +74,13 @@
         public void AddDefaultAppConfigFallback() {
             RegisterFallbackProvider((pName) => {
 
-#region marker constants
+                #region marker constants
 
                 const string MARKERIDENTIFIER = "$$";
                 const int MARKERIDLEN = 2;  // MARKERIDENTIFIER.Length
                 const int MARKERIDLENDOUBLED = 4;  // MARKERIDENTIFIER.Length ;
 
-#endregion
+                #endregion
 
                 string vmatch;
                 vmatch = ConfigurationManager.AppSettings[pName];
@@ -106,13 +106,17 @@
         /// be looked for instead.
         /// </summary>
         /// <param name="directory">The directory to search [APP] can be used as the app directory and [APP]\subdir works too.</param>
-        public void AddDirectoryFallbackProvider(string directory) {
+        /// <param name="fileName">Optional: Filename that is added in the directory, defaults to machinename.chcfg.</param>
+        public void AddDirectoryFallbackProvider(string directory, string fileName = null) {
             string actualDir = GetDirectoryName(directory);
 
-            
+
+            if (fileName==null) {
                 SetupMachineName();
-            
-            string machineBasedFilename = Path.Combine(directory, thisMachineName + ".chcfg");
+                fileName = thisMachineName+ ".chcfg";
+            }
+
+            string machineBasedFilename = Path.Combine(actualDir, fileName);
             if (File.Exists(machineBasedFilename)) {
                 RegisterFallbackProvider((setName) => {
                     XDocument x = XDocument.Load(machineBasedFilename);
@@ -128,6 +132,10 @@
             }
             if (directory.StartsWith("[APP]")) {
                 result = directory.Replace("[APP]", Assembly.GetEntryAssembly().Location);
+            }
+            if (directory.Contains("%")) {
+                // Environment variable tokenisation
+                result = Environment.ExpandEnvironmentVariables(directory);
             }
             return result;
         }

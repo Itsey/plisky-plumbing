@@ -34,8 +34,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigHubUtil", "ConfigHubU
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Plumbing.Testing", "Plumbing.Testing\Plumbing.Testing.shproj", "{70D3DACF-379C-4105-9DF4-995023B8602E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.47", "FrameworkVersions\Plisky.Testing.47\Plisky.Testing.47.csproj", "{D85B0BF8-248C-4A53-A874-52D4C81D5E95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.452", "FrameworkVersions\Plisky.Testing.452\Plisky.Testing.452.csproj", "{47365C71-BF09-4EB0-B4A4-325A347D39C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.46", "FrameworkVersions\Plisky.Testing.46\Plisky.Testing.46.csproj", "{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.Standard", "FrameworkVersions\Plisky.Testing.Standard\Plisky.Testing.Standard.csproj", "{3C202AC2-6155-4829-A73D-8468AF639B77}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Plumbing.Testing\Plumbing.Testing.projitems*{1b7cc383-e196-49bf-a824-4ec1aaebee4d}*SharedItemsImports = 4
+		Plumbing.Testing\Plumbing.Testing.projitems*{47365c71-bf09-4eb0-b4a4-325a347d39c5}*SharedItemsImports = 4
 		Plumbing.Testing\Plumbing.Testing.projitems*{70d3dacf-379c-4105-9df4-995023b8602e}*SharedItemsImports = 13
 		Plumbing.Shared\Plumbing.Shared.projitems*{76c8f9f5-05f2-4251-be0c-50abc65f80f9}*SharedItemsImports = 4
 		Plumbing.Testing\Plumbing.Testing.projitems*{79784982-59c1-46a4-9bb2-bfd83fa8fe6e}*SharedItemsImports = 4
@@ -43,6 +53,7 @@ Global
 		Plumbing.Shared\Plumbing.Shared.projitems*{aab5d441-24a1-4b45-ae82-a041fee3475a}*SharedItemsImports = 4
 		Plumbing.Shared\Plumbing.Shared.projitems*{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}*SharedItemsImports = 4
 		Plumbing.Shared\Plumbing.Shared.projitems*{d37a44a0-db6e-4945-b904-7aa00c2d8e34}*SharedItemsImports = 4
+		Plumbing.Testing\Plumbing.Testing.projitems*{d85b0bf8-248c-4a53-a874-52d4c81d5e95}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +112,30 @@ Global
 		{814D46F5-C31C-4686-B586-412B51560646}.Develop|Any CPU.Build.0 = Debug|Any CPU
 		{814D46F5-C31C-4686-B586-412B51560646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{814D46F5-C31C-4686-B586-412B51560646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D85B0BF8-248C-4A53-A874-52D4C81D5E95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D85B0BF8-248C-4A53-A874-52D4C81D5E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D85B0BF8-248C-4A53-A874-52D4C81D5E95}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
+		{D85B0BF8-248C-4A53-A874-52D4C81D5E95}.Develop|Any CPU.Build.0 = Debug|Any CPU
+		{D85B0BF8-248C-4A53-A874-52D4C81D5E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D85B0BF8-248C-4A53-A874-52D4C81D5E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47365C71-BF09-4EB0-B4A4-325A347D39C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47365C71-BF09-4EB0-B4A4-325A347D39C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47365C71-BF09-4EB0-B4A4-325A347D39C5}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
+		{47365C71-BF09-4EB0-B4A4-325A347D39C5}.Develop|Any CPU.Build.0 = Debug|Any CPU
+		{47365C71-BF09-4EB0-B4A4-325A347D39C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47365C71-BF09-4EB0-B4A4-325A347D39C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}.Develop|Any CPU.Build.0 = Debug|Any CPU
+		{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C202AC2-6155-4829-A73D-8468AF639B77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C202AC2-6155-4829-A73D-8468AF639B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C202AC2-6155-4829-A73D-8468AF639B77}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C202AC2-6155-4829-A73D-8468AF639B77}.Develop|Any CPU.Build.0 = Debug|Any CPU
+		{3C202AC2-6155-4829-A73D-8468AF639B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C202AC2-6155-4829-A73D-8468AF639B77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +145,10 @@ Global
 		{AAB5D441-24A1-4B45-AE82-A041FEE3475A} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 		{73287A0E-5084-4E71-A7F0-676544B068F6} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
+		{D85B0BF8-248C-4A53-A874-52D4C81D5E95} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
+		{47365C71-BF09-4EB0-B4A4-325A347D39C5} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
+		{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
+		{3C202AC2-6155-4829-A73D-8468AF639B77} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FDF37E7-BBEF-4A79-8975-0DDA5195F4BC}

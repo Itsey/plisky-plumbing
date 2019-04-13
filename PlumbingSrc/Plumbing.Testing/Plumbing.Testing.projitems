@@ -9,8 +9,9 @@
     <Import_RootNamespace>Plumbing.Testing</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)TestHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestSupport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UnitTestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory).editorconfig" />

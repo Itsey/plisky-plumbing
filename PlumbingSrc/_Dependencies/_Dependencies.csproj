@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="versions\CommonPliskyTesting.cs" />
     <Compile Include="versions\CommonInfoListeners.cs" />
     <Compile Include="versions\CommonInfoDiags.cs" />
     <Compile Include="versions\CommonAssemblyInfo.cs" />
@@ -90,6 +91,9 @@
     <CodeAnalysisDictionary Include="Dictionary.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Packaging\PliskyTesting.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Packaging\PliskyPlumbing.nuspec">
       <SubType>Designer</SubType>
     </None>

@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)HttpHelper\WebCallResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHub.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHubMissingConfigException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHub_Internals.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Hub.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\HubMessageBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IDecryptStuff.cs" />
@@ -32,6 +33,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Security\CryptoHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\PasswordSalt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\SaltedPassword.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UnitTestHelper.cs" />
   </ItemGroup>
 </Project>

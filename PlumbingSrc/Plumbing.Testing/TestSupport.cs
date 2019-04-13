@@ -47,6 +47,12 @@
         public const string Unit = "Unit";
 
         /// <summary>
+        /// Style - Developer Tests are designed to run on development machines only, not on build servers.  This is because they either
+        /// use specific configuration for dealing with private elements of a class or they depend on settings and data stored locally.
+        /// </summary>
+        public const string Developer = "Dev";
+
+        /// <summary>
         /// Style - Smoke tests are integrated, but leightweight non distructive - suitable for production tests.
         /// </summary>
         public const string Smoke = "Smoke";

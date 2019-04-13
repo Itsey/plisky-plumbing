@@ -3,8 +3,8 @@
     using System.Net;
     using Xunit;
     using Plisky.Plumbing;
-    using Plisky.Test.Mocks;
     using System.Net.Http;
+    using System.Threading.Tasks;
 
     public class HttpHelperTests {
 
@@ -161,7 +161,7 @@
 
             _ = sut.Execute("p");
 
-            Assert.Equal(hh.LastUsedVerb, "POST");
+            Assert.Equal("POST", hh.LastUsedVerb);
         }
 
 
@@ -221,8 +221,8 @@
 
             var s = hh.GetHeaderValue("Authorization");
 
-            Assert.True(s.Contains("Bearer"));
-            Assert.True(s.Contains("secret"));  // cant contain it in plain text.
+            Assert.Contains("Bearer", s);
+            Assert.Contains("secret", s);  // cant contain it in plain text.
         }
 
 
@@ -242,10 +242,10 @@
         [Fact(DisplayName = nameof(Body_IsPresent))]
         [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
-        public void Body_IsPresent() {
+        public async Task Body_IsPresent() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
-            sut.Execute("qparam", "body");
+            await sut.Execute("qparam", "body");
 
             var s = hh.GetBodyValue();
             Assert.Equal("body", s);
@@ -263,26 +263,26 @@
         [Fact(DisplayName = nameof(Retry_500_DoesRetry))]
         [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
-        public void Retry_500_DoesRetry() {
+        public async Task Retry_500_DoesRetry() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
             hh.SetResponse(HttpStatusCode.InternalServerError);
 
             sut.RetryCount = 5;
-            sut.Execute(null);
+            await sut.Execute(null);
             Assert.Equal(5, hh.CallsMade);
         }
 
         [Fact(DisplayName = nameof(Retry_404_DoesNotRetry))]
         [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
-        public void Retry_404_DoesNotRetry() {
+        public async Task Retry_404_DoesNotRetry() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
 
             hh.SetResponse(HttpStatusCode.NotFound);
             sut.RetryCount = 5;
-            sut.Execute(null);
+            await sut.Execute(null);
 
             Assert.Equal(1, hh.CallsMade);
         }
