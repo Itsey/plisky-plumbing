@@ -2,11 +2,11 @@
 <package >
   <metadata>
     <id>Plisky.Testing</id>
-    <version>1.0.0.0</version>
+    <version>1.0.1.0</version>
     <title>Plisky Infrastructure Testing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
-    <licenseUrl>https://opensource.org/licenses/MS-PL</licenseUrl>
+    <license type="expression">MS-PL</license>
     <projectUrl>http://www.plisky.net/main/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Unit Testing Support, TestData TestSupport and Test File Handling.</description>
