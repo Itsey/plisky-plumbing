@@ -76,8 +76,7 @@
                     } catch (WebException wx) {
                         result.Exception = wx;
                         if (wx.Status == WebExceptionStatus.ProtocolError) {
-                            var r = wx.Response as HttpWebResponse;
-                            if (r != null) {
+                            if (wx.Response is HttpWebResponse r) {
                                 result.Status = r.StatusCode;
                             }
                         }

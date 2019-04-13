@@ -39,7 +39,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Bug_IfBilgePassed_NullRefException))]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void Bug_IfBilgePassed_NullRefException() {
             b.Info.Flow();
             var clas = new CommandArgumentSupport(b);
@@ -55,7 +55,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Bug_IfPostfixSpecified_ItMustBeUsed))]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void Bug_IfPostfixSpecified_ItMustBeUsed() {
             b.Info.Flow();
             var clas = new CommandArgumentSupport();
@@ -82,7 +82,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Required_ThrowsIfNotPresent))]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void Required_ThrowsIfNotPresent() {
             b.Info.Flow();
 
@@ -128,7 +128,7 @@ namespace Plisky.Test {
 
         [Theory(DisplayName = nameof(DateTime_StringParse_Works))]
         [Trait("age", "fresh")]
-        [Trait("type", "exploratory")]
+        [Trait(Traits.Style, "exploratory")]
         [MemberData(nameof(DateTimeData))]
         public void DateTime_StringParse_Works(DateTime exp, string text) {
             b.Info.Flow();
@@ -152,7 +152,7 @@ namespace Plisky.Test {
 
 
         [Theory(DisplayName = nameof(DateTime_BasicParse_Works))]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         [InlineData(2018, 11, 22)]
         [InlineData(2000, 1, 1)]
         [InlineData(1945, 11, 11)]
@@ -180,7 +180,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(IntegerParameter_TooLarge_ReturnsCorrectError))]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void IntegerParameter_TooLarge_ReturnsCorrectError() {
             var clas = new CommandArgumentSupport();
             clas.ArgumentPostfix = ":";
@@ -202,7 +202,7 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(TestIntAndLogMaxValues))]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void TestIntAndLogMaxValues() {
             CommandArgumentSupport clas = new CommandArgumentSupport();
             clas.ArgumentPostfix = ":";
@@ -223,7 +223,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Basic_ArrayOfInts_Works))]
-        [Trait("type", "exploratory")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, "exploratory")] // Legacy Tests, replace when working on them.
         public void Basic_ArrayOfInts_Works() {
 
             var clas = new CommandArgumentSupport {
@@ -255,7 +255,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Basic_ArrayOfStrs_Works))]
-        [Trait("type", "exploratory")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, "exploratory")] // Legacy Tests, replace when working on them.
         public void Basic_ArrayOfStrs_Works() {
 
             var clas = new CommandArgumentSupport {
@@ -286,7 +286,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(BasicTest_GetAndSetProperties))]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void BasicTest_GetAndSetProperties() {
             var clas = new CommandArgumentSupport();
             Assert.Equal(string.Empty, clas.ArgumentPostfix);
@@ -307,7 +307,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void BasicTest_BooleanParameters() {
             b.Info.Log("Starting  Testing boolean behaviour");
 
@@ -357,7 +357,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void BasicTest_NumberStringAndBoolParams() {
             b.Info.Log("Starting test for SimpleArguments");
 
@@ -386,7 +386,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void BasicTest_ArgumentPrefix() {
             b.Info.Log("Starting  Testing Argument prefix behaviour");
 
@@ -425,7 +425,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(BasicTest_DefaultArguments))]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void BasicTest_DefaultArguments() {
             var c2 = new SampleCommandLine_C2();
             VerifySampleCommandLine2_InitialSate(c2);
@@ -447,7 +447,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void BasicTest_GenerateShortHelp() {
             var clas = new CommandArgumentSupport();
             var c2 = new SampleCommandLine_C2();
@@ -458,7 +458,7 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(BasicTest_MultipleArgumentsSameValue))]
-        [Trait("type", "regression")] // Legacy Tests, replace when working on them.
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
         public void BasicTest_MultipleArgumentsSameValue() {
             var clas = new CommandArgumentSupport();
             clas.ArgumentPrefix = "/";

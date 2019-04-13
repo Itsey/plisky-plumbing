@@ -15,9 +15,9 @@
     /// </summary>
     /// <remarks> Developed in conjunction with Nemingalator, therefore may not be suitable for reuse</remarks>
     public class CommandArgumentSupport {
-        private Bilge b;
-        private List<string> argumentErrorsDuringLastParse = new List<string>();
-        private List<Tuple<string, string>> Examples = new List<Tuple<string, string>>();
+        private readonly Bilge b;
+        private readonly List<string> argumentErrorsDuringLastParse = new List<string>();
+        private readonly List<Tuple<string, string>> Examples = new List<Tuple<string, string>>();
 
 
         /// <summary>
@@ -342,7 +342,7 @@
         }
 
         private static bool StringToBool(string theValue) {
-            bool tbool = false;
+            bool tbool;
 
             string argWorkingString = theValue.ToLower();
             if ((argWorkingString == "y") || (argWorkingString == "yes") || (argWorkingString == "t")) {

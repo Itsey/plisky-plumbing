@@ -79,7 +79,7 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(TFSUseCaseRemainderCheck))]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void TFSUseCaseRemainderCheck() {
             var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
@@ -102,7 +102,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void TFSUseCaseOptionalPrefix() {
             var tcc1 = new Kev_TFS_UseCase();
             var tcc2 = new Kev_TFS_UseCase();
@@ -133,7 +133,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void TFSUseCaseUsesProperties() {
             var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
@@ -154,7 +154,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void TestingKevsUseCase2() {
             var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
@@ -163,7 +163,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void TestingKevsUseCase3() {
             var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
@@ -176,7 +176,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void UseCase1_BasicFilenameParameter() {
             b.Info.Log("Starting Usecase1 Basic testing");
 
@@ -215,7 +215,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void UseCase2_OptionalParameterDefaultFilenames() {
             b.Info.Log("Starting UseCase2 Testing");
 
@@ -255,7 +255,7 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        [Trait("type", "regression")]
+        [Trait(Traits.Style, Traits.Regression)]
         public void UseCase3_TFSBuildToolSampleArguments() {
             b.Info.Log("Starting UseCase3 - TBuildtool Sample UseCase");
 

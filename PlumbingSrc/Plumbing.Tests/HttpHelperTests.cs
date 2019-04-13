@@ -9,8 +9,8 @@
     public class HttpHelperTests {
 
         [Fact(DisplayName = nameof(Constructor_SetsBaseUri))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Constructor_SetsBaseUri() {
             const string val = "http://notarealurl/somwhere/not";
 
@@ -19,16 +19,16 @@
         }
 
         [Fact(DisplayName = nameof(DefaultContentType_Json))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void DefaultContentType_Json() {
             var sut = new HttpHelper();
             Assert.Equal("application/json", sut.AcceptContentType);
         }
 
         [Fact(DisplayName = nameof(Constructor_MustBeValidIfPassed))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Constructor_MustBeValidIfPassed() {
             Assert.Throws<ArgumentNullException>(() => {
                 var sut = new HttpHelper(val: null);
@@ -41,7 +41,7 @@
 
 
         [Fact(DisplayName = nameof(HttpSucces_ReturnsSuccess))]
-        [Trait("age", "fresh")]
+        [Trait(Traits.Age, "fresh")]
         public async void HttpSucces_ReturnsSuccess() {
             var hh = new MockHttpHelper("dummy");
             hh.SetResponse(HttpStatusCode.OK);
@@ -55,8 +55,8 @@
 
 
         [Fact(DisplayName = nameof(MockHelper_SetResponse_ReturnsResponse))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public async void MockHelper_SetResponse_ReturnsResponse() {
             var hh = new MockHttpHelper("dummy");
             hh.SetResponse(HttpStatusCode.InternalServerError);
@@ -71,8 +71,8 @@
         }
 
         [Fact(DisplayName = nameof(Response_Non200_SetsSuccessFalse))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Response_Non200_SetsSuccessFalse() {
             var sut = new WebCallResponse();
 
@@ -92,8 +92,8 @@
 
 
         [Theory(DisplayName = nameof(GetUri_ReturnsUri))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         [InlineData("https://test","test","test", "https://test/test/test")]
         [InlineData("https://www.google.co.uk/", "monkey", "fish", "https://www.google.co.uk/monkey/fish")]
         [InlineData("http://1", "/2", "3?4&5&6", "http://1/2/3?4&5&6")]
@@ -110,8 +110,8 @@
 
 
         [Fact(DisplayName = nameof(GetUri_BaseCanNotBeNull))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void GetUri_BaseCanNotBeNull() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -127,8 +127,8 @@
 
 
         [Fact(DisplayName = nameof(Verb_ExecuteSet_Arrives))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Verb_ExecuteSet_Arrives() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -140,8 +140,8 @@
 
 
         [Fact(DisplayName = nameof(Verb_DefaultIs_Get))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Verb_DefaultIs_Get() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -152,8 +152,8 @@
 
 
         [Fact(DisplayName = nameof(Verb_PropSet_Persists))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Verb_PropSet_Persists() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -166,8 +166,8 @@
 
 
         [Fact(DisplayName = nameof(CustomVerb_Works))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void CustomVerb_Works() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -179,8 +179,8 @@
 
 
         [Fact(DisplayName = nameof(Verb_ArivesUpperCase))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Verb_ArivesUpperCase() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -198,8 +198,8 @@
 
 
         [Fact(DisplayName = nameof(Auth_Basic_AddsB64Creds))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Auth_Basic_AddsB64Creds() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -212,8 +212,8 @@
         }
 
         [Fact(DisplayName = nameof(Auth_Bearer_AddsCreds))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Auth_Bearer_AddsCreds() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -227,8 +227,8 @@
 
 
         [Fact(DisplayName = nameof(Header_IsPresent))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Header_IsPresent() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -240,8 +240,8 @@
 
 
         [Fact(DisplayName = nameof(Body_IsPresent))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Body_IsPresent() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -253,16 +253,16 @@
 
 
         [Fact(DisplayName = nameof(MockHelper_StartsZeroCallsMade))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void MockHelper_StartsZeroCallsMade() {
             var hh = new MockHttpHelper("dummy");
             Assert.Equal(0, hh.CallsMade);
         }
 
         [Fact(DisplayName = nameof(Retry_500_DoesRetry))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Retry_500_DoesRetry() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;
@@ -274,8 +274,8 @@
         }
 
         [Fact(DisplayName = nameof(Retry_404_DoesNotRetry))]
-        [Trait("age", "current")]
-        [Trait("type", "regression")]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
         public void Retry_404_DoesNotRetry() {
             var hh = new MockHttpHelper("dummyuri");
             HttpHelper sut = hh;

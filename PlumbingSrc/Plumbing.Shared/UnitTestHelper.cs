@@ -14,7 +14,7 @@
     public sealed class UnitTestHelper {
         private Bilge b = new Bilge("UTH");
         private Random rand;
-        private HttpHelper hh;
+        
 
         /// <summary>
         /// Provides access to a Random class stored within the unit test helper.  No benefit to using it over a normal one

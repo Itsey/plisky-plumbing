@@ -102,15 +102,16 @@
 
         /// <summary>
         /// Adds a fall back handler to look up settings in xml files based on the machine name in a specific driectory. The behaviour is to find files
-        /// that are machinename.chcfg to resolve the settings names.
+        /// that are machinename.chcfg to resolve the settings names.  If an app setting is set to Environment name then environmentname.chcfg will 
+        /// be looked for instead.
         /// </summary>
-        /// <param name="directory"></param>
+        /// <param name="directory">The directory to search [APP] can be used as the app directory and [APP]\subdir works too.</param>
         public void AddDirectoryFallbackProvider(string directory) {
             string actualDir = GetDirectoryName(directory);
 
-            lock (lockme) {
+            
                 SetupMachineName();
-            }
+            
             string machineBasedFilename = Path.Combine(directory, thisMachineName + ".chcfg");
             if (File.Exists(machineBasedFilename)) {
                 RegisterFallbackProvider((setName) => {
@@ -180,11 +181,13 @@
 
         private static void SetupMachineName() {
             if (thisMachineName == null) {
-                try {
-                    thisMachineName = Environment.MachineName.ToLower();
-                } catch (InvalidOperationException) {
-                    // Probably access denied
-                    thisMachineName = DefaultMachineName;
+                lock (lockme) {
+                    try {
+                        thisMachineName = Environment.MachineName.ToLower();
+                    } catch (InvalidOperationException) {
+                        // Probably access denied
+                        thisMachineName = DefaultMachineName;
+                    }
                 }
             }
         }

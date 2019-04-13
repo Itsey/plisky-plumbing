@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_Dependencies", "_Dependencies\_Dependencies.csproj", "{6A505E98-EAE9-44A1-9B62-D30617367DC0}"
 EndProject
@@ -30,9 +30,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{A556861D-E
 		..\NuGet.Config = ..\NuGet.Config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigHubUtil", "ConfigHubUtil\ConfigHubUtil.csproj", "{814D46F5-C31C-4686-B586-412B51560646}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Plumbing.Testing", "Plumbing.Testing\Plumbing.Testing.shproj", "{70D3DACF-379C-4105-9DF4-995023B8602E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Plumbing.Testing\Plumbing.Testing.projitems*{70d3dacf-379c-4105-9df4-995023b8602e}*SharedItemsImports = 13
 		Plumbing.Shared\Plumbing.Shared.projitems*{76c8f9f5-05f2-4251-be0c-50abc65f80f9}*SharedItemsImports = 4
+		Plumbing.Testing\Plumbing.Testing.projitems*{79784982-59c1-46a4-9bb2-bfd83fa8fe6e}*SharedItemsImports = 4
 		Plumbing.Shared\Plumbing.Shared.projitems*{a94681e7-2d80-4c40-9d6c-0db22e5823eb}*SharedItemsImports = 13
 		Plumbing.Shared\Plumbing.Shared.projitems*{aab5d441-24a1-4b45-ae82-a041fee3475a}*SharedItemsImports = 4
 		Plumbing.Shared\Plumbing.Shared.projitems*{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}*SharedItemsImports = 4
@@ -45,11 +51,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6A505E98-EAE9-44A1-9B62-D30617367DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A505E98-EAE9-44A1-9B62-D30617367DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A505E98-EAE9-44A1-9B62-D30617367DC0}.Develop|Any CPU.ActiveCfg = Develop|Any CPU
-		{6A505E98-EAE9-44A1-9B62-D30617367DC0}.Develop|Any CPU.Build.0 = Develop|Any CPU
 		{6A505E98-EAE9-44A1-9B62-D30617367DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A505E98-EAE9-44A1-9B62-D30617367DC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EEDB10F9-A51C-421B-A5D4-7F00ECBDC368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEDB10F9-A51C-421B-A5D4-7F00ECBDC368}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEDB10F9-A51C-421B-A5D4-7F00ECBDC368}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
@@ -92,6 +95,12 @@ Global
 		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Develop|Any CPU.Build.0 = Debug|Any CPU
 		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{814D46F5-C31C-4686-B586-412B51560646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{814D46F5-C31C-4686-B586-412B51560646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{814D46F5-C31C-4686-B586-412B51560646}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
+		{814D46F5-C31C-4686-B586-412B51560646}.Develop|Any CPU.Build.0 = Debug|Any CPU
+		{814D46F5-C31C-4686-B586-412B51560646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{814D46F5-C31C-4686-B586-412B51560646}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,54 @@
+﻿namespace Plisky.Test {
+    // N.b. Special EditorConfig file in this project to allow for these, specific, constants to be Pascal cased.  This is because they are used in Attributes and the code
+    // looks ugly with shouty caps all over it.
+
+    /// <summary>
+    /// Defines Common strings for the traits used in xunit tests.
+    /// </summary>
+    public class Traits {
+        /// <summary>
+        /// Describes the age of the test, Exploratory, Fresh, Regression, Interface
+        /// </summary>
+        public const string Age = "Age";
+
+        /// <summary>
+        /// Describes the stlye of the test, such as its dependencyt on deployments or database.  Examples are Integration, Unit, Smoke.
+        /// </summary>
+        public const string Style = "Style";
+
+        /// <summary>
+        /// Fresh tests are new, hot off the press.  They are for new features of code and therefore less stable than other types of test.
+        /// </summary>
+        public const string Fresh = "Fresh";
+
+        /// <summary>
+        /// Regression tests define the code that is well established, these should not be failing.
+        /// </summary>
+        public const string Regression = "Regression";
+
+        /// <summary>
+        /// Style - Exploratory tests relate to bleeding edge or features that require environmental configuration, they are often skipped during build testnig
+        /// </summary>
+        public const string Exploratory = "Exploratory";
+
+        /// <summary>
+        /// Age - Interface tests relate to released, public, interfaces.  They should not break for any reason.
+        /// </summary>
+        public const string Interface = "Interface";
+
+        /// <summary>
+        /// Style - Integration tests involve connectivity to other elements of the sytstem (such as databases and the like)
+        /// </summary>
+        public const string Integration = "Integration";
+
+        /// <summary>
+        /// Style - Unit tests involve small isolated lements of the code 
+        /// </summary>
+        public const string Unit = "Unit";
+
+        /// <summary>
+        /// Style - Smoke tests are integrated, but leightweight non distructive - suitable for production tests.
+        /// </summary>
+        public const string Smoke = "Smoke";
+    }
+}

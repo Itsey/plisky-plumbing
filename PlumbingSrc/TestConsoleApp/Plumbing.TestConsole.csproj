@@ -34,14 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Plisky.Diagnostics, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Plisky.Diagnostics.2.2.1\lib\net47\Plisky.Diagnostics.dll</HintPath>
+      <HintPath>..\..\Packages\Plisky.Diagnostics.2.2.2\lib\net47\Plisky.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="Plisky.Diagnostics.Listeners, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Plisky.Listeners.2.2.1\lib\net47\Plisky.Diagnostics.Listeners.dll</HintPath>
+      <HintPath>..\..\Packages\Plisky.Listeners.2.2.2\lib\net47\Plisky.Diagnostics.Listeners.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,9 +62,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FrameworkVersions\Plisky.Plumbing.Standard\Plisky.Plumbing.Standard.csproj">
-      <Project>{73287a0e-5084-4e71-a7f0-676544b068f6}</Project>
-      <Name>Plisky.Plumbing.Standard</Name>
+    <ProjectReference Include="..\FrameworkVersions\Plisky.Plumbing.47\Plisky.Plumbing.47.csproj">
+      <Project>{76c8f9f5-05f2-4251-be0c-50abc65f80f9}</Project>
+      <Name>Plisky.Plumbing.47</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

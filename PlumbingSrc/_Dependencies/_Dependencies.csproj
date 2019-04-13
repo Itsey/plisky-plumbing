@@ -93,6 +93,7 @@
     <None Include="Packaging\PliskyPlumbing.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="plisky_publickey.snk" />
     <None Include="TestData\BilgeTestData.xlsx" />
     <None Include="versioningrules.json" />
   </ItemGroup>
