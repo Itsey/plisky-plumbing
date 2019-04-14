@@ -158,7 +158,19 @@
                 result = Environment.CurrentDirectory;
             }
             if (directory.StartsWith("[APP]")) {
-                result = directory.Replace("[APP]", Assembly.GetEntryAssembly().Location);
+                string path;
+                var asm = Assembly.GetEntryAssembly();
+                if (asm!=null) {
+                    path = Path.GetDirectoryName(asm.Location);
+                } else {
+                    asm = Assembly.GetExecutingAssembly();
+                    if (asm!=null) {
+                        path = Path.GetDirectoryName(asm.Location);
+                    } else {
+                        path = Directory.GetCurrentDirectory();
+                    }
+                }
+                result = directory.Replace("[APP]",path );
             }
             if (directory.Contains("%")) {
                 // Environment variable tokenisation
@@ -169,9 +181,11 @@
 
         private string GetSettingsFromCustomXmlFile(XDocument configFile, string settingName) {
             try {
-                var set = configFile.Element("chub_settings").Element("settings").Element(settingName.ToLower());
+                var set = configFile.Element("chub_settings").Element("settings").Element(settingName);
                 if (set != null) {
                     return set.Value;
+                } else {
+                    b.Verbose.Log($"Setting Name {settingName} not found in xml file.",configFile.ToString());
                 }
             } catch(Exception x) {
                 b.Warning.Log("XML Parsing Failed, corrupt settings file, setting NOT Matched");

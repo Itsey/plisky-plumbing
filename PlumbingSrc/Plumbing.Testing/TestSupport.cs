@@ -56,5 +56,11 @@
         /// Style - Smoke tests are integrated, but leightweight non distructive - suitable for production tests.
         /// </summary>
         public const string Smoke = "Smoke";
+
+        /// <summary>
+        /// Style - Live bug tests are specific examples that occured in prodution and have been isolated to test cases in the code
+        /// this is to ensure that we dont regress these in future and learn from our mistakes.
+        /// </summary>
+        public const string LiveBug = "Bug";
     }
 }

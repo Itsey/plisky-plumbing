@@ -138,6 +138,51 @@ namespace Plisky.Test {
         }
 #endif
 
+        [Fact(DisplayName = nameof(Bug_AppTagMarkerIncludesExeName))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.LiveBug)]
+        public void Bug_AppTagMarkerIncludesExeName() {
+            b.Info.Flow();
+
+            // This bug was because "ToLower" was used in the settings therefore the connectionString could not be found
+            // as it wasnt lowercase in the file.  This is currently failing as have fixed the file.
+
+            // TODO - Implement case insensitivity option.
+            ConfigHub sut = new ConfigHub();
+            sut.InjectBilge(b);
+
+            string output = ConfigHub.Current.Test_GetDirectoryName("[APP]");
+                
+            Assert.NotNull(output);
+            Assert.False(output.EndsWith(".dll"));
+
+        }
+
+        [Fact(DisplayName = nameof(Bug_CanNotFindConnectionString))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.LiveBug)]
+        public void Bug_CanNotFindConnectionString() {
+            b.Info.Flow();
+
+            // This bug was because "ToLower" was used in the settings therefore the connectionString could not be found
+            // as it wasnt lowercase in the file.  This is currently failing as have fixed the file.
+
+            // TODO - Implement case insensitivity option.
+            ConfigHub sut = new ConfigHub();
+            sut.InjectBilge(b);
+
+            ConfigHub.Current.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config", "appservices.xml");
+            string cs = ConfigHub.Current.GetSetting("connectionString", true, false);            
+            Assert.NotNull(cs);
+
+            cs = ConfigHub.Current.GetSetting("coNNectionString", true, false);
+            Assert.NotNull(cs);
+
+            cs = ConfigHub.Current.GetSetting("CONNECTIONSTRING", true, false);
+            Assert.NotNull(cs);
+
+        }
+
         [Fact(DisplayName = nameof(Directory_DoubleFallbackWorks))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.Integration)]
