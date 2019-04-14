@@ -17,7 +17,7 @@ namespace Plisky.Test {
             ConfigHubTests();
 
             CommandLineArgs cla = new CommandLineArgs();
-            Plisky.Helpers.CommandArgumentSupport clas = new Helpers.CommandArgumentSupport();
+            CommandArgumentSupport clas = new CommandArgumentSupport();
             clas.ProcessArguments(cla, args);
             clas.AddExample("TestConsoleApp.exe -x", "Runs it with an x parameter");
             string sa = clas.GenerateShortHelp(cla, "TestConsoleApp");

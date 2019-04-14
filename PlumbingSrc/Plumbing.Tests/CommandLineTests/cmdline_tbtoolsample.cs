@@ -1,6 +1,5 @@
-﻿
-namespace Plisky.Test {
-    using Plisky.Helpers;
+﻿namespace Plisky.Test {    
+    using Plisky.Plumbing;
 
     [CommandLineArguments]
     public class TFSBuildToolArgs {

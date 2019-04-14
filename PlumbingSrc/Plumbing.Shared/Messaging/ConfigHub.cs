@@ -74,7 +74,7 @@
         /// the search is not case sensitive and that nested settings delimited by $$SETTINGNAME$$ can be used.
         /// </summary>
         public void AddDefaultAppConfigFallback() {
-            RegisterFallbackProvider((pName) => {
+            RegisterFallbackProvider((pName) => { 
 
                 #region marker constants
 
@@ -101,6 +101,9 @@
             });
         }
 
+
+#endif
+
         /// <summary>
         /// Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
         /// the first parameter is null.  To set bilge simply pass a new instance of bilge.
@@ -114,8 +117,6 @@
                 b.CurrentTraceLevel = tl;
             }
         }
-
-#endif
 
         /// <summary>
         /// Adds a fall back handler to look up settings in xml files based on the machine name in a specific driectory. The behaviour is to find files

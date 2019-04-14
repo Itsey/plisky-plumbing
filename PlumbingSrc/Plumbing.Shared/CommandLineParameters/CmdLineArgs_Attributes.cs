@@ -1,4 +1,4 @@
-﻿namespace Plisky.Helpers {
+﻿namespace Plisky.Plumbing {
 
     using System;
 

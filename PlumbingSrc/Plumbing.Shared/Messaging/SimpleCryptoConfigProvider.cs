@@ -1,6 +1,4 @@
-﻿using Plisky.Security;
-
-namespace Plisky.Plumbing {
+﻿namespace Plisky.Plumbing {
 
     public class SimpleCryptoConfigProvider : IDecryptStuff {
         private byte[] keyStore;

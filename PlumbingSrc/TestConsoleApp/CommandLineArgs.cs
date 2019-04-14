@@ -1,6 +1,5 @@
-﻿using Plisky.Helpers;
-
-namespace Plisky.Test {
+﻿namespace Plisky.Test {
+    using Plisky.Plumbing;
 
     [CommandLineArgumentsAttribute]
     internal class CommandLineArgs {

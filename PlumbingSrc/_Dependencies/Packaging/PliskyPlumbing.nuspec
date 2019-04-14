@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.5.6.0</version>
+    <version>1.5.7.0</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -18,6 +18,7 @@
                   1.5.4  Adds environment support to directory.
                   1.5.5  License Format Update
                   1.5.5  Adds Bilge Injection to ConfigHub, Hub and CommandLineArguments.
+                  1.5.7  Corrects Issue With 1.5.5 in .net standard.
                   </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>

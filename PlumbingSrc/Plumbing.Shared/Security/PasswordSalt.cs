@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
-namespace Plisky.Infrastructure {
+namespace Plisky.Plumbing {
 
     [StructLayout(LayoutKind.Explicit)]
     public struct PasswordSalt {

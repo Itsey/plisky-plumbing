@@ -1,19 +1,40 @@
 ﻿using Plisky.Diagnostics;
-using Plisky.Infrastructure;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Plisky.Security {
+namespace Plisky.Plumbing {
 
     public class SaltyPassword {
-        private Bilge b = new Bilge("SaltyPassword");
+        protected Bilge b = new Bilge(tl: TraceLevel.Off);
+
         private static bool hashB64Enc = true;
 
         public const int MinPassLength = 5;
         public const string OkPasswordChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890_+-=[]{}\\/?!.,£$%^&*()";
+
+
+
+        
+        // Paste in constructor? >> b = useThisBilge ?? new Bilge(tl: TraceLevel.Off);
+        /// <summary>
+        /// Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+        /// the first parameter is null.  To set bilge simply pass a new instance of bilge.
+        /// </summary>
+        /// <param name="blg">An instance of Bilge to use inside this Hub</param>
+        /// <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        public void InjectBilge(Bilge blg, TraceLevel tl = TraceLevel.Off) {
+            if (blg != null) {
+                b = blg;
+            } else {
+                b.CurrentTraceLevel = tl;
+            }
+        }
+
+
 
         public static bool HashesAreB64Encoded {
             get { return hashB64Enc; }

@@ -40,7 +40,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.452", "Frame
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.46", "FrameworkVersions\Plisky.Testing.46\Plisky.Testing.46.csproj", "{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.Standard", "FrameworkVersions\Plisky.Testing.Standard\Plisky.Testing.Standard.csproj", "{3C202AC2-6155-4829-A73D-8468AF639B77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Testing.Standard", "FrameworkVersions\Plisky.Testing.Standard\Plisky.Testing.Standard.csproj", "{3C202AC2-6155-4829-A73D-8468AF639B77}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
