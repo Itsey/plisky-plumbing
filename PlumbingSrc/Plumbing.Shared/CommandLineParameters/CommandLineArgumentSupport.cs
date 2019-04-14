@@ -3,6 +3,7 @@
     using Plisky.Diagnostics;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -15,10 +16,23 @@
     /// </summary>
     /// <remarks> Developed in conjunction with Nemingalator, therefore may not be suitable for reuse</remarks>
     public class CommandArgumentSupport {
-        private readonly Bilge b;
+        protected Bilge b;
         private readonly List<string> argumentErrorsDuringLastParse = new List<string>();
         private readonly List<Tuple<string, string>> Examples = new List<Tuple<string, string>>();
 
+        /// <summary>
+        /// Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+        /// the first parameter is null.  To set bilge simply pass a new instance of bilge.
+        /// </summary>
+        /// <param name="blg">An instance of Bilge to use inside this Hub</param>
+        /// <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        public void InjectBilge(Bilge blg, TraceLevel tl = TraceLevel.Off) {
+            if (blg != null) {
+                b = blg;
+            } else {
+                b.CurrentTraceLevel = tl;
+            }
+        }
 
         /// <summary>
         /// Returns the name(s) of arguments that errored (rather than were not matched at all) and a brief description
@@ -128,7 +142,7 @@
                     bool matchOccuredForThisArgument = false;  // Determines whether any match occured for this argument
 
                     foreach (FieldArgumentMapping singleArgumentMapping in mappingsOfFieldsToArguments) {
-                        if (singleArgumentMapping.MatchArgumentToField(individualArgument,ArgumentPostfix)) {
+                        if (singleArgumentMapping.MatchArgumentToField(individualArgument, ArgumentPostfix)) {
                             matchOccuredForThisArgument = true;
                             b.Verbose.Log("Match discovered for " + singleArgumentMapping.TargetField.Name + " trying to assign value now ", " using value " + individualArgument);
 
@@ -164,17 +178,17 @@
 
                 // Now validate that all required arguments are present.
                 foreach (FieldArgumentMapping fam in mappingsOfFieldsToArguments) {
-                    foreach(var f in fam.TargetField.CustomAttributes) {
+                    foreach (var f in fam.TargetField.CustomAttributes) {
                         var nargs = f.NamedArguments.Where(a => a.MemberName == "IsRequired");
-                        foreach(var p in nargs) {
+                        foreach (var p in nargs) {
                             if (((bool)p.TypedValue.Value) && (!fam.HasBeenMatchedToArgument)) {
                                 // Required argument was not matched!
                                 throw new ArgumentNullException(fam.ParameterMatches.First(), "The parameter was not specified.");
                             }
                         }
                     }
-                    
-                    
+
+
                 }
             } finally {
                 b.Info.X();
@@ -433,8 +447,8 @@
         /// </summary>
         /// <param name="example">The syntactic example</param>
         /// <param name="description">The description</param>
-        public void AddExample(string example,string description) {
-            Examples.Add(new Tuple<string,string>(example, description));
+        public void AddExample(string example, string description) {
+            Examples.Add(new Tuple<string, string>(example, description));
         }
         /// <summary>
         /// Generates the short form of help which is typically shown when the program is called with no arguments.  The short help is generated
@@ -497,8 +511,8 @@
                     }
                 }
 
-                if (Examples.Count>0) {
-                    sb.Append("Example: " + Examples[0].Item1+Environment.NewLine);
+                if (Examples.Count > 0) {
+                    sb.Append("Example: " + Examples[0].Item1 + Environment.NewLine);
                     sb.Append(Examples[0].Item2 + Environment.NewLine);
                 }
                 return sb.ToString();
@@ -569,7 +583,7 @@
                     }
                 }
 
-                foreach(var f in Examples) {
+                foreach (var f in Examples) {
                     sb.Append("Example: " + Examples[0].Item1 + Environment.NewLine);
                     sb.Append(Examples[0].Item2 + Environment.NewLine);
                 }

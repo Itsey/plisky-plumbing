@@ -1,4 +1,4 @@
-﻿#if false
+﻿
 namespace Plisky.Test {
     using Plisky.Plumbing;
     using System;
@@ -7,51 +7,51 @@ namespace Plisky.Test {
 
     public class HubTests {
         private UnitTestHelper uth = new UnitTestHelper();
-
+        private TestData td = new TestData();
         
         public HubTests() {
             Hub.Relinquish();
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Hub_HasNameOnCreate() {
             Hub sut = new Hub();
             Assert.NotNull(sut.InstanceName);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Hub_CreatedNamesAreUnique() {
             Hub sut = new Hub();
             Hub sut2 = new Hub();
             Assert.NotEqual(sut.InstanceName, sut2.InstanceName);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void InstanceName_Provided_IsUSed() {
             Hub sut = new Hub("systesthub");
             Assert.True(sut.InstanceName.Contains("systesthub"), "The identifier was not used in the intsance name");
             Assert.NotEqual("systesthub", sut.InstanceName);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Hub_StaticCurrent_NotNull() {
             Assert.NotNull(Hub.Current);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Hub_Launch_NothingListening() {
             Hub sut = new Hub();
-            sut.Launch(UnitTestHelper.GenericString1);
+            sut.Launch(TestData.GenericString1);
             sut.Launch<TestMessage>(new TestMessage());
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Hub_DefaultConstructorUsesWeakReferences() {
             Hub sut = new Hub();
             Assert.False(sut.UseStrongReferences, "The strong references should not be the default");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Hub_SetReferencesConstructorWorks() {
             Hub sut = new Hub(true);
             Hub sut2 = new Hub(false);
@@ -59,10 +59,10 @@ namespace Plisky.Test {
             Assert.False(sut2.UseStrongReferences, "The constructor should set the strong references to false");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void SendMessage_CustomType_DoesReachRecipient() {
             Hub sut = new Hub();
-            string testMsg = UnitTestHelper.GenericString1;
+            string testMsg = TestData.GenericString1;
             bool wasExecuted = false;
 
             sut.LookFor<TestMessage>((TestMessage msg) => {
@@ -75,10 +75,10 @@ namespace Plisky.Test {
             Assert.True(wasExecuted, "The hub message recipient did not get notified of the call that was made.");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void SendMessage_SimpleString_DoesReachRecipient() {
             Hub sut = new Hub();
-            string testMsg = UnitTestHelper.GenericString1;
+            string testMsg = TestData.GenericString1;
             bool notification = false;
 
             sut.LookFor<string>((string s) => {
@@ -87,15 +87,16 @@ namespace Plisky.Test {
                 }
             });
 
-            sut.Launch(UnitTestHelper.GenericString1);
+            sut.Launch(TestData.GenericString1);
 
             Assert.True(notification, "The notification was not hit with a simple string message");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void SendMessage_LookForDifferentString_DoesNotNotify() {
             Hub sut = new Hub();
-            string testMsg = UnitTestHelper.GenericString1;
+            
+            string testMsg = TestData.GenericString1;
             bool notification = false;
 
             sut.LookFor<string>((string s) => {
@@ -104,12 +105,12 @@ namespace Plisky.Test {
                 }
             });
 
-            sut.Launch(UnitTestHelper.GenericString2);
+            sut.Launch(TestData.GenericString2);
 
             Assert.False(notification, "The notification was not hit with a simple string message");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void LookFor_NoMessagesSent_WasNotCalled() {
             Hub sut = new Hub();
             string testMsg = "aTestString";
@@ -124,7 +125,7 @@ namespace Plisky.Test {
             Assert.False(notification, "The notification in look for should not be hit if no messages were sent to it.");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void StringRecipeint_NotCalledIfWrongTypeSent() {
             Hub sut = new Hub();
             string testMsg = "aTestString";
@@ -141,7 +142,7 @@ namespace Plisky.Test {
             Assert.False(notification, "The notification was hit when it should not have been.");
         }
 
-        // DISABLED - TODO [Fact][Trait("xunit","regression")]
+        // DISABLED - TODO [Fact][Trait(Traits.Age,Traits.Regression)]
         public void StringRecipeint_IsCalledRightStringSent() {
             // TODO : FIX
             Hub sut = new Hub();
@@ -158,7 +159,7 @@ namespace Plisky.Test {
             Assert.True(wasHit, "The action was not fired for the correct message");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void StringRecipeint_NotCalledWrongStringSent() {
             Hub sut = new Hub();
             string testmsg = "arflebarflegloop";
@@ -173,7 +174,7 @@ namespace Plisky.Test {
             Assert.False(wasHit, "The action was not fired for the correct message");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void IntRecipient_IsCalledRightIntSent() {
             Hub sut = new Hub();
             int testmsg = 1234;
@@ -189,7 +190,7 @@ namespace Plisky.Test {
             Assert.True(wasHit, "The action was not fired for the correct message");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void IntRecipient_NotCalledWrongIntSent() {
             Hub sut = new Hub();
             int testmsg = 1234;
@@ -207,7 +208,7 @@ namespace Plisky.Test {
             Assert.False(wasHit, "The action was not fired for the correct message");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void IntRecipeint_NotCalledWrongTypeSent() {
             Hub sut = new Hub();
             int testMsg = 1324;
@@ -226,12 +227,14 @@ namespace Plisky.Test {
             Assert.False(notification, "The notification was hit when it should not have been.");
         }
 
+#if false
+        UNKNOWN AGED CODE - Likely related to removing memory leak
         private WeakReference GetInstanceThatHasHooked(Hub sut) {
             TestMemLeak tml = new TestMemLeak(sut);
             return new WeakReference(tml);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void UseStrong_False_LookForDoesNotHoldOn() {
             // Bug 57.  Its quite hard to actually test for memory leaks and fixes to them but this is the best i can come up with.
             Hub sut = new Hub();
@@ -244,7 +247,7 @@ namespace Plisky.Test {
             Assert.False(wr.IsAlive, "Should be dead after a GC");
         }
 
-        // TODO - this fails on build server dont know why [Fact][Trait("xunit","regression")]
+       [Fact][Trait(Traits.Age,Traits.Regression)]
         public void UseStrong_True_LookForDoesHoldOn() {
             // Bug 57.  Its quite hard to actually test for memory leaks and fixes to them but this is the best i can come up with.
             Hub sut = new Hub();
@@ -256,8 +259,9 @@ namespace Plisky.Test {
             GC.Collect(2, GCCollectionMode.Forced);
             Assert.True(wr.IsAlive, "The reference should still be alive when using strong references");
         }
+#endif
 
-        // TODO This fails on build server, not clear why [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void LookFor_ReturnsSameActionItWasGiven() {
             Hub sut = new Hub();
             Action<TestMessage> tma = new Action<TestMessage>(param => {
@@ -267,7 +271,7 @@ namespace Plisky.Test {
             Assert.Same(tma, res);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void LookFor_SimpleInt_ReturnsSameActionItWasGiven() {
             Hub sut = new Hub();
             Action<int> tma = new Action<int>(param => {
@@ -277,7 +281,7 @@ namespace Plisky.Test {
             Assert.Same(tma, res);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void LookFor_SimpleString_ReturnsSameActionItWasGiven() {
             Hub sut = new Hub();
             Action<string> tma = new Action<string>(param => {
@@ -287,7 +291,7 @@ namespace Plisky.Test {
             Assert.Same(tma, res);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void StopLooking_SimpleStringMessage_DoesStopLooking() {
             Hub sut = new Hub();
             bool wasCalled = false;
@@ -299,7 +303,7 @@ namespace Plisky.Test {
             Assert.False(wasCalled, "the call did get executed even after removing stop looking");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void StopLooking_SimpleIntMessage_DoesStopLooking() {
             Hub sut = new Hub();
             bool wasCalled = false;
@@ -311,7 +315,7 @@ namespace Plisky.Test {
             Assert.False(wasCalled, "the call did get executed even after removing stop looking");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void StopLooking_GenericMessage_DoesStopLooking() {
             Hub sut = new Hub();
             bool wasCalled = false;
@@ -323,7 +327,7 @@ namespace Plisky.Test {
             Assert.False(wasCalled, "the call did get executed even after removing stop looking");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void StopLooking_GenericMessage_StartAndStopWorksTogether() {
             Hub sut = new Hub();
             int callcount = 0;
@@ -336,7 +340,7 @@ namespace Plisky.Test {
             Assert.Equal<int>(1, callcount);
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void NonAsyncUsesSameThread() {
             Hub sut = new Hub();
             int callout = 0;
@@ -356,7 +360,7 @@ namespace Plisky.Test {
             Assert.True(sameThreadId, "The call was not made on a different thread");
         }
 
-        [Fact][Trait("xunit","regression")]
+        [Fact][Trait(Traits.Age,Traits.Regression)]
         public void AsyncLaunchPerformsTask() {
             Hub sut = new Hub();
             int callout = 0;
@@ -377,4 +381,3 @@ namespace Plisky.Test {
         }
     }
 }
-#endif

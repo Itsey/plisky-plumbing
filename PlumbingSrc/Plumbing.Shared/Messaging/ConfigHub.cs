@@ -1,8 +1,9 @@
 ﻿namespace Plisky.Plumbing {
-
+    using Plisky.Diagnostics;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Diagnostics;
     using System.IO;
     using System.Reflection;
     using System.Xml.Linq;
@@ -12,6 +13,7 @@
     /// the hub and recievers can call GetSetting to retrieve single pieces of information.
     /// </summary>
     public partial class ConfigHub {
+        private Bilge b = new Bilge(tl:System.Diagnostics.TraceLevel.Off);
         public const string DateTimeSettingName = "defaultdatetimevalue";
         public const string DefaultMachineName = "defaultmachinename";
         public IDecryptStuff CryptoProvider { get; set; }
@@ -98,6 +100,21 @@
                 return vmatch;
             });
         }
+
+        /// <summary>
+        /// Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+        /// the first parameter is null.  To set bilge simply pass a new instance of bilge.
+        /// </summary>
+        /// <param name="blg">An instance of Bilge to use inside this Hub</param>
+        /// <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        public void InjectBilge(Bilge blg, TraceLevel tl = TraceLevel.Off) {
+            if (blg != null) {
+                b = blg;
+            } else {
+                b.CurrentTraceLevel = tl;
+            }
+        }
+
 #endif
 
         /// <summary>
@@ -108,20 +125,29 @@
         /// <param name="directory">The directory to search [APP] can be used as the app directory and [APP]\subdir works too.</param>
         /// <param name="fileName">Optional: Filename that is added in the directory, defaults to machinename.chcfg.</param>
         public void AddDirectoryFallbackProvider(string directory, string fileName = null) {
+            b.Info.Flow($"Dir[{directory}], filename [{fileName ?? "null"}]");
             string actualDir = GetDirectoryName(directory);
 
 
             if (fileName==null) {
                 SetupMachineName();
-                fileName = thisMachineName+ ".chcfg";
+                fileName = thisMachineName+ ".chcfg";                
             }
 
             string machineBasedFilename = Path.Combine(actualDir, fileName);
+
+
+            b.Verbose.Log($"Filename {machineBasedFilename}");
+
             if (File.Exists(machineBasedFilename)) {
                 RegisterFallbackProvider((setName) => {
+
+                    b.Verbose.Log($"Directory Fallback Called for {setName}", $"fallback provider file: {machineBasedFilename}");
                     XDocument x = XDocument.Load(machineBasedFilename);
                     return GetSettingsFromCustomXmlFile(x, setName);
                 });
+            } else {
+                b.Warning.Log("Fallback Directory Searcher - File Not Found. Fallback Provider Is NOT Registered.",fileName);
             }
         }
 
@@ -141,9 +167,14 @@
         }
 
         private string GetSettingsFromCustomXmlFile(XDocument configFile, string settingName) {
-            var set = configFile.Element("chub_settings").Element("settings").Element(settingName.ToLower());
-            if (set != null) {
-                return set.Value;
+            try {
+                var set = configFile.Element("chub_settings").Element("settings").Element(settingName.ToLower());
+                if (set != null) {
+                    return set.Value;
+                }
+            } catch(Exception x) {
+                b.Warning.Log("XML Parsing Failed, corrupt settings file, setting NOT Matched");
+                b.Info.Dump(x,"XML Exception Reading Config");
             }
             return null;
         }
@@ -286,23 +317,35 @@
             string val = null;
 
             if (functionList.ContainsKey(settingName)) {
+
+                b.Verbose.Log($"Direct Retrieval Funcation Call Made");
                 val = functionList[settingName]();
             }
 
             if (val == null) {
+
                 foreach (var v in fallbackList1) {
+
+                    b.Verbose.Log($"Fallback Function Call");
+
                     val = v(settingName);
                     if (val != null) {
+
+                        b.Verbose.Log($"Value Found {val}");
+
+
                         break;
                     }
                 }
             }
 
             if ((val != null) && (isEncrypted)) {
+                b.Verbose.Log("Encrypted - Running through registered decryptor");
                 val = CryptoProvider.DecryptValue(val);
             }
 
             if ((val == null) && (mustBePresent)) {
+                b.Warning.Log("Value not matched, and must be present set - throwing exception");
                 throw new ConfigHubMissingConfigException($"The setting {settingName ?? "null"} must be present and have a value.");
             }
             return val;

@@ -3,13 +3,14 @@
     using Plisky.Diagnostics;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Threading;
 
     /// <summary>
     /// Holds a hub for messaging, sending messages from one part of the application to another.
     /// </summary>
     public class Hub {
-        protected Bilge b = new Bilge("Hub");  // Diags.PliskyMessagingSwitch
+        protected Bilge b = new Bilge("Hub");
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         private Dictionary<Type, List<HubMessageBase>> peopleSearching = new Dictionary<Type, List<HubMessageBase>>();
@@ -119,6 +120,20 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+        /// the first parameter is null.  To set bilge simply pass a new instance of bilge.
+        /// </summary>
+        /// <param name="blg">An instance of Bilge to use inside this Hub</param>
+        /// <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        public void InjectBilge(Bilge blg, TraceLevel tl = TraceLevel.Off) {
+            if (blg != null) {
+                b = blg;
+            } else {
+                b.CurrentTraceLevel = tl;
+            }
+        }
 
         // public virtual Func<T1, T1> LookFor<T1>(Func<T1,T1> openMessage) {
         public virtual Action<T1> LookFor<T1>(Action<T1> openMessage) {

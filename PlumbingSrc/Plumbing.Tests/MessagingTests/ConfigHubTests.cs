@@ -1,6 +1,7 @@
 ﻿
 namespace Plisky.Test {
     using Plisky.Diagnostics;
+    using Plisky.Diagnostics.Listeners;
     using Plisky.Helpers;
 //    using Plisky.PliskyLibTests.Mocks;
     using Plisky.Plumbing;
@@ -12,8 +13,13 @@ namespace Plisky.Test {
 
     public class ConfigHubTests {
         private UnitTestHelper uth = new UnitTestHelper();
-        protected Bilge b = new Bilge();
+        protected Bilge b = new Bilge(tl:System.Diagnostics.TraceLevel.Verbose);
         
+        public ConfigHubTests () {
+            var h = new TCPHandler("127.0.0.1", 9060);            
+            b.AddHandler(h);
+        }
+
         ~ConfigHubTests() {
             uth.ClearUpTestFiles();
         }
@@ -29,6 +35,19 @@ namespace Plisky.Test {
             string actual = ConfigHub.Current.GetSetting("test");
 
             Assert.Equal(returnString, actual);
+        }
+
+
+        [Fact(DisplayName = nameof(GetSetting_ThrowsInfNullSetting))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void GetSetting_ThrowsInfNullSetting() {
+            b.Info.Flow();
+
+            ConfigHub sut = new ConfigHub();
+            Assert.Throws<ArgumentNullException>(() => {
+                sut.GetSetting(null);
+            });            
         }
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
@@ -120,6 +139,23 @@ namespace Plisky.Test {
             Assert.Equal(par + "\\MyDir", dn);
         }
 #endif
+
+        [Fact(DisplayName = nameof(Directory_DoubleFallbackWorks))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Integration)]
+        public void Directory_DoubleFallbackWorks() {
+            b.Info.Flow();
+
+
+            ConfigHub sut = new ConfigHub();
+            sut.InjectBilge(b);
+            sut.AddDirectoryFallbackProvider("C:\\DoesNotExistAtAll", "tests.xml");
+            sut.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config", "tests.xml");
+
+            var str = sut.GetSetting("testconstr", true);
+
+            Assert.Equal("CONSTR-Value", str);
+        }
 
         [Fact(DisplayName = nameof(Directory_FullConfigStringRetrieval))]
         [Trait(Traits.Age, Traits.Fresh)]

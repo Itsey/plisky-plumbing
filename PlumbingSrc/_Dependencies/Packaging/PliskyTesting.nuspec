@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Testing</id>
-    <version>1.0.1.0</version>
+    <version>1.0.2.0</version>
     <title>Plisky Infrastructure Testing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -11,6 +11,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Unit Testing Support, TestData TestSupport and Test File Handling.</description>
     <releaseNotes>1.0 Initial Release, Moving out of Plisky.Plumbing and into its own Assembly
+                  1.0.1 License Update
+                  1.0.2 Adds Bilge Injection
                   </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>

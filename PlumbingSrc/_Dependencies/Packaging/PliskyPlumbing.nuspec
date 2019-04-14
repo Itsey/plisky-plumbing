@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.5.5.0</version>
+    <version>1.5.6.0</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -16,6 +16,8 @@
                   1.5.2  Fixes NullRef Exception when using bilge.
                   1.5.3  Adds formatting for DateTime parsing.
                   1.5.4  Adds environment support to directory.
+                  1.5.5  License Format Update
+                  1.5.5  Adds Bilge Injection to ConfigHub, Hub and CommandLineArguments.
                   </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>
