@@ -138,6 +138,7 @@ namespace Plisky.Test {
         }
 #endif
 
+#if DEBUG
         [Fact(DisplayName = nameof(Bug_AppTagMarkerIncludesExeName))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.LiveBug)]
@@ -157,6 +158,7 @@ namespace Plisky.Test {
             Assert.False(output.EndsWith(".dll"));
 
         }
+#endif
 
         [Fact(DisplayName = nameof(Bug_CanNotFindConnectionString))]
         [Trait(Traits.Age, Traits.Fresh)]
