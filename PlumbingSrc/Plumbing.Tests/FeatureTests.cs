@@ -1,4 +1,5 @@
 ﻿using Plisky.Diagnostics;
+using Plisky.Diagnostics.Listeners;
 using Plisky.Plumbing;
 using Plisky.Test;
 using System;
@@ -11,9 +12,12 @@ using Xunit;
 
 namespace Plisky.Test {
     public class FeatureTests {
-        protected Bilge b = new Bilge();
+        protected Bilge b = new Bilge(tl:System.Diagnostics.TraceLevel.Verbose);
         const string FEATURENAME = "MyFeatureName";
 
+        public FeatureTests() {
+            b.AddHandler(new TCPHandler("127.0.0.1", 9060));
+        }
 
         [Fact(DisplayName = nameof(Feature_CreateConstructorOk))]
         [Trait(Traits.Age, Traits.Fresh)]
@@ -224,9 +228,13 @@ namespace Plisky.Test {
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_StartDateWorks() {
             b.Info.Flow();
+            Feature.InjectBilge(b);
+            ConfigHub ch = new ConfigHub();
+            Feature.InjectHub(ch);
 
             Feature sut = new Feature(FEATURENAME, true);
-            var when = ConfigHub.Current.GetNow();
+            
+            var when = ch.GetNow();
             var tomorrow = when.AddDays(1);
             
             sut.SetDateRange(tomorrow,null);

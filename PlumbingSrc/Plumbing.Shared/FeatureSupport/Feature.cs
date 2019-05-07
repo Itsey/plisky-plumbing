@@ -6,6 +6,7 @@ using System.Text;
 namespace Plisky.Plumbing {
     public class Feature {
         private static ConfigHub injectedHub = ConfigHub.Current;
+        private static Bilge injectedBilge = new Bilge();
 
         public static void Reset() {
             resolver = null;
@@ -29,7 +30,7 @@ namespace Plisky.Plumbing {
 
         // Feature instance.
         protected ConfigHub cfg;
-        protected Bilge b = new Bilge();
+        protected Bilge b = injectedBilge;
         protected bool? featureBool;
         protected int? featureLevel;
         protected DateTime? featureStartDate;
@@ -51,6 +52,7 @@ namespace Plisky.Plumbing {
         /// feature active.  To get more detail other methods need to be called.
         /// </summary>
         private void CalculateFeatureActive() {
+            b.Verbose.Log($"About to calc feature active, before {Active}");
 
             if (featureBool.HasValue) {
                 Active = featureBool.Value;
@@ -59,6 +61,8 @@ namespace Plisky.Plumbing {
             } else {
                 Active = false;
             }
+
+            b.Verbose.Log($"Prior to date check {Active}");
 
             Active &= IsFeatureCurrentlyActive();
         }
@@ -84,6 +88,8 @@ namespace Plisky.Plumbing {
         /// <param name="featureName">The Feature Name</param>
         /// <param name="featureValue">A value for whether the feature is Active.</param>
         public Feature(string featureName, bool featureValue) {
+            b.Verbose.Log($"Feature Bool Online {featureName} {featureValue}");
+
             Name = featureName;
             this.featureBool = featureValue;
             cfg = injectedHub;
@@ -194,6 +200,10 @@ namespace Plisky.Plumbing {
             annualAgnostic = yearAgnostic;
 
             IsActive();
+        }
+
+        public static void InjectBilge(Bilge b) {
+            injectedBilge = b;
         }
 
         public static void InjectHub(ConfigHub ch) {
