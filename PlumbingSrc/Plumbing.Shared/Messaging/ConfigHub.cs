@@ -368,7 +368,7 @@
 
         public DateTime GetNow() {
             try {
-                DateTime dt = GetSetting<DateTime>(DateTimeSettingName);
+                DateTime dt = GetSetting<DateTime>(DateTimeSettingName,true);
                 return dt;
             } catch (ConfigHubMissingConfigException) {
                 return DateTime.Now;

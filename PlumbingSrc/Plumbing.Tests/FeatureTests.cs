@@ -194,6 +194,31 @@ namespace Plisky.Test {
         }
 
 
+        [Fact(DisplayName = nameof(Feature_SetEndWorks))]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void Feature_SetEndWorks() {
+            b.Info.Flow();
+            DateTime when = new DateTime(2010, 1, 1);
+            MockFeature sut = new MockFeature(FEATURENAME, true);
+            sut.SetDateRange(when, null);
+
+            Assert.Equal(when, sut.GetStartDate());
+        }
+
+        [Fact(DisplayName = nameof(Feature_SetStartWorks))]
+        [Trait(Traits.Age, Traits.Regression)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void Feature_SetStartWorks() {
+            b.Info.Flow();
+            DateTime when = new DateTime(2010, 1, 1);
+            MockFeature sut = new MockFeature(FEATURENAME, true);
+            sut.SetDateRange(null, when);
+
+            Assert.Equal(when, sut.GetEndDate());
+        }
+
+
         [Fact(DisplayName = nameof(Feature_StartDateWorks))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.Unit)]
@@ -203,10 +228,23 @@ namespace Plisky.Test {
             Feature sut = new Feature(FEATURENAME, true);
             var when = ConfigHub.Current.GetNow();
             var tomorrow = when.AddDays(1);
-
+            
             sut.SetDateRange(tomorrow,null);
 
             Assert.False(sut.Active);
+            Assert.False(sut.IsActive());
+        }
+
+
+        [Fact(DisplayName = nameof(Feature_RespectsDateConfig))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void Feature_RespectsDateConfig() {
+            b.Info.Flow();
+
+            Feature sut = new Feature(FEATURENAME, true);
+
+
         }
 
 
@@ -215,8 +253,10 @@ namespace Plisky.Test {
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_EndDateWorks() {
             b.Info.Flow();
+            ConfigHub testcfg = new ConfigHub();
+            Feature.InjectHub(testcfg);
             Feature sut = new Feature(FEATURENAME, true);
-            var when = ConfigHub.Current.GetNow();
+            var when = testcfg.GetNow();
             var yesterday = when.AddDays(-1);
 
             sut.SetDateRange(null, yesterday);
@@ -230,19 +270,78 @@ namespace Plisky.Test {
         [Theory(DisplayName = nameof(Feature_DateRangeWorks))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.Unit)]
-        [InlineData("2019,1,1", "2019,31,12","2019,6,6",true)]
-        [InlineData("2019,1,1", "2019,31,12", "2020,6,6", false)]
-        public void Feature_DateRangeWorks(string start, string end, string now, bool inRange) {
+        [InlineData("2019,01,01", "2019,31,12","2019,06,06",false,true)]
+        [InlineData("2019,01,01", "2019,31,12", "2020,06,06",false, false)]
+        [InlineData("2019,01,01","2019,15,02","2019,14,02",false, true)]
+        public void Feature_DateRangeWorks(string start, string end, string now, bool yearAgnostic, bool inRange) {
             b.Info.Flow();
 
-            DateTime startDate = DateTime.ParseExact(start, "YYYY,dd,MM", CultureInfo.InvariantCulture);
-            DateTime endDate = DateTime.ParseExact(end, "YYYY,dd,MM", CultureInfo.InvariantCulture);
-            DateTime currentDate = DateTime.ParseExact(now, "YYYY,dd,MM", CultureInfo.InvariantCulture);
+            DateTime startDate = DateTime.ParseExact(start, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+            DateTime currentDate = DateTime.ParseExact(now, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+            ConfigHub ch = new ConfigHub();
+            ch.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                return currentDate;
+            });
 
+            Feature.InjectHub(ch);
             Feature sut = new Feature(FEATURENAME, true);
-            sut.SetDateRange(startDate, endDate);
+            sut.SetDateRange(startDate, endDate, yearAgnostic);
 
             Assert.Equal(inRange, sut.Active);
+            Assert.Equal(sut.Active, sut.IsActive());
+        }
+
+        
+        [Theory(DisplayName = nameof(Feature_YearAgnosticDateRangeWorks))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        [InlineData("2000,01,01", "2000,31,12", "2019,06,06", true, true)]
+        [InlineData("2000,01,01", "2000,31,12", "2019,31,12", true, true)]
+        [InlineData("2000,01,01", "2000,31,12", "2019,01,01", true, true)]
+        [InlineData("2019,01,01", "2019,02,02", "2020,06,06", true, false)]
+        [InlineData("2019,13,01", "2019,02,02", "2020,01,01", true, false)]
+        public void Feature_YearAgnosticDateRangeWorks(string start, string end, string now, bool yearAgnostic, bool inRange) {
+            b.Info.Flow();
+
+            DateTime startDate = DateTime.ParseExact(start, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+            DateTime currentDate = DateTime.ParseExact(now, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+            ConfigHub ch = new ConfigHub();
+            ch.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                return currentDate;
+            });
+
+            Feature.InjectHub(ch);
+            Feature sut = new Feature(FEATURENAME, true);
+            sut.SetDateRange(startDate, endDate, yearAgnostic);
+
+            Assert.Equal(inRange, sut.Active);
+            Assert.Equal(sut.Active, sut.IsActive());
+        }
+
+        [Fact(DisplayName = nameof(Feature_DateRange_AgnosticBlowsIfStartNotSet))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void Feature_DateRange_AgnosticBlowsIfStartNotSet() {
+            b.Info.Flow();
+
+            Assert.Throws<InvalidOperationException>(() => {
+                Feature sut = new Feature(FEATURENAME, true);
+                sut.SetDateRange(DateTime.Now, null, true);
+            });
+        }
+
+        [Fact(DisplayName = nameof(Feature_DateRange_AgnosticBlowsIfEndNotSet))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void Feature_DateRange_AgnosticBlowsIfEndNotSet() {
+            b.Info.Flow();
+
+            Assert.Throws<InvalidOperationException>(() => {
+                Feature sut = new Feature(FEATURENAME, true);
+                sut.SetDateRange(null,DateTime.Now,  true);
+            });
         }
 
     }

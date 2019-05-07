@@ -58,6 +58,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FeatureTests.cs" />
+    <Compile Include="Mocks\MockFeature.cs" />
     <Compile Include="Mocks\MockFeatureProvider.cs" />
     <Compile Include="TestDataTests.cs" />
     <Compile Include="HttpHelperTests.cs" />

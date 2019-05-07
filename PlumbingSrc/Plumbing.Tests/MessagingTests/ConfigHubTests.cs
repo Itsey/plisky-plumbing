@@ -22,6 +22,23 @@ namespace Plisky.Test {
             uth.ClearUpTestFiles();
         }
 
+
+
+        [Fact(DisplayName = nameof(DateTime_Setting_Works))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void DateTime_Setting_Works() {
+            b.Info.Flow();
+            DateTime expected = new DateTime(2019, 1, 1);
+
+            ConfigHub sut = new ConfigHub();
+            sut.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                return expected;
+            });
+
+            Assert.Equal<DateTime>(expected, sut.GetNow());
+        }
+
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfigCurrentInstance_SingleProvider_ReturnsCorrectly() {
             string returnString = TestData.GenericString1;
