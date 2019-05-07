@@ -20,7 +20,7 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(Feature_CreateConstructorOk))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_CreateConstructorOk() {
             b.Info.Flow();
@@ -32,7 +32,7 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(Feature_CreateConstructorOk2))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_CreateConstructorOk2() {
             b.Info.Flow();
@@ -44,7 +44,7 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(Provider_ReturnsOnlyOnesItProvides))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Provider_ReturnsOnlyOnesItProvides() {
             b.Info.Flow();
@@ -69,7 +69,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(MissingFeature_ReturnsNull))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void MissingFeature_ReturnsNull() {
             b.Info.Flow();
@@ -81,7 +81,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Provider_ReturnsNamedFeature))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Provider_ReturnsNamedFeature() {
             b.Info.Flow();
@@ -101,7 +101,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_WithLevelGtZeroIsActive))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_WithLevelGtZeroIsActive() {
             b.Info.Flow();
@@ -114,7 +114,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_WithLevelZeroNotActive))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_WithLevelZeroNotActive() {
             b.Info.Flow();
@@ -128,7 +128,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_CacheResult))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_CacheResult() {
             b.Info.Flow();
@@ -157,7 +157,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_CacheResult_UnlessRefresh))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_CacheResult_UnlessRefresh() {
             b.Info.Flow();
@@ -187,7 +187,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(WhenNotSet_FeatureLevel_IsZero))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void WhenNotSet_FeatureLevel_IsZero() {
             b.Info.Flow();
@@ -224,7 +224,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_StartDateWorks))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_StartDateWorks() {
             b.Info.Flow();
@@ -245,7 +245,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_RespectsDateConfig))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_RespectsDateConfig() {
             b.Info.Flow();
@@ -257,7 +257,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_EndDateWorks))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_EndDateWorks() {
             b.Info.Flow();
@@ -276,7 +276,7 @@ namespace Plisky.Test {
 
 
         [Theory(DisplayName = nameof(Feature_DateRangeWorks))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         [InlineData("2019,01,01", "2019,31,12","2019,06,06",false,true)]
         [InlineData("2019,01,01", "2019,31,12", "2020,06,06",false, false)]
@@ -302,7 +302,7 @@ namespace Plisky.Test {
 
         
         [Theory(DisplayName = nameof(Feature_YearAgnosticDateRangeWorks))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         [InlineData("2000,01,01", "2000,31,12", "2019,06,06", true, true)]
         [InlineData("2000,01,01", "2000,31,12", "2019,31,12", true, true)]
@@ -329,7 +329,7 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(Feature_DateRange_AgnosticBlowsIfStartNotSet))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_DateRange_AgnosticBlowsIfStartNotSet() {
             b.Info.Flow();
@@ -341,7 +341,7 @@ namespace Plisky.Test {
         }
 
         [Fact(DisplayName = nameof(Feature_DateRange_AgnosticBlowsIfEndNotSet))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_DateRange_AgnosticBlowsIfEndNotSet() {
             b.Info.Flow();
