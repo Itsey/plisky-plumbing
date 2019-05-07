@@ -57,7 +57,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="FeatureTests.cs" />
+    <Compile Include="FeatureTests\FeatureProviderTests.cs" />
+    <Compile Include="FeatureTests\FeatureTests.cs" />
     <Compile Include="Mocks\MockFeature.cs" />
     <Compile Include="Mocks\MockFeatureProvider.cs" />
     <Compile Include="TestDataTests.cs" />
