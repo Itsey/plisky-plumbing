@@ -71,7 +71,11 @@
             var result = new WebCallResponse();
             var request = (HttpWebRequest)WebRequest.Create(wcr.FullUri);
             request.Method = wcr.Verb.Method;
-            request.Host = Host;
+
+            if (!string.IsNullOrWhiteSpace(Host)) {
+                request.Host = Host;
+            }
+
             request.Headers.Add(wcr.AllHeaders);
 
             //Invalid SSL Certificate support.

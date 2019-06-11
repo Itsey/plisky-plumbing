@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 
 [assembly: AssemblyVersion("1.5")]
-[assembly: AssemblyFileVersion("1.5.9.0")]
+[assembly: AssemblyFileVersion("1.5.10.0")]
 
 //[assembly: AssemblyKeyFile("..\\..\\_Dependencies\\plisky_publickey.snk")]
 //[assembly: AssemblyDelaySign(true)]
