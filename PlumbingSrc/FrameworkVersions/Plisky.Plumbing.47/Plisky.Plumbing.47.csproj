@@ -30,6 +30,7 @@
     <DefineConstants>TRACE;NET40;NET452;NET46;NET47</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Plisky.Plumbing.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -38,8 +39,8 @@
     <AssemblyOriginatorKeyFile>..\..\..\..\..\..\..\Fsync\plisky_keyfile.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Plisky.Diagnostics, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\Plisky.Diagnostics.2.2.2\lib\net47\Plisky.Diagnostics.dll</HintPath>
+    <Reference Include="Plisky.Diagnostics, Version=2.4.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Packages\Plisky.Diagnostics.2.4.0\lib\net47\Plisky.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -53,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\_Dependencies\versions\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,0 +1,559 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plisky.Plumbing</name>
+    </assembly>
+    <members>
+        <member name="T:Plisky.Plumbing.CommandLineArgumentBaseAttribute">
+            <summary>
+            The CmdLineArgumentBase class represents the base for the attributes that are used to indicate a class is based on command line attributes
+            it should not be applied to any class or field directly.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandLineArgumentBaseAttribute.Description">
+            <summary>
+            Describes the command line option to the user of the tool, in a way in which it can be displayed on the screen, this should
+            be a short one liner describing the option simply.  It is limited to a total of 80 characters
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when Description is set to a length greater than 80 Charcters.</exception>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandLineArgumentBaseAttribute.FullDescription">
+            <summary>
+            Describes the command line option to the user more fully.  This can be any length and is displayed when the user asks for
+            help about a specific command. This should be a fully fledged description of the command and can occupy many lines.
+            </summary>
+        </member>
+        <member name="T:Plisky.Plumbing.CommandLineArgumentsAttribute">
+            <summary>
+            CommandLineArgumentsAttribute used to describe a class as a command line argument.
+            </summary>
+        </member>
+        <member name="T:Plisky.Plumbing.CommandLineArgDefaultAttribute">
+            <summary>
+            The UnmatchedCmdLineArgAttribute acn be applied to an array of strings to indicate that any unmatched parameters should be
+            placed into this array.
+            </summary>
+        </member>
+        <member name="T:Plisky.Plumbing.CommandLineArgAttribute">
+            <summary>
+            CmdLineArgAttribute class is an attribute that can be used to decorate Fields and Properties on a Class that represents arguments
+            passed to the application.  This attribute describes how command line arguments map to the fields in the class and can be used
+            by the CommandArgumentSupport class to convert a set of command line parameters into values within the class.
+            </summary>
+            <remarks>This attribute can target Fields or Properties, is allowed multiple times and is inherited.</remarks>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandLineArgAttribute.#ctor(System.String)">
+            <summary>
+            The CmdLineArgAttribute is applied to a field or a property within a class to indicate that it can be initialised from
+            the command line.  This constructor passes the argument identifier which is the part of the argument that identifies
+            which of the passed parameters matches the decorated field or property.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">The argumentIdentifier parameter is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">When the argumentIdentifier length is 0.</exception>
+            <param name="argumentIdentifier">The string to match on the command line</param>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandLineArgAttribute.ArgumentIdentifier">
+            <summary>
+            The ArgumentIdentifier specifies the text that identifiers the argument, this is typically passed as the first part of
+            any argument string therefore something like /n:xxxx could be the argument where /n: is the argument identifier and the
+            xxxx is the vaule assigned to that identifier.
+            </summary>
+            <remarks>The ArgumentIdentifier can not be null or empty.</remarks>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandLineArgAttribute.IsSingleParameterDefault">
+            <summary>
+            The Default Property indicates whether this is the default argument for the program and therefore if it should have the
+            value assigned to it for any arguments that do not have a prefix that is matched.  This allows the code to pass for example
+            a filename without a prefix and have it route through to the decorated field or property.  It is therefore not possible to
+            have more than one Default decorated field or property for a class.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandLineArgAttribute.ArraySeparatorChar">
+            <summary>
+            Where the argument is an array then this must be used to indicate the separator char, therefore arrays of ints can be
+            passed using int,int,int if the separator char is set to ,
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandLineArgAttribute.IsRequired">
+            <summary>
+            When set to true then an exception will be thrown if the parameter has not been specified on the command line.
+            </summary>
+        </member>
+        <member name="T:Plisky.Plumbing.CommandArgumentSupport">
+            <summary>
+            CommandArgumentSupport provides assistance with using command line arguments and is designed to work in conjunction with the
+            CmdLineArgAttribute class which should be used to decorate a class with command line attributes.  This decorated class can be
+            passed to this CommandLineArgument support class to process any arguments passed to the application.
+            </summary>
+            <remarks> Developed in conjunction with Nemingalator, therefore may not be suitable for reuse</remarks>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.InjectBilge(Plisky.Diagnostics.Bilge,System.Diagnostics.TraceLevel)">
+            <summary>
+            Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+            the first parameter is null.  To set bilge simply pass a new instance of bilge.
+            </summary>
+            <param name="blg">An instance of Bilge to use inside this Hub</param>
+            <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.ListArgumentsWithErrors">
+            <summary>
+            Returns the name(s) of arguments that errored (rather than were not matched at all) and a brief description
+            of why the error occured.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.#ctor(Plisky.Diagnostics.Bilge)">
+            <summary>
+            Creates a new instance of the CommandArgumentSupport class.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandArgumentSupport.ArgumentPrefix">
+            <summary>
+            ArgumentPrefix determines the prefixed text that should be on the front of each argument specifier.  This is commonly a forwards
+            slash however the default is a hyphen in line with the Microsoft powershell standards.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandArgumentSupport.ArgumentPostfix">
+            <summary>
+            Set when the arguments have a specific post fix before the value.  Typically this is a colon, however there is no default for this
+            as it is not necessary for many types of argument.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandArgumentSupport.ArgumentPrefixOptional">
+            <summary>
+            ArgumentPrefixOptional determines whether the ArgumentPrefix string must be on the front of a parameter for the match to be valid
+            or whether the match will occur whether the prefix is there or not.  If this is set to false then an exact match must occur including
+            any prefix that is specified.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.CommandArgumentSupport.DateTimeParseFormat">
+            <summary>
+            The date time format used to parse date times - default. dd-MM-yyyy.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.ProcessArguments(System.Object,System.String[])">
+            <summary>
+            ProcessArguments will process the command line arguments and pass the values into the class passed as argumentVals, assuming
+            that the argumentVals class has been correctly decorated with attributes to identify which of the arguments belong to which
+            of the fields and properties in the class.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when argumentVals is null</exception>
+            <exception cref="T:System.ArgumentException">Thrown when the argumentVals class has no atrribute specified or has no fields.</exception>
+            <param name="argumentValuesClassInstance">The class representing the arguments, decorated by CmdLineArgAttributes</param>
+            <param name="arguments">The string list of arguments passed to the application.</param>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.AssignValueToMember(System.Reflection.MemberInfo,System.Object,System.String)">
+            <summary>
+            This is the default assignment which attempts to put the value in as an object
+            </summary>
+            <param name="theMember">The field on the object to set</param>
+            <param name="theObject">The object containing the field</param>
+            <param name="argumentValueToParse">The value to set it to.</param>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.AssignValueToField(System.Reflection.FieldInfo,System.Object,System.Object)">
+            <summary>
+            Assigns a value which is specified in a string to a reflected field, parsing the value into the type of the field that is expected, if the
+            value in the string can not be parsed into the value that the field is expecting correctly then an ArgumentException is thrown.
+            </summary>
+            <remarks>If the FieldInfo type is boolean then the string value supports True/Yes/Y/T as values.</remarks>
+            <remarks>This method should not be called with theValue parameter being null, if it is theValue is converted to an empty string</remarks>
+            <exception cref="T:System.ArgumentException">Thrown if the value can not be assigned to the field</exception>
+            <param name="theField">The reflected FieldInfo type describing the field that is to be filled/</param>
+            <param name="theObject">The object which is to have the value passed into it</param>
+            <param name="theValue">The string representation of the value</param>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.ConvertArgumentToRemovePostfixes(System.String)">
+            <summary>
+            Massage the argument values to remove the argument postfix from them if it is specified.
+            </summary>
+            <param name="arg">The argument values themselves</param>
+            <returns>The argument values minus any postfix.</returns>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.PopulateFieldMappings(System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo},System.Collections.Generic.List{Plisky.Plumbing.FieldArgumentMapping})">
+            <summary>
+            PopulateFieldMappings populates a list of FieldArgumentMappings which describes how arguments are matched to the fields of the object
+            that is being populated.  This method runs through the fieldInfos that are provided and checks each for instances of the
+            cmdLineArgument attributes.  It then creates a FieldArgumentMapping for each which descirbes the parameters and any defaults that
+            are associated with the field.  This list of mappings is used later to populate the values.
+            </summary>
+            <param name="members">Array of FieldInfo values taken from the object that is to be populated</param>
+            <param name="fim">List of FieldArgumentMappings which is populated representing the mappings to fieldInfos</param>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.AddExample(System.String,System.String)">
+            <summary>
+            Adds an example to the help text that is generated.  Each example should have a one line syntactically correct option and a secondary
+            description option
+            </summary>
+            <param name="example">The syntactic example</param>
+            <param name="description">The description</param>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.GenerateShortHelp(System.Object,System.String)">
+            <summary>
+            Generates the short form of help which is typically shown when the program is called with no arguments.  The short help is generated
+            by specifying the Description attribute on the decoration of the command line arguments class.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when ArgumentVals is null</exception>
+            <exception cref="T:System.ArgumentException">Thrown when no fields are found.</exception>
+            <param name="argumentValues">The class with the [CommandLineArguments] attribute used to generate the help.</param>
+            <param name="appName">The application name to write out into the help.</param>
+            <returns>A string of short form comments, with newlines in to format correctly.</returns>
+        </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.GenerateHelp(System.Object,System.String)">
+            <summary>
+            Generates the longer form of help which is typically shown when the program is called with no arguments.  The FullDescription
+            text is used for outputting the content of this help screen.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when ArgumentVals is null</exception>
+            <exception cref="T:System.ArgumentException">Thrown when the argumentVals has no attributes or no fields.</exception>
+            <param name="commandLineArgumentClass">The class with the [CommandLineArguments] attribute used to generate the help.</param>
+            <param name="appName">The application name</param>
+            <returns>A string of short form comments</returns>
+        </member>
+        <member name="T:Plisky.Plumbing.FieldArgumentMapping">
+            <summary>
+            This class is used by the command line support to map fields within objects to command line arguments.  It is used internally
+            by the command line arguments class to actually hold a field and a mapping and to set the value to the field for a specific
+            command line argument.
+            </summary>
+        </member>
+        <member name="F:Plisky.Plumbing.FieldArgumentMapping.TargetField">
+            <summary>
+            The target reflected field that is to be populated if there is a match.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.FieldArgumentMapping.ParameterMatches">
+            <summary>
+            The list of parameter match forms that should be checked against.  This should be a full list with
+            any relevant prefixes applied.
+            </summary>
+        </member>
+        <member name="F:Plisky.Plumbing.FieldArgumentMapping.HasBeenMatchedToArgument">
+            <summary>
+            Determines whether this field has already been matched and therefoer should not be checked again.
+            </summary>
+        </member>
+        <member name="F:Plisky.Plumbing.FieldArgumentMapping.ShortDescription">
+            <summary>
+            This is the short description which describes the parameter.  This should be around 50 characters in length to allow it to fit on
+            the screen when /? is passed to the command line application.
+            </summary>
+        </member>
+        <member name="F:Plisky.Plumbing.FieldArgumentMapping.LongDescription">
+            <summary>
+            This is the full help string that will be printed when a full help request is made.  This should be descriptive and contain
+            as much information descriving the paramter as possible.
+            </summary>
+        </member>
+        <member name="F:Plisky.Plumbing.FieldArgumentMapping.MatchesAllUnmatchedArguments">
+            <summary>
+            If the mapping represents the default match case then all of the arguments that have not been assigned to the other matches
+            will be put into
+            </summary>
+        </member>
+        <member name="F:Plisky.Plumbing.FieldArgumentMapping.IsDefaultSingleArgument">
+            <summary>
+            Determines whether this parameter is the match for a single unnamed argument, this alows you to pass across filenames and so on
+            without a prefix.  Once this has been matched to the first non prefixed arguments then all of the rest will go into the
+            unmatched store.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.FieldArgumentMapping.MatchArgumentToField(System.String,System.String)">
+            <summary>
+            Method attempts to match an argument passed in against the field parameterMatches that have been specified.  If no
+            parameter matches have been specified this method does noting.
+            </summary>
+            <remarks> Specify both parameterMatches and TargetField before calling this method.</remarks>
+            <param name="argument"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Plisky.Plumbing.Feature.Active">
+            <summary>
+            Determines if this feature is currently active.  Features that are active are designed to be running in code.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.Feature.Name">
+            <summary>
+            The Name of the feature, this must be unique and is case sensitive.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.Feature.CalculateFeatureActive">
+            <summary>
+            Used to take all of the feature data and work out whether or not the boolean for "active" should be set.  Any feature value makes the
+            feature active.  To get more detail other methods need to be called.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.Feature.Level">
+            <summary>
+            When a feature has a level it will be set here.  Feature levels return integer numbers, if the level is zero then the feature is off.
+            Any other value for the feature level means that the feature is on.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.Feature.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of the Feature class, giving it a name and a boolean Active value.
+            </summary>
+            <param name="featureName">The Feature Name</param>
+            <param name="featureValue">A value for whether the feature is Active.</param>
+        </member>
+        <member name="M:Plisky.Plumbing.Feature.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates a new instance of the Feature class, giving it a level.
+            </summary>
+            <param name="featureName">The Feature Name</param>
+            <param name="featureValue">A value for the level, when set to zero the feature is not active.</param>
+        </member>
+        <member name="M:Plisky.Plumbing.Feature.IsActive">
+            <summary>
+            IsActive() will refresh the instance of the feature using the underlying feature provider - and then return whether the feature is active 
+            or not.  This will cause a hit on the underlying provider of the feature implementation, which may itself call other services or cache
+            the result.  Its down to the underlying provider what actually happens.  
+            </summary>
+            <returns>The value of Active for the refreshed feature</returns>
+        </member>
+        <member name="M:Plisky.Plumbing.HttpHelper.InjectBilge(Plisky.Diagnostics.Bilge,System.Diagnostics.TraceLevel)">
+            <summary>
+            Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+            the first parameter is null.  To set bilge simply pass a new instance of bilge.
+            </summary>
+            <param name="blg">An instance of Bilge to use inside this Hub</param>
+            <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        </member>
+        <member name="P:Plisky.Plumbing.HttpHelper.Host">
+            <summary>
+            Sets the host name on the call, when host headers are used by the web server this can be used to set the correct
+            header to match the website call.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.HttpHelper.BaseUri">
+            <summary>
+            The base uri to call for the web request.  This should be the main host element and anything that does not change on each call.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.HttpHelper.Stem">
+            <summary>
+            The stem used after base URI but before call specific items.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.HttpHelper.Verb">
+            <summary>
+            This is the preferred way of setting the httpMethod that the call uses and will persist across execute requests, 
+            however execute takes a secondary parameter that will allow you to use alternative verbs that are not present 
+            in the enum or to override an individual call.
+            </summary>
+        </member>
+        <member name="T:Plisky.Plumbing.ConfigHub">
+            <summary>
+            A class responsible for managing access to configuration information that may be required by an application.  Providers can place information into
+            the hub and recievers can call GetSetting to retrieve single pieces of information.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.ConfigHub.Current">
+            <summary>
+            Returns a single static, instance of the hub.  Not thread safe.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.ResetCurrentConfigHub">
+            <summary>
+            Resets all of the hub for the ConfigHub.Current instance.  Not normally required but useful for unit testing where components
+            use the Current config hub rather than a passed instance.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.InjectBilge(Plisky.Diagnostics.Bilge,System.Diagnostics.TraceLevel)">
+            <summary>
+            Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+            the first parameter is null.  To set bilge simply pass a new instance of bilge.
+            </summary>
+            <param name="blg">An instance of Bilge to use inside this Hub</param>
+            <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.AddDirectoryFallbackProvider(System.String,System.String)">
+            <summary>
+            Adds a fall back handler to look up settings in xml files based on the machine name in a specific driectory. The behaviour is to find files
+            that are machinename.chcfg to resolve the settings names.  If an app setting is set to Environment name then environmentname.chcfg will 
+            be looked for instead.
+            </summary>
+            <param name="directory">The directory to search [APP] can be used as the app directory and [APP]\subdir works too.</param>
+            <param name="fileName">Optional: Filename that is added in the directory, defaults to machinename.chcfg.</param>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.AddMachineFallbackProvider(System.String,System.Func{System.String,System.String})">
+            <summary>
+            Adds a fallback provider which is called only when the machine that the configuration hub runs on is matched to the machine name specified in the registration
+            call.  You can therefore add fallback providers for different machines and have the right one called by machine name.
+            </summary>
+            <remarks>If the hub is unable to retrieve the machine name (due to access rights etc) then it will try and call a fallback with the name of "default", if you
+            add a machine name with the word "default" then this will be called if no other machine name matches.</remarks>
+            <param name="machineName">the machine name to execute the fallback provider for</param>
+            <param name="getAllSettings">the fallback provider that will be executed</param>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.RegisterFallbackProvider(System.Func{System.String,System.String})">
+            <summary>
+            Register your own, custom, fallback provider.  Will be called when a specific provider for a value can not be found.
+            </summary>
+            <remarks>Fallback providers are called after no setting value has been found.</remarks>
+            <param name="getAllSettings"></param>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.RegisterProvider``1(System.String,System.Func{``0})">
+            <summary>
+            Register a provider for a specific type of configuration request.
+            </summary>
+            <typeparam name="T">The type to register the provider for</typeparam>
+            <param name="name">The setting name that this specific provider returns a value for</param>
+            <param name="getSetting">The delegate to return the correct setting value when executed.</param>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.RegisterProvider(System.String,System.Func{System.String})">
+            <summary>
+            Registers a simple provider for a string based configuration request.
+            </summary>
+            <param name="forValue">The setting name that this specific provider returns a value for</param>
+            <param name="provider">The delegate used to return the correct setting when executed.</param>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.GetSetting``1(System.String)">
+            <summary>
+            Retrieves a setting for a specific type, checking the registered providers to see which one is able to return a setting
+            of the correct type.
+            </summary>
+            <typeparam name="T">The type of the setting to retrieve</typeparam>
+            <param name="settingName">The name of the setting required</param>
+            <returns>A setting value of type T</returns>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.GetSetting(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Retrieves a string setting value using a string key name from the configuration hub.  If there is a fallback provider registered
+            for strings then this fallback provider will be called.  If the default appconfig provider is registerd this will also be called.
+            </summary>
+            <param name="settingName">The key identifying the setting</param>
+            <param name="mustBePresent">Boolean, defaults to false.  Set to true if an exception should be thrown if no value can be found.</param>
+            <returns>A string based value indicating the setting</returns>
+        </member>
+        <member name="T:Plisky.Plumbing.Hub">
+            <summary>
+            Holds a hub for messaging, sending messages from one part of the application to another.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.Hub.Relinquish">
+            <summary>
+            Destroys the static "current" in order that all listeners are lost.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.Hub.UseStrongReferences">
+            <summary>
+            Indicates whether the hub should hold a reference to the Actions that are passed into the LookFor methods, in the case where you are using
+            inline Actions and are able to manage your references yourself (with Unregistering correctly) then this can be set to True to manage the lifetime
+            of the Actions without referencing them as member variables.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.Hub.InjectBilge(Plisky.Diagnostics.Bilge,System.Diagnostics.TraceLevel)">
+            <summary>
+            Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+            the first parameter is null.  To set bilge simply pass a new instance of bilge.
+            </summary>
+            <param name="blg">An instance of Bilge to use inside this Hub</param>
+            <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        </member>
+        <member name="M:Plisky.Plumbing.Hub.Launch(System.Int32,System.Boolean)">
+            <summary>
+            Sends a simple integer message to the listeners
+            </summary>
+            <param name="messageIdentity">The integer message identity</param>
+        </member>
+        <member name="M:Plisky.Plumbing.Hub.Launch(System.String,System.Boolean)">
+            <summary>
+            Sends a simple string message to the listeners.
+            </summary>
+            <param name="messageContext">The string message identifier</param>
+        </member>
+        <member name="M:Plisky.Plumbing.Hub.StopLooking``1(System.Action{``0})">
+            <summary>
+            Removes the registered action from the list of actions.  Pass in the message identifier that was first associated with this action
+            and the action to have it removed.  If the action is not found in the list nothing happens.
+            </summary>
+            <param name="targetMessage">The generic message identifier</param>
+            <param name="opener">The action that was passed to LookFor</param>
+        </member>
+        <member name="M:Plisky.Plumbing.Hub.StopLooking(System.String,System.Action{System.String})">
+            <summary>
+            Removes the registered action from the list of actions.  Pass in the message identifier that was first associated with this action
+            and the action to have it removed.  If the action is not found in the list nothing happens.
+            </summary>
+            <param name="targetMessage">The string message identifier</param>
+            <param name="opener">The action that was passed to LookFor</param>
+        </member>
+        <member name="M:Plisky.Plumbing.Hub.StopLooking(System.Int32,System.Action{System.Int32})">
+            <summary>
+            Removes the registered action from the list of actions.  Pass in the message identifier that was first associated with this action
+            and the action to have it removed.  If the action is not found in the list nothing happens.
+            </summary>
+            <param name="targetMessage">The int message identifier</param>
+            <param name="opener">The action that was passed to LookFor</param>
+        </member>
+        <member name="T:Plisky.Plumbing.HubMessageBase">
+            <summary>
+            HubMessageBase is required as a base type for all messages that are to be sent.  It allows us to operate on all message types and also to use
+            either the weak or strong implementations.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.HubMessageBase.Valid">
+            <summary>
+            Is this message valid.  If this method returns false then the hub will remove it from the listeners.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Plisky.Plumbing.StrongMessageReader`1">
+            <summary>
+            Holds the action which is performed when an opener executes, this implementation uses a strong reference which will ensure that the
+            action is available to be called even when the origin of the action goes out of scope. However this will also keep that reference until
+            explicitly removed or the hub goes out of scope.
+            </summary>
+            <typeparam name="T1"></typeparam>
+        </member>
+        <member name="T:Plisky.Plumbing.WeakMessageReader`1">
+            <summary>
+            Holds the action which is performed when an opener executes, this implementation uses a weak reference which will ensure that the
+            action is not held open by the hub. This is more useful when the objects are being replaced on the cliend side.
+            </summary>
+            <typeparam name="T1"></typeparam>
+        </member>
+        <member name="T:Plisky.Plumbing.CryptoHelper">
+            <summary>
+            Implements a cryptographic helper for 24 bit keys.  This is probably a naieve implementation but it iwll server as a starter.
+            </summary>
+        </member>
+        <member name="M:Plisky.Plumbing.CryptoHelper.GenerateKeyFromIdentity(System.Int32)">
+            <summary>
+            This will use the key identity as a seed to generate a key which is used to encrypt the data, this can be a way of obsfuscating the actual
+            key by using an int value called something else to pretend to be the key. It is not very secure at all but it is harder to work out
+            whats actually going on.
+            </summary>
+            <param name="keyIdentity">The identity to seed the key generator with</param>
+            <returns>A Key which can be used for encrypting data</returns>
+        </member>
+        <member name="M:Plisky.Plumbing.SaltyPassword.InjectBilge(Plisky.Diagnostics.Bilge,System.Diagnostics.TraceLevel)">
+            <summary>
+            Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
+            the first parameter is null.  To set bilge simply pass a new instance of bilge.
+            </summary>
+            <param name="blg">An instance of Bilge to use inside this Hub</param>
+            <param name="tl">If specified and blg==null then will alter the tracelevel of the current Bilge</param>
+        </member>
+        <member name="M:Plisky.Plumbing.SaltyPassword.CreateRandomPassword(System.Int32)">
+            <summary>
+            Creates a random password up to a specified maximum length.  The password is a series of randomly chosen characters from a set
+            of predefined OK characters for use.  This method returns a different password each time it is called.
+            </summary>
+            <remarks>Password length must be at least 5 characters long</remarks>
+            <param name="length">The length in characters of the password that is to be created</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if the length passed is less than the minimum allowed by MinPassLength</exception>
+            <returns>The newly created password stored within a secure string</returns>
+        </member>
+        <member name="M:Plisky.Plumbing.SaltyPassword.ComputeSaltedHash(System.Security.SecureString,Plisky.Plumbing.PasswordSalt)">
+            <summary>
+            This method will compute a hash of a password and salt combination.  As a result it does need to take the secure string and read
+            through its contents to compute the hash, this is probably the only time the secure string is not secure, other than when its
+            created in the first place.
+            </summary>
+            <param name="password">The password that is to be hashed.</param>
+            <param name="salt">The salt to hash with the password so that the password hash is more secure</param>
+            <exception cref="T:System.ArgumentException">Thrown if the password is empty or null or if the salt is not initialised</exception>
+            <returns>A string representing that password and salt, this string can be passed around and persisted wtihout fear of revealing the password</returns>
+        </member>
+    </members>
+</doc>

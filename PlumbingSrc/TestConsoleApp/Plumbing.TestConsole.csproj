@@ -37,8 +37,8 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Plisky.Diagnostics, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\Plisky.Diagnostics.2.2.2\lib\net47\Plisky.Diagnostics.dll</HintPath>
+    <Reference Include="Plisky.Diagnostics, Version=2.4.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Plisky.Diagnostics.2.4.0\lib\net47\Plisky.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="Plisky.Diagnostics.Listeners, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Plisky.Listeners.2.2.2\lib\net47\Plisky.Diagnostics.Listeners.dll</HintPath>
