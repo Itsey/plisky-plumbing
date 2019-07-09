@@ -201,7 +201,7 @@
             }
 
             if (!string.IsNullOrWhiteSpace(actualParam)) {
-                if (!actualStem.EndsWith("/")) {
+                if (!actualStem.EndsWith("/") && actualStem.Length > 0) {
                     actualStem += "/";
                 }
             }
