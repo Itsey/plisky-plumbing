@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.5.12.0</version>
+    <version>1.5.13.0</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -24,6 +24,7 @@
                   1.5.10  Fixes SSL Bypass
                   1.5.11 Diagnostics Update for References.
                   1.5.12 Further Diagnostics update for references
+                  1.5.13 Addition of AsyncProcessSupport and HttpHelper Uri bug fix
                   </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>

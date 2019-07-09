@@ -7,14 +7,14 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Plisky.Library")]
 
 
-[assembly: AssemblyInformationalVersion("1.5.12")]
+[assembly: AssemblyInformationalVersion("1.5.13")]
 
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 [assembly: AssemblyVersion("1.5")]
-[assembly: AssemblyFileVersion("1.5.12.0")]
+[assembly: AssemblyFileVersion("1.5.13.0")]
 
 //[assembly: AssemblyKeyFile("..\\..\\_Dependencies\\plisky_publickey.snk")]
 //[assembly: AssemblyDelaySign(true)]
