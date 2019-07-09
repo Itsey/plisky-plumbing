@@ -9,6 +9,7 @@
     <Import_RootNamespace>Plumbing.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Async\AsyncProcessSupport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\CmdLineArgs_Attributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\CommandLineArgumentSupport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\FieldToArgumentMapping.cs" />

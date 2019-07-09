@@ -12,7 +12,7 @@ namespace Plisky.Test {
 
     internal class Program {
 
-        static int Main(string[] args) {
+        static async Task<int> Main(string[] args) {
             Console.WriteLine("online");
             ConfigHubTests();
 
@@ -32,8 +32,26 @@ namespace Plisky.Test {
             string sa = clas.GenerateShortHelp(cla, "TestConsoleApp");
             Console.WriteLine("sec");
             Console.WriteLine(sa);
-            //NewOne();
-            throw new NotImplementedException();
+
+            await HHTestExecute();
+
+            Console.ReadLine();
+                
+            return 0;
+
+        }
+
+        private static async Task HHTestExecute() {
+            HttpHelper hh = new HttpHelper("https://52.142.237.56/api/battlerequest/");
+            hh.Verb = HttpMethod.Post;
+            hh.Host = "";
+            hh.AcceptAllCerts = true;
+            var res = await hh.Execute("", "\"value\":\"asdf\"");
+
+            Console.WriteLine($"Worked : {res.Success} {res.Status}");
+            if (!res.Success) {
+                Console.WriteLine($"Res: {res.ErrorText} {res.Exception.Message}" );
+            }
 
         }
 

@@ -12,7 +12,9 @@
 
     public class HttpHelper {
         protected Bilge b;
-
+        protected NameValueCollection headers = new NameValueCollection();
+        protected string namneCheckStringValue;
+        
         /// <summary>
         /// Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
         /// the first parameter is null.  To set bilge simply pass a new instance of bilge.
@@ -27,11 +29,33 @@
             }
         }
 
+        /// <summary>
+        /// Sets the host name on the call, when host headers are used by the web server this can be used to set the correct
+        /// header to match the website call.
+        /// </summary>
+        public string Host { get; set; }
 
-
-        protected NameValueCollection headers = new NameValueCollection();
+        /// <summary>
+        /// The base uri to call for the web request.  This should be the main host element and anything that does not change on each call.
+        /// </summary>
         public string BaseUri { get; set; }
+
+        /// <summary>
+        /// The stem used after base URI but before call specific items.
+        /// </summary>
         public string Stem { get; set; }
+
+        public bool AcceptAllCerts { get; set; }
+
+        public string NameCheckSSLCallback {
+            get {
+                return namneCheckStringValue;
+            }
+            set {
+                namneCheckStringValue = value.ToLower();
+
+            }
+        }
 
         /// <summary>
         /// This is the preferred way of setting the httpMethod that the call uses and will persist across execute requests, 
@@ -48,7 +72,20 @@
             var request = (HttpWebRequest)WebRequest.Create(wcr.FullUri);
             request.Method = wcr.Verb.Method;
 
+            if (!string.IsNullOrWhiteSpace(Host)) {
+                request.Host = Host;
+            }
+
             request.Headers.Add(wcr.AllHeaders);
+
+            //Invalid SSL Certificate support.
+            if(AcceptAllCerts) {
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => { return true; };
+            } else if (NameCheckSSLCallback!=null) {
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => { return cert.Issuer.ToLower().Contains(namneCheckStringValue); };
+            }
+
+
 
             try {
                 b.Verbose.Log(wcr.DiagnosticSummary());
@@ -164,7 +201,7 @@
             }
 
             if (!string.IsNullOrWhiteSpace(actualParam)) {
-                if (!actualStem.EndsWith("/")) {
+                if (!actualStem.EndsWith("/") && actualStem.Length > 0) {
                     actualStem += "/";
                 }
             }
@@ -191,48 +228,6 @@
         }
 
 
-        /*
-         
 
-   
-
-
-
- 
-
-//body = strversionofq;
-
-try {
-	var url = uri+qstem+qparam;
-    Console.WriteLine(url);
-	
-
-        request.Method = method.ToUpper();
-	request.Timeout = 200000;
-
-	if (headers.Count > 0) {
-		foreach (var h in headers) {
-			request.Headers.Add(h.Item1, h.Item2);
-		}
-
-	}
-
-	if (!string.IsNullOrEmpty(body)) {
-		var encoding = new UTF8Encoding();
-		var byteArray = encoding.GetBytes(body);
-
-		request.ContentLength = byteArray.Length;
-		request.ContentType = @"application/json";
-
-		using (Stream dataStream = request.GetRequestStream()) {
-			dataStream.Write(byteArray, 0, byteArray.Length);
-		}
-	} else {
-		request.ContentLength = 0;
-	}
-
-
-	
-    */
     }
 }
