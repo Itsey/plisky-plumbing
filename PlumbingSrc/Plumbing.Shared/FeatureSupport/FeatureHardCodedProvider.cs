@@ -8,7 +8,7 @@ namespace Plisky.Plumbing {
         private ConfigHub injectedHub = ConfigHub.Current;
         private Dictionary<string, Feature> allFeatures = new Dictionary<string, Feature>();
 
-        public void AddFeatire(Feature f) {
+        public void AddFeature(Feature f) {
             allFeatures.Add(f.Name, f);
         }
         public Feature GetFeature(string byName) {

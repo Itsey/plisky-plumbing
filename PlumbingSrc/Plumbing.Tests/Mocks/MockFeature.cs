@@ -7,11 +7,11 @@ namespace Plisky.Test {
         }
 
         public DateTime? GetStartDate() {
-            return this.featureStartDate;
+            return this.StartActive;
         }
 
         public DateTime? GetEndDate() {
-            return this.featureEndDate;
+            return this.EndActive;
         }
 
     }

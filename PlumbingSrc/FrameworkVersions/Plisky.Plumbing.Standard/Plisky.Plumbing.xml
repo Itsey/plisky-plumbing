@@ -4,6 +4,25 @@
         <name>Plisky.Plumbing</name>
     </assembly>
     <members>
+        <member name="M:Plisky.Plumbing.AsyncProcessSupport.WaitForExitAsync(System.Diagnostics.Process,System.Threading.CancellationToken)">
+            <summary>
+            Waits asynchronously for the process to exit.
+            </summary>
+            <param name="process">The process to wait for cancellation.</param>
+            <param name="cancellationToken">A cancellation token. If invoked, the task will return immediately as cancelled.</param>
+            <returns>A Task representing waiting for the process to end.</returns>
+        </member>
+        <member name="M:Plisky.Plumbing.AsyncProcessSupport.ReadAsync(System.Action{System.Diagnostics.DataReceivedEventHandler},System.Action{System.Diagnostics.DataReceivedEventHandler},System.Text.StringBuilder,System.Threading.CancellationToken)">
+            <summary>
+            Reads the data from the specified data recieved event and writes it to the
+            <paramref name="dataStore"/>.
+            </summary>
+            <param name="addHandler">Adds the event handler.</param>
+            <param name="removeHandler">Removes the event handler.</param>
+            <param name="dataStore">the string builder that has the text appended to it.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
         <member name="T:Plisky.Plumbing.CommandLineArgumentBaseAttribute">
             <summary>
             The CmdLineArgumentBase class represents the base for the attributes that are used to indicate a class is based on command line attributes
@@ -264,6 +283,23 @@
             <remarks> Specify both parameterMatches and TargetField before calling this method.</remarks>
             <param name="argument"></param>
             <returns></returns>
+        </member>
+        <member name="P:Plisky.Plumbing.Feature.StartActive">
+            <summary>
+            IF not null then this indicates a start date, after which the feature will be active.
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.Feature.EndActive">
+            <summary>
+            If not null then this indicates an end date, after which the feature will not be active.  
+            </summary>
+        </member>
+        <member name="P:Plisky.Plumbing.Feature.AnnualAgnostic">
+            <summary>
+            When a date range is Annual agnostic then it kicks in each year, this is only valid when there is both a start and an end date.  Therefore 
+            setting start to 1/1 and end to 10/1 will mean every year the feature is active between first and 10th jan.  It does not matter which year is selected
+            for setting the dates.
+            </summary>
         </member>
         <member name="P:Plisky.Plumbing.Feature.Active">
             <summary>

@@ -17,7 +17,7 @@ namespace Plisky.Test {
             ConfigHubTests();
 
             var f = new FeatureHardCodedProvider();
-            f.AddFeatire(new Feature("TEST", true));
+            f.AddFeature(new Feature("TEST", true));
 
 
 

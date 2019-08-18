@@ -30,7 +30,7 @@ namespace Plisky.Test {
 
             var f = new Feature(FEATURENAME, true);
             FeatureHardCodedProvider sut = new FeatureHardCodedProvider();
-            sut.AddFeatire(f);
+            sut.AddFeature(f);
             var result = sut.GetFeature(FEATURENAME);
 
             
