@@ -15,6 +15,8 @@ namespace Plisky.Test {
         const string FEATURENAME = "MyFeatureName";
 
 
+        
+
         [Fact(DisplayName = nameof(Feature_CreateConstructorOk))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.Unit)]
@@ -110,7 +112,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_WithLevelZeroNotActive))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_WithLevelZeroNotActive() {
             b.Info.Flow();
@@ -124,7 +126,7 @@ namespace Plisky.Test {
 
 
         [Fact(DisplayName = nameof(Feature_CacheResult))]
-        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_CacheResult() {
             b.Info.Flow();
@@ -230,20 +232,85 @@ namespace Plisky.Test {
         [Theory(DisplayName = nameof(Feature_DateRangeWorks))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.Unit)]
-        [InlineData("2019,1,1", "2019,31,12","2019,6,6",true)]
-        [InlineData("2019,1,1", "2019,31,12", "2020,6,6", false)]
+        [InlineData("2019,01,01", "2019,31,12","2019,06,06",true)]
+        [InlineData("2019,01,01", "2019,31,12", "2020,06,06", false)]
         public void Feature_DateRangeWorks(string start, string end, string now, bool inRange) {
             b.Info.Flow();
 
-            DateTime startDate = DateTime.ParseExact(start, "YYYY,dd,MM", CultureInfo.InvariantCulture);
-            DateTime endDate = DateTime.ParseExact(end, "YYYY,dd,MM", CultureInfo.InvariantCulture);
-            DateTime currentDate = DateTime.ParseExact(now, "YYYY,dd,MM", CultureInfo.InvariantCulture);
+            ConfigHub c = new ConfigHub();
+            Feature.UseHub(c);
+
+            DateTime startDate = DateTime.ParseExact(start, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+            DateTime currentDate = DateTime.ParseExact(now, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+
+           c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                return currentDate;
+            });
 
             Feature sut = new Feature(FEATURENAME, true);
             sut.SetDateRange(startDate, endDate);
 
-            Assert.Equal(inRange, sut.Active);
+            Assert.Equal(inRange, sut.IsActive());
         }
+
+        [Theory]
+        [InlineData("02/10/2017", "04/10/2017", "03/10/2017", true)]    // in range
+        [InlineData("02/10/2017", "04/10/2017", "05/10/2017", false)]  // after max date by 1
+        [InlineData("01/12/2012", "01/01/2013", "31/12/2012", true)]   // in date range across year
+        [InlineData("01/12/2012", "01/01/2013", "31/12/2017", false)]  // After max date
+        [InlineData("01/12/2012", "01/01/2013", "31/12/2010", false)]  // Before min date
+        [InlineData("01/12/2012", "01/01/2013", "01/12/2012", true)]  // edge case in start
+        [InlineData("01/12/2012", "01/01/2013", "01/01/2013", true)]  // edge case in end
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void Feature_DateRange_Expected(string featureActiveDate, string featureEndDate, string todaysDate, bool shouldPass) {
+            b.Info.Flow($"{featureActiveDate} >> {featureEndDate} >> {todaysDate} >> {shouldPass}");
+
+            ConfigHub c = new ConfigHub();
+            Feature.UseHub(c);
+
+            string fname = nameof(Feature_DateRange_Expected);
+            CultureInfo ci = new CultureInfo("en-GB");
+
+            Feature f = new Feature(fname, true);
+            f.SetDateRange(DateTime.Parse(featureActiveDate, ci), DateTime.Parse(featureEndDate, ci));
+
+            c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                return DateTime.Parse(todaysDate, ci);
+            });
+
+
+            Assert.Equal(shouldPass, f.IsActive());
+
+        }
+
+        [Theory]
+        [InlineData("02/10/2017", "04/10/2017", "03/10/2018", true)]    // after is valid
+        [InlineData("02/10/2017", "04/10/2017", "05/10/2017", false)]  // out not valid
+        [InlineData("01/12/2012", "01/01/2013", "31/12/2010", true)]   // before is valid
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void GetFeature_AnualAgnostic_IsValid(string featureActiveDate, string featureEndDate, string todaysDate, bool shouldPass) {
+            b.Info.Flow();
+
+            ConfigHub c = new ConfigHub();
+            Feature.UseHub(c);
+
+            string fname = nameof(GetFeature_AnualAgnostic_IsValid);
+            CultureInfo ci = new CultureInfo("en-GB");
+
+            Feature f = new Feature(fname, true);
+            f.SetDateRange(DateTime.Parse(featureActiveDate, ci), DateTime.Parse(featureEndDate, ci), true);
+
+            c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                return DateTime.Parse(todaysDate, ci);
+            });
+
+            Assert.Equal(shouldPass, f.IsActive());
+
+        }
+
 
     }
 }

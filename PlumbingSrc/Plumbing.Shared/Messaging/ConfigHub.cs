@@ -292,7 +292,7 @@
             } else {
                 string s = GetSetting(settingName, mustBePresent);
 
-                if (s == null) {
+                if (s == null) {                   
                     return default(T);
                 }
 
@@ -369,6 +369,9 @@
         public DateTime GetNow() {
             try {
                 DateTime dt = GetSetting<DateTime>(DateTimeSettingName);
+                if (dt == default(DateTime)) {
+                    dt = DateTime.Now;
+                }
                 return dt;
             } catch (ConfigHubMissingConfigException) {
                 return DateTime.Now;
