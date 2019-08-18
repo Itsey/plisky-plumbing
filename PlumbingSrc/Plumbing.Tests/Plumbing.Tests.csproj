@@ -57,7 +57,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="FeatureTests.cs" />
+    <Compile Include="FeatureTests\FeatureProviderTests.cs" />
+    <Compile Include="FeatureTests\FeatureTests.cs" />
+    <Compile Include="Mocks\MockFeature.cs" />
     <Compile Include="Mocks\MockFeatureProvider.cs" />
     <Compile Include="TestDataTests.cs" />
     <Compile Include="HttpHelperTests.cs" />
@@ -84,7 +86,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\..\Packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Plumbing\Plumbing.csproj">
       <Project>{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}</Project>
@@ -92,11 +96,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Plisky.Diagnostics, Version=2.4.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\Plisky.Diagnostics.2.4.0\lib\net47\Plisky.Diagnostics.dll</HintPath>
+    <Reference Include="Plisky.Diagnostics, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Plisky.Diagnostics.2.6.0\lib\net47\Plisky.Diagnostics.dll</HintPath>
     </Reference>
-    <Reference Include="Plisky.Diagnostics.Listeners, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fa048162fdc8ec66, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\Plisky.Listeners.2.2.2\lib\net47\Plisky.Diagnostics.Listeners.dll</HintPath>
+    <Reference Include="Plisky.Diagnostics.Listeners, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Plisky.Listeners.2.6.0\lib\net47\Plisky.Diagnostics.Listeners.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net" />
@@ -115,9 +119,6 @@
     <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\Packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <Import Project="..\Plumbing.Testing\Plumbing.Testing.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="oldFeature.cs" />
     <Compile Include="versions\CommonPliskyTesting.cs" />
     <Compile Include="versions\CommonInfoListeners.cs" />
     <Compile Include="versions\CommonInfoDiags.cs" />

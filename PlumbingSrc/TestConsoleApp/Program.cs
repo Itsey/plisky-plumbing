@@ -16,6 +16,15 @@ namespace Plisky.Test {
             Console.WriteLine("online");
             ConfigHubTests();
 
+            var f = new FeatureHardCodedProvider();
+            f.AddFeatire(new Feature("TEST", true));
+
+
+
+            if (Feature.GetFeatureByName("TEST").Active) {
+
+            }
+
             CommandLineArgs cla = new CommandLineArgs();
             CommandArgumentSupport clas = new CommandArgumentSupport();
             clas.ProcessArguments(cla, args);
