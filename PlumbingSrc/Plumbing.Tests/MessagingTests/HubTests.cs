@@ -7,7 +7,7 @@ namespace Plisky.Test {
 
     public class HubTests {
         private UnitTestHelper uth = new UnitTestHelper();
-        private TestData td = new TestData();
+        private SampleTestData td = new SampleTestData();
         
         public HubTests() {
             Hub.Relinquish();
@@ -41,7 +41,7 @@ namespace Plisky.Test {
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void Hub_Launch_NothingListening() {
             Hub sut = new Hub();
-            sut.Launch(TestData.GenericString1);
+            sut.Launch(SampleTestData.GenericString1);
             sut.Launch<TestMessage>(new TestMessage());
         }
 
@@ -62,7 +62,7 @@ namespace Plisky.Test {
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void SendMessage_CustomType_DoesReachRecipient() {
             Hub sut = new Hub();
-            string testMsg = TestData.GenericString1;
+            string testMsg = SampleTestData.GenericString1;
             bool wasExecuted = false;
 
             sut.LookFor<TestMessage>((TestMessage msg) => {
@@ -78,7 +78,7 @@ namespace Plisky.Test {
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void SendMessage_SimpleString_DoesReachRecipient() {
             Hub sut = new Hub();
-            string testMsg = TestData.GenericString1;
+            string testMsg = SampleTestData.GenericString1;
             bool notification = false;
 
             sut.LookFor<string>((string s) => {
@@ -87,7 +87,7 @@ namespace Plisky.Test {
                 }
             });
 
-            sut.Launch(TestData.GenericString1);
+            sut.Launch(SampleTestData.GenericString1);
 
             Assert.True(notification, "The notification was not hit with a simple string message");
         }
@@ -96,7 +96,7 @@ namespace Plisky.Test {
         public void SendMessage_LookForDifferentString_DoesNotNotify() {
             Hub sut = new Hub();
             
-            string testMsg = TestData.GenericString1;
+            string testMsg = SampleTestData.GenericString1;
             bool notification = false;
 
             sut.LookFor<string>((string s) => {
@@ -105,7 +105,7 @@ namespace Plisky.Test {
                 }
             });
 
-            sut.Launch(TestData.GenericString2);
+            sut.Launch(SampleTestData.GenericString2);
 
             Assert.False(notification, "The notification was not hit with a simple string message");
         }

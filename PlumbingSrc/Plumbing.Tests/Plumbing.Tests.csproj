@@ -94,6 +94,10 @@
       <Project>{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}</Project>
       <Name>Plumbing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestData\TestData.csproj">
+      <Project>{E22D0EDB-0D91-4E99-BA59-913C0D57A50A}</Project>
+      <Name>TestData</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Plisky.Diagnostics, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">

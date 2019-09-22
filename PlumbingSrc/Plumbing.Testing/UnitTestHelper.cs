@@ -14,8 +14,7 @@
     public sealed class UnitTestHelper {
         private Bilge b = new Bilge("UTH");
         
-      
-
+        
         /// <summary>
         /// Creates a new instance of the UnitTestHelper class
         /// </summary>
@@ -25,6 +24,73 @@
 
         ~UnitTestHelper() {
             ClearUpTestFiles();
+        }
+
+        public string GetTestDataFile(string partialRefName, string assemblyName = "TestData") {
+            #region constants
+            const string MS_ASM_NAMEPREFIX = "microsoft";
+            const string SYSTEM_ASM_NAMEPREFIX = "system";
+            const string XUNIT_ASM_NAMEPREFIX = "xunit";
+            #endregion
+
+            #region parameter validation
+            if (string.IsNullOrWhiteSpace(partialRefName)) {
+                throw new ArgumentOutOfRangeException(nameof(partialRefName), "The resource name must be specified, at least partially, to retrieve it.");
+            }
+
+            if (string.IsNullOrWhiteSpace(assemblyName)) {
+                throw new ArgumentOutOfRangeException(nameof(assemblyName), "The assembly name should be defaulted or specified, it can not be empty.");
+            }
+            #endregion
+
+            assemblyName = assemblyName.ToLowerInvariant();
+            string fname = NewTemporaryFileName(true);
+            var asm = Assembly.GetExecutingAssembly();
+            Assembly matchedTestData = null;
+            foreach (var f in asm.GetReferencedAssemblies()) {
+                string str = f.FullName.ToLower();
+
+                if ((str.StartsWith(MS_ASM_NAMEPREFIX)) || (str.StartsWith(SYSTEM_ASM_NAMEPREFIX)) || (str.StartsWith(XUNIT_ASM_NAMEPREFIX))) {
+                    continue;
+                }
+
+                if (str.Contains(assemblyName)) {
+                    foreach (var mtcher in AppDomain.CurrentDomain.GetAssemblies()) {
+                        if (mtcher.FullName == f.FullName) {
+                            matchedTestData = mtcher;
+                        }
+                    }
+
+                    break;
+                }
+            }
+
+            if (matchedTestData == null) {
+                throw new InvalidOperationException($"No referenced assembly {assemblyName}.  Did you reference and use the assembly in the test project?");
+            }
+
+            string resMatched = null;
+            string[] allNames = matchedTestData.GetManifestResourceNames();
+            foreach (string x in allNames) {
+                b.Verbose.Log($"Matched Resource {x}");
+                if (x.Contains(partialRefName)) {
+                    resMatched = x;
+                }
+            }
+
+            if (string.IsNullOrEmpty(resMatched)) {
+                throw new InvalidOperationException("Unable to find the resource");
+            }
+
+            using (var stream = matchedTestData.GetManifestResourceStream(resMatched)) {
+                if (stream != null) {
+                    var reader = new StreamReader(stream);
+                    string rd = reader.ReadToEnd();
+                    File.WriteAllText(fname, rd);
+                }
+            }
+
+            return fname;
         }
 
         /// <summary>
@@ -140,7 +206,7 @@
         /// <param name="target">The value to change</param>
         /// <returns>A new value for the object val</returns>
         public object AlterValue(object target) {
-            var td = new TestData();
+            var td = new SampleTestData();
 
             if (target == null) { return null; }
 

@@ -41,7 +41,7 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfigCurrentInstance_SingleProvider_ReturnsCorrectly() {
-            string returnString = TestData.GenericString1;
+            string returnString = SampleTestData.GenericString1;
 
             ConfigHub.Current.RegisterProvider("test", () => {
                 return returnString;
@@ -299,7 +299,7 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_FallbackProvider_CalledForAllStrings() {
-            TestData td = new TestData();
+            SampleTestData td = new SampleTestData();
             ConfigHub sut = new ConfigHub();
             int hits = 0;
 
