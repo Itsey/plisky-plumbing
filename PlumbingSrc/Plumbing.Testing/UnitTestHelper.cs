@@ -12,13 +12,32 @@
     /// Class designed to support the adoption of unit tests and provide helper functions for typical common elements.
     /// </summary>
     public sealed class UnitTestHelper {
-        private Bilge b = new Bilge("UTH");
-        
-        
+        private List<string> m_storedFilenames = new List<string>();
+        private Bilge b;
+        private bool handlerAdded = false;
+
+        public Bilge TestBilge {
+            get {
+                return b;
+            }
+        }
+
+        public void AddHandlerOnce(IBilgeMessageHandler mh) {
+            if (!handlerAdded) {
+                b.AddHandler(mh);
+                handlerAdded = true;
+            }
+        }
+
         /// <summary>
         /// Creates a new instance of the UnitTestHelper class
         /// </summary>
-        public UnitTestHelper() {
+        public UnitTestHelper(Bilge blg = null) {
+            if (blg == null) {
+                b = new Bilge("UTH");
+            } else {
+                b = blg;
+            }
             CaseSensitiveMatches = false;
         }
 
@@ -26,12 +45,17 @@
             ClearUpTestFiles();
         }
 
+
+        /// <summary>
+        /// GetTestDataFile, returns a test data file stored to the file system and read from the referenced assembly.  To use this pass in the partial name of the
+        /// embedded resource and a partial name of a referenced assembly of the current appdomain.  This defaults to "TestData", therefore if you create a project
+        /// called TestData, reference it in your unit test project and load a class from it the match will work.
+        /// </summary>
+        /// <param name="partialRefName">The partial name of the manifest reference to load as a file.</param>
+        /// <param name="assemblyName">The partial name of the assembly where the manifest lives, defaults TestData</param>
+        /// <returns></returns>
         public string GetTestDataFile(string partialRefName, string assemblyName = "TestData") {
-            #region constants
-            const string MS_ASM_NAMEPREFIX = "microsoft";
-            const string SYSTEM_ASM_NAMEPREFIX = "system";
-            const string XUNIT_ASM_NAMEPREFIX = "xunit";
-            #endregion
+         
 
             #region parameter validation
             if (string.IsNullOrWhiteSpace(partialRefName)) {
@@ -45,40 +69,33 @@
 
             assemblyName = assemblyName.ToLowerInvariant();
             string fname = NewTemporaryFileName(true);
-            var asm = Assembly.GetExecutingAssembly();
-            Assembly matchedTestData = null;
-            foreach (var f in asm.GetReferencedAssemblies()) {
-                string str = f.FullName.ToLower();
+            
 
-                if ((str.StartsWith(MS_ASM_NAMEPREFIX)) || (str.StartsWith(SYSTEM_ASM_NAMEPREFIX)) || (str.StartsWith(XUNIT_ASM_NAMEPREFIX))) {
-                    continue;
-                }
+            b.Info.Log($"GetTestDataFile >> Finding ({assemblyName})  reference {partialRefName}");
 
-                if (str.Contains(assemblyName)) {
-                    foreach (var mtcher in AppDomain.CurrentDomain.GetAssemblies()) {
-                        if (mtcher.FullName == f.FullName) {
-                            matchedTestData = mtcher;
-                        }
-                    }
+            var asm = Assembly.GetCallingAssembly();
+            var matchedTestData = GetMatchedTestDataFromAssembly(asm, assemblyName);
+            if (matchedTestData == null) {
+                matchedTestData = GetMatchedTestDataFromAssembly(Assembly.GetExecutingAssembly(), assemblyName);
 
-                    break;
-                }
             }
 
             if (matchedTestData == null) {
+                b.Warning.Log("Unable to Match assembly, Exception being thrown");
                 throw new InvalidOperationException($"No referenced assembly {assemblyName}.  Did you reference and use the assembly in the test project?");
             }
 
             string resMatched = null;
             string[] allNames = matchedTestData.GetManifestResourceNames();
             foreach (string x in allNames) {
-                b.Verbose.Log($"Matched Resource {x}");
+                b.Verbose.Log($"Looking for matched Resource {x}");
                 if (x.Contains(partialRefName)) {
                     resMatched = x;
                 }
             }
 
             if (string.IsNullOrEmpty(resMatched)) {
+                b.Warning.Log("No Res Matched, Exception");
                 throw new InvalidOperationException("Unable to find the resource");
             }
 
@@ -87,10 +104,50 @@
                     var reader = new StreamReader(stream);
                     string rd = reader.ReadToEnd();
                     File.WriteAllText(fname, rd);
+                } else {
+                    b.Warning.Log("Could not find stream, failing to update the file. Exception being thrown");
+                    throw new InvalidOperationException("The stream could not be read from the matched resource. No data.");
                 }
             }
 
+            b.Verbose.Log($"Returns {fname}");
             return fname;
+        }
+
+        //Assembly name is already tolower.
+        private Assembly GetMatchedTestDataFromAssembly(Assembly asm, string assemblyName) {
+            #region constants
+            const string MS_ASM_NAMEPREFIX = "microsoft";
+            const string SYSTEM_ASM_NAMEPREFIX = "system";
+            const string XUNIT_ASM_NAMEPREFIX = "xunit";
+            #endregion
+
+            Assembly result = null;
+            var refAsms = asm.GetReferencedAssemblies();
+            b.Info.Log($"Checking {asm.FullName} found refs {refAsms.Length}");
+
+            foreach (var f in refAsms) {
+                string str = f.FullName.ToLower();
+
+                if ((str.StartsWith(MS_ASM_NAMEPREFIX)) || (str.StartsWith(SYSTEM_ASM_NAMEPREFIX)) || (str.StartsWith(XUNIT_ASM_NAMEPREFIX))) {
+                    b.Verbose.Log($"Skipping Well Known ASM {str}");
+                    continue;
+                }
+
+
+                if (str.Contains(assemblyName)) {
+                    foreach (var mtcher in AppDomain.CurrentDomain.GetAssemblies()) {
+                        b.Verbose.Log($"Checking {str} against {mtcher.FullName}");
+                        if (mtcher.FullName == f.FullName) {
+                            result = mtcher;
+                        }
+                    }
+
+                    break;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -99,7 +156,7 @@
         /// <remarks>Defaults to false, making all matches insensitive</remarks>
         public bool CaseSensitiveMatches { get; set; }
 
-        private List<string> m_storedFilenames = new List<string>();
+        
 
         /// <summary>
         /// Returns a TemporaryFilename which can be used for storing data during unit tests.  This filename is stored within
@@ -238,7 +295,7 @@
             return target;
         }
 
-       
+
 
         /// <summary>
         /// Attempts to delete all of the test files that are used.

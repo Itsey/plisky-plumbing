@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Plisky.Diagnostics.Listeners;
 using TestData;
 
 namespace Plisky.Test {
@@ -9,7 +10,14 @@ namespace Plisky.Test {
     using Plisky.Diagnostics;
 
     public class TestDataTests {
-        private Bilge b = new Bilge();
+        private Bilge b;
+        private UnitTestHelper uth;
+
+        public TestDataTests() {
+            b = new Bilge(tl: System.Diagnostics.TraceLevel.Verbose);
+            uth = new UnitTestHelper(b);
+            uth.AddHandlerOnce(new TCPHandler("127.0.0.1", 5060, true));
+        }
 
         [Fact(DisplayName = nameof(TestDataFile_CleanUpWorks))]
         [Trait(Traits.Age, Traits.Regression)]
