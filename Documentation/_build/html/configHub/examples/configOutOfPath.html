@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Keeping Configuration Out Of Your Source Path &#8212; Plisky.Plumbing 1.6.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="keeping-configuration-out-of-your-source-path">
+<h1>Keeping Configuration Out Of Your Source Path<a class="headerlink" href="#keeping-configuration-out-of-your-source-path" title="Permalink to this headline">¶</a></h1>
+<p>Sometimes when working with configuration it must contain sensitive information and this should not be commited to source control.  Using environment variables
+or files that are set to be ignored by your source control tool you can do this as per the following examples.</p>
+</div>
+<div class="section" id="simple-use-case">
+<h1>Simple Use Case<a class="headerlink" href="#simple-use-case" title="Permalink to this headline">¶</a></h1>
+<p>1 - Create The File With the Config In it</p>
+<p>‘&lt;?xml version=”1.0” encoding=”utf-8”?&gt;
+‘&lt;chub_settings&gt;
+‘&lt;settings&gt;
+‘  &lt;connectionstring&gt;secretDataYouDontWantInSourceControl&lt;/connectionstring&gt;
+‘&lt;/settings&gt;
+‘&lt;/chub_settings&gt;</p>
+<p>2 - Save This File - C:MyAppConfigsappNamedevSettings.chConfig
+2a - (Optionally) Set An Environment variable to locate the config set MYAPPCONFIG=C:MyAppConfigs</p>
+<p>3 - Add the ConfigHub File Fallback Provider
+3a - (Optionally) Use %MYAPPCONFIG%
+‘ ConfigHub.Current.AddDirectoryFallbackProvider(“%MYAPPCONFIG%\appName&quot;, “devSettings”);</p>
+<p>4 - Retrieve The Value</p>
+<p>‘ var s = ConfigHub.Current.GetSetting&lt;string&gt;(“testvalue”);</p>
+<p>With this approach different settings can be applied on different machines outside the deployment path to keep the configuration constant.</p>
+</div>
+<div class="section" id="using-ignored-files">
+<h1>Using ignored files.<a class="headerlink" href="#using-ignored-files" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt>Using files with a consistant .donotcommit extension then including them in your SCM ignore file will allow you to have configruation data in the source path</dt><dd><p>that contains sensitive info.  This does present a risk of loosing this information but that is better than having secrets compromised.</p>
+</dd>
+</dl>
+<p>‘&lt;?xml version=”1.0” encoding=”utf-8”?&gt;
+‘&lt;chub_settings&gt;
+‘&lt;settings&gt;
+‘  &lt;connectionstring&gt;secretDataYouDontWantInSourceControl&lt;/connectionstring&gt;
+‘&lt;/settings&gt;
+‘&lt;/chub_settings&gt;</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Plisky.Plumbing</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configHubStart.html">Plisky.Plumbing - ConfigHub.</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Jim.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/configHub/examples/configOutOfPath.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

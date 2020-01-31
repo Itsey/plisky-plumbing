@@ -203,6 +203,12 @@
                 }
             } else {
                 b.Warning.Log(GetTraceMessage("Message type could not be found, no one being notified"));
+
+                foreach (var f in peopleSearching.Keys) {
+                    b.Verbose.Log($"Registered: {f.AssemblyQualifiedName}");
+                }
+
+                b.Verbose.Log($"SearchingFor: {msgType.AssemblyQualifiedName}");
             }
 
             if (messagesDispatched == 0) {

@@ -12,4 +12,8 @@
     <EmbeddedResource Include="SampleFileData.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Plisky.Diagnostics" Version="2.7.0" />
+  </ItemGroup>
+
 </Project>

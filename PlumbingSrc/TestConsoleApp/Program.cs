@@ -16,6 +16,8 @@ namespace Plisky.Test {
             Console.WriteLine("online");
             ConfigHubTests();
 
+            return 0;
+
             var f = new FeatureHardCodedProvider();
             f.AddFeature(new Feature("TEST", true));
 
@@ -57,6 +59,14 @@ namespace Plisky.Test {
 
         private static void ConfigHubTests() {
 //            ConfigHub.Current.AddDirectoryFallbackProvider
+
+            ConfigHub.Current.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\config\\", "tests");
+            var s = ConfigHub.Current.GetSetting<string>("testvalue");
+
+            if (s != "CONSTR-Value") {
+                throw new InvalidOperationException();
+            }
+
         }
 
         private static async Task<string> SaveQuestion(string s) {

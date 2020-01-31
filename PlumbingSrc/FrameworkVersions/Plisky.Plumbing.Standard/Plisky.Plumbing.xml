@@ -407,8 +407,8 @@
             that are machinename.chcfg to resolve the settings names.  If an app setting is set to Environment name then environmentname.chcfg will 
             be looked for instead.
             </summary>
-            <param name="directory">The directory to search [APP] can be used as the app directory and [APP]\subdir works too.</param>
-            <param name="fileName">Optional: Filename that is added in the directory, defaults to machinename.chcfg.</param>
+            <param name="directory">The directory to search [APP] can be used as the app directory and [APP]\subdir works too. Null uses current directory.  Environment variables are expanded</param>
+            <param name="fileName">Optional: Filename that is added in the directory, defaults to machinename.chConfig, appends chConfig to the string you supply if not already there.</param>
         </member>
         <member name="M:Plisky.Plumbing.ConfigHub.AddMachineFallbackProvider(System.String,System.Func{System.String,System.String})">
             <summary>

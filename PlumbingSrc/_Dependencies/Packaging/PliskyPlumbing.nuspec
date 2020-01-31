@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.6.0.0</version>
+    <version>1.6.3.0</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -10,7 +10,8 @@
     <projectUrl>http://www.plisky.net/main/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Plumbing Functions including Hub, ConfigHub, CommandLineSupport.</description>
-    <releaseNotes>1.5 Corrects versioning fault in different targettted frameworks, all previous versions deprecated. 
+    <releaseNotes>1.6.2/3 Updating Dependency Chain on Diagnostics To Keep Up with New Constructor Changes
+                  1.5 Corrects versioning fault in different targettted frameworks, all previous versions deprecated. 
                   Adds int and string array support to command line arguments.  Comma separated only.
                   1.5.1  Adds DateTime as a supported format.  Adds required option to attributes.
                   1.5.2  Fixes NullRef Exception when using bilge.
@@ -26,7 +27,7 @@
                   1.5.12 Further Diagnostics update for references
                   1.5.13 Addition of AsyncProcessSupport and HttpHelper Uri bug fix
                   </releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <copyright>Copyright 2020</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>
     <dependencies>
       <dependency id="Plisky.Diagnostics" version="2.6.0"/>
