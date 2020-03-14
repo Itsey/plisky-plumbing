@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Plisky.Test {
     public class FeatureProviderTests {
-        protected Bilge b = new Bilge(tl:System.Diagnostics.TraceLevel.Verbose);
+        protected Bilge b = new Bilge();
         protected UnitTestHelper uth = new UnitTestHelper();
 
         const string FEATURENAME = "MyFeatureName";

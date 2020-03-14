@@ -16,8 +16,6 @@ namespace Plisky.Test {
             Console.WriteLine("online");
             ConfigHubTests();
 
-            return 0;
-
             var f = new FeatureHardCodedProvider();
             f.AddFeature(new Feature("TEST", true));
 

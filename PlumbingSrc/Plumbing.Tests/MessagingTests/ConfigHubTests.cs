@@ -11,7 +11,7 @@ namespace Plisky.Test {
 
     public class ConfigHubTests {
         private UnitTestHelper uth = new UnitTestHelper();
-        protected Bilge b = new Bilge(tl:System.Diagnostics.TraceLevel.Verbose);
+        protected Bilge b = new Bilge();
         
         public ConfigHubTests () {
             var h = new TCPHandler("127.0.0.1", 9060);            

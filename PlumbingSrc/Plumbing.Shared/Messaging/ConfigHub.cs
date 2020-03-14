@@ -15,7 +15,7 @@
     public partial class ConfigHub {
         private static string CONFIGHUB_EXTENSION = ".chConfig";
 
-        private Bilge b = new Bilge(tl:System.Diagnostics.TraceLevel.Off);
+        private Bilge b = new Bilge();
         public const string DateTimeSettingName = "defaultdatetimevalue";
         public const string DefaultMachineName = "defaultmachinename";
         public IDecryptStuff CryptoProvider { get; set; }

@@ -158,7 +158,7 @@
         public HttpHelper(Bilge useThisBilge = null) {
             AcceptContentType = "application/json";
             Verb = HttpMethod.Get;
-            b = useThisBilge ?? new Bilge(tl: TraceLevel.Off);
+            b = useThisBilge ?? new Bilge();
         }
 
 

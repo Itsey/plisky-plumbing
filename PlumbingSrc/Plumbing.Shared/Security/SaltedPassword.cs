@@ -9,7 +9,7 @@ using System.Text;
 namespace Plisky.Plumbing {
 
     public class SaltyPassword {
-        protected Bilge b = new Bilge(tl: TraceLevel.Off);
+        protected Bilge b = new Bilge();
 
         private static bool hashB64Enc = true;
 

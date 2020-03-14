@@ -14,7 +14,7 @@ namespace Plisky.Test {
         private UnitTestHelper uth;
 
         public TestDataTests() {
-            b = new Bilge(tl: System.Diagnostics.TraceLevel.Verbose);
+            b = new Bilge();
             uth = new UnitTestHelper(b);
             uth.AddHandlerOnce(new TCPHandler("127.0.0.1", 5060, true));
         }
