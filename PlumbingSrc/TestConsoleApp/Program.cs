@@ -15,7 +15,7 @@ namespace Plisky.Test {
         static async Task<int> Main(string[] args) {
             Console.WriteLine("online");
             ConfigHubTests();
-
+            // Test
             var f = new FeatureHardCodedProvider();
             f.AddFeature(new Feature("TEST", true));
 
