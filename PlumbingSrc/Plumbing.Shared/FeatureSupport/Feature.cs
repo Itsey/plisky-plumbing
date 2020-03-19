@@ -10,6 +10,7 @@ namespace Plisky.Plumbing {
 
         public static void Reset() {
             resolver = null;
+            configResolver = ConfigHub.Current;
         }
 
         // Feature Management
@@ -145,9 +146,9 @@ namespace Plisky.Plumbing {
         /// </summary>
         /// <param name="featureName">The Feature Name</param>
         /// <param name="featureValue">A value for the level, when set to zero the feature is not active.</param>
-        public Feature(string fn, int level) {
-            Name = fn;
-            featureLevel = level;
+        public Feature(string featureName, int newFeatureLevel) {
+            Name = featureName;
+            featureLevel = newFeatureLevel;
             CalculateFeatureActive();
         }
 
@@ -188,5 +189,7 @@ namespace Plisky.Plumbing {
             }
             configResolver = newHubToUse;
         }
+
+        
     }
 }

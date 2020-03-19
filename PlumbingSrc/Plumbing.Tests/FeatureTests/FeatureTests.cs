@@ -15,7 +15,7 @@ namespace Plisky.Test {
         const string FEATURENAME = "MyFeatureName";
 
 
-        
+
 
         [Fact(DisplayName = nameof(Feature_CreateConstructorOk))]
         [Trait(Traits.Age, Traits.Fresh)]
@@ -175,9 +175,9 @@ namespace Plisky.Test {
 
                 var ct = mfp.HowManyCallsForThisFeature(FEATURENAME);
                 // +1 because of the first GetFeatureByName, then the additonal CALLSTOMAKE in the loop.
-                Assert.Equal(CALLSTOMAKE+1, ct);
-                
-                
+                Assert.Equal(CALLSTOMAKE + 1, ct);
+
+
             } finally {
                 Feature.Reset();
             }
@@ -201,14 +201,20 @@ namespace Plisky.Test {
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_StartDateWorks() {
             b.Info.Flow();
+            ConfigHub ch = new ConfigHub();
+            Feature.UseHub(ch);
+            try {
+                Feature sut = new Feature(FEATURENAME, true);
+                var when = ch.GetNow();
+                var tomorrow = when.AddDays(1);
 
-            Feature sut = new Feature(FEATURENAME, true);
-            var when = ConfigHub.Current.GetNow();
-            var tomorrow = when.AddDays(1);
+                sut.SetDateRange(tomorrow, null);
 
-            sut.SetDateRange(tomorrow,null);
+                Assert.False(sut.Active);
 
-            Assert.False(sut.Active);
+            } finally {
+                Feature.Reset();
+            }
         }
 
 
@@ -217,13 +223,23 @@ namespace Plisky.Test {
         [Trait(Traits.Style, Traits.Unit)]
         public void Feature_EndDateWorks() {
             b.Info.Flow();
-            Feature sut = new Feature(FEATURENAME, true);
-            var when = ConfigHub.Current.GetNow();
-            var yesterday = when.AddDays(-1);
 
-            sut.SetDateRange(null, yesterday);
+            ConfigHub ch = new ConfigHub();
+            Feature.UseHub(ch);
+            try {
 
-            Assert.False(sut.Active);
+                Feature sut = new Feature(FEATURENAME, true);
+
+                var when = ch.GetNow();
+                var yesterday = when.AddDays(-1);
+
+                sut.SetDateRange(null, yesterday);
+
+                Assert.False(sut.Active);
+
+            } finally {
+                Feature.Reset();
+            }
 
         }
 
@@ -232,26 +248,31 @@ namespace Plisky.Test {
         [Theory(DisplayName = nameof(Feature_DateRangeWorks))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.Unit)]
-        [InlineData("2019,01,01", "2019,31,12","2019,06,06",true)]
+        [InlineData("2019,01,01", "2019,31,12", "2019,06,06", true)]
         [InlineData("2019,01,01", "2019,31,12", "2020,06,06", false)]
         public void Feature_DateRangeWorks(string start, string end, string now, bool inRange) {
             b.Info.Flow();
 
             ConfigHub c = new ConfigHub();
             Feature.UseHub(c);
+            try {
 
-            DateTime startDate = DateTime.ParseExact(start, "yyyy,dd,MM", CultureInfo.InvariantCulture);
-            DateTime endDate = DateTime.ParseExact(end, "yyyy,dd,MM", CultureInfo.InvariantCulture);
-            DateTime currentDate = DateTime.ParseExact(now, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+                DateTime startDate = DateTime.ParseExact(start, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+                DateTime endDate = DateTime.ParseExact(end, "yyyy,dd,MM", CultureInfo.InvariantCulture);
+                DateTime currentDate = DateTime.ParseExact(now, "yyyy,dd,MM", CultureInfo.InvariantCulture);
 
-           c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
-                return currentDate;
-            });
+                c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                    return currentDate;
+                });
 
-            Feature sut = new Feature(FEATURENAME, true);
-            sut.SetDateRange(startDate, endDate);
+                Feature sut = new Feature(FEATURENAME, true);
+                sut.SetDateRange(startDate, endDate);
 
-            Assert.Equal(inRange, sut.IsActive());
+                Assert.Equal(inRange, sut.IsActive());
+
+            } finally {
+                Feature.Reset();
+            }
         }
 
         [Theory]
@@ -269,19 +290,24 @@ namespace Plisky.Test {
 
             ConfigHub c = new ConfigHub();
             Feature.UseHub(c);
+            try {
 
-            string fname = nameof(Feature_DateRange_Expected);
-            CultureInfo ci = new CultureInfo("en-GB");
+                string fname = nameof(Feature_DateRange_Expected);
+                CultureInfo ci = new CultureInfo("en-GB");
 
-            Feature f = new Feature(fname, true);
-            f.SetDateRange(DateTime.Parse(featureActiveDate, ci), DateTime.Parse(featureEndDate, ci));
+                Feature f = new Feature(fname, true);
+                f.SetDateRange(DateTime.Parse(featureActiveDate, ci), DateTime.Parse(featureEndDate, ci));
 
-            c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
-                return DateTime.Parse(todaysDate, ci);
-            });
+                c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                    return DateTime.Parse(todaysDate, ci);
+                });
 
 
-            Assert.Equal(shouldPass, f.IsActive());
+                Assert.Equal(shouldPass, f.IsActive());
+
+            } finally {
+                Feature.Reset();
+            }
 
         }
 
@@ -296,19 +322,22 @@ namespace Plisky.Test {
 
             ConfigHub c = new ConfigHub();
             Feature.UseHub(c);
+            try {
+                string fname = nameof(GetFeature_AnualAgnostic_IsValid);
+                CultureInfo ci = new CultureInfo("en-GB");
 
-            string fname = nameof(GetFeature_AnualAgnostic_IsValid);
-            CultureInfo ci = new CultureInfo("en-GB");
+                Feature f = new Feature(fname, true);
+                f.SetDateRange(DateTime.Parse(featureActiveDate, ci), DateTime.Parse(featureEndDate, ci), true);
 
-            Feature f = new Feature(fname, true);
-            f.SetDateRange(DateTime.Parse(featureActiveDate, ci), DateTime.Parse(featureEndDate, ci), true);
+                c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                    return DateTime.Parse(todaysDate, ci);
+                });
 
-            c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
-                return DateTime.Parse(todaysDate, ci);
-            });
+                Assert.Equal(shouldPass, f.IsActive());
 
-            Assert.Equal(shouldPass, f.IsActive());
-
+            } finally {
+                Feature.Reset();
+            }
         }
 
 
