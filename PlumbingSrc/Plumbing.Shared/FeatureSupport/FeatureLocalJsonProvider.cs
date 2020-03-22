@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Plisky.Plumbing {
     public class FeatureLocalJsonProvider : IResolveFeatures {
-        public Feature GetFeature(string ByName) {
+        public Feature GetFeature(string byName) {
             throw new NotImplementedException();
         }
 

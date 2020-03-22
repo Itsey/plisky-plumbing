@@ -18,19 +18,19 @@ namespace Plisky.Test {
 
 
         /// <summary>
-        /// Generic string used in unit testing, when any old token string will do.
+        /// Generic string used in unit testing, when any old token string will do.  This one is lower case with no spaces
         /// </summary>
-        public const string GenericString1 = "arflebarflegloop";
+        public const string GENERIC_STRING1 = "arflebarflegloop";
 
         /// <summary>
-        /// Second Generic string used in unit testing, when any old token string will do.
+        /// Second Generic string used in unit testing, when any old token string will do. This one has spaces and is pascal cased.
         /// </summary>
-        public const string GenericString2 = "BilgeAndFlimflam";
+        public const string GENERNIC_STRING2 = "Bilge And Flimflam";
 
         /// <summary>
-        /// Third Generic string used in unit testing, when any old token string will do.
+        /// Third Generic string used in unit testing, when any old token string will do.  This is a sentence with a full stop.
         /// </summary>
-        public const string GenericString3 = "spontralification of the spire";
+        public const string GENERIC_STRING3 = "Spontralification of the spire.";
 
 
 

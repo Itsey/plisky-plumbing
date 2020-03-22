@@ -363,6 +363,7 @@
             const string STRINGPAR1 = "StringParameter1";
             const string STRINGPAR2 = "StrnigParameter2";
             const int NUMVALUE = 12;
+
             var sc1 = new SampleCommandLine_C1();
 
             VerifySampleCommandLine1_InitialState(sc1);

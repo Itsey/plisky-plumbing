@@ -219,9 +219,9 @@ namespace Plisky.Test {
         public void UseCase2_OptionalParameterDefaultFilenames() {
             b.Info.Log("Starting UseCase2 Testing");
 
-            #region string constants used to avoid typos
+            #region predefined string values used to avoid typos
 
-            string[] FILENAMES = new string[] { "file1.xml", "file2arflebarfleglooopmakethestringmuchlongerifwecan.xml", "c:\\temp\\files\\file3.xml", "\\s816244\\c$\\afile\\file4.xml", "file://testingfile/file5.xml" };
+            string[] fileNames = new string[] { "file1.xml", "file2arflebarfleglooopmakethestringmuchlongerifwecan.xml", "c:\\temp\\files\\file3.xml", "\\s816244\\c$\\afile\\file4.xml", "file://testingfile/file5.xml" };
 
             #endregion
 
@@ -235,7 +235,7 @@ namespace Plisky.Test {
 
             #endregion
 
-            string[] expectedArguments = new string[] { FILENAMES[0], FILENAMES[1], FILENAMES[2], FILENAMES[3], FILENAMES[4], "/O" };
+            string[] expectedArguments = new string[] { fileNames[0], fileNames[1], fileNames[2], fileNames[3], fileNames[4], "/O" };
             b.Info.Log("About to perform the actual test case");
             CommandArgumentSupport clas = new CommandArgumentSupport();
             clas.ArgumentPrefix = "/";
@@ -247,8 +247,8 @@ namespace Plisky.Test {
 
             Assert.True(uc2Class.Filenames.Length == 5, "The filenames were not passed through to the default array correctly");
 
-            for (int i = 0; i < FILENAMES.Length; i++) {
-                Assert.Equal(FILENAMES[i], uc2Class.Filenames[i]);
+            for (int i = 0; i < fileNames.Length; i++) {
+                Assert.Equal(fileNames[i], uc2Class.Filenames[i]);
             }
 
             Assert.True(uc2Class.Overwrite, "The overwrite paramteter was not passed correctly");

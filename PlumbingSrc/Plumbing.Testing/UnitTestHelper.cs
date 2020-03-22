@@ -13,7 +13,7 @@
     /// </summary>
     public sealed class UnitTestHelper {
         private List<string> m_storedFilenames = new List<string>();
-        private Bilge b;
+        private Bilge b = new Bilge("Plisky-UnitTestHelper");
         private bool handlerAdded = false;
 
         public Bilge TestBilge {
@@ -32,12 +32,8 @@
         /// <summary>
         /// Creates a new instance of the UnitTestHelper class
         /// </summary>
-        public UnitTestHelper(Bilge blg = null) {
-            if (blg == null) {
-                b = new Bilge("UTH");
-            } else {
-                b = blg;
-            }
+        public UnitTestHelper() {
+          
             CaseSensitiveMatches = false;
         }
 

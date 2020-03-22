@@ -131,8 +131,8 @@
                     m_lastArgVal = argument.Substring(s.Length);
 
                     if (TargetField.MemberType == MemberTypes.Field) {
-                        FieldInfo fi = (FieldInfo)TargetField;
-                        if ((fi.FieldType == typeof(Boolean)) && (m_lastArgVal.Length == 0)) {
+                        var fi = (FieldInfo)TargetField;
+                        if ((fi.FieldType == typeof(bool)) && (m_lastArgVal.Length == 0)) {
                             // This allows things like /Y to specify true and the absence of it to specify false.
                             m_lastArgVal = "True";
                         }
@@ -141,8 +141,8 @@
                     } else {
                         // TODO Bilge.Assert(TargetField is PropertyInfo, "The target fields should all be FieldInfo or PropertyInfo types");
 
-                        PropertyInfo pi = (PropertyInfo)TargetField;
-                        if ((pi.PropertyType == typeof(Boolean)) && (m_lastArgVal.Length == 0)) {
+                        var pi = (PropertyInfo)TargetField;
+                        if ((pi.PropertyType == typeof(bool)) && (m_lastArgVal.Length == 0)) {
                             // This allows things like /Y to specify true and the absence of it to specify false.
                             m_lastArgVal = "True";
                         }

@@ -22,19 +22,19 @@ namespace Plisky.Plumbing {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "integer")]
         [FieldOffset(0)]
-        public System.Int32 IntegerSalt;
+        public int IntegerSalt;
 
         public void FillWithSalt() {
             // Grr unions completely dont work properly in c# this is completely lame but does
             // what i want in the end.  Could of course use << << but why!
-            byte[] ByteArraySalt = new byte[4];
+            byte[] byteArraySalt = new byte[4];
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            rng.GetNonZeroBytes(ByteArraySalt);
+            rng.GetNonZeroBytes(byteArraySalt);
 
-            this.Byte1 = ByteArraySalt[0];
-            this.Byte2 = ByteArraySalt[1];
-            this.Byte3 = ByteArraySalt[2];
-            this.Byte4 = ByteArraySalt[3];
+            this.Byte1 = byteArraySalt[0];
+            this.Byte2 = byteArraySalt[1];
+            this.Byte3 = byteArraySalt[2];
+            this.Byte4 = byteArraySalt[3];
         }
 
         public override bool Equals(object obj) {

@@ -1,6 +1,8 @@
 ﻿namespace Plisky.Test {
-    // N.b. Special EditorConfig file in this project to allow for these, specific, constants to be Pascal cased.  This is because they are used in Attributes and the code
-    // looks ugly with shouty caps all over it.
+
+    // Naming Styles are suppressed for this particular file, as the way that traits are used are inside attributes and it just looks better if they are not constants, therefore
+    // the usual constants are all capitals rule is suppressed in code here.
+#pragma warning disable IDE1006
 
     /// <summary>
     /// Defines Common strings for the traits used in xunit tests.
@@ -14,7 +16,9 @@
         /// <summary>
         /// Describes the stlye of the test, such as its dependencyt on deployments or database.  Examples are Integration, Unit, Smoke.
         /// </summary>
+
         public const string Style = "Style";
+
 
         /// <summary>
         /// Fresh tests are new, hot off the press.  They are for new features of code and therefore less stable than other types of test.
@@ -63,4 +67,6 @@
         /// </summary>
         public const string LiveBug = "Bug";
     }
+
+#pragma warning restore IDE1006 // Naming Styles
 }

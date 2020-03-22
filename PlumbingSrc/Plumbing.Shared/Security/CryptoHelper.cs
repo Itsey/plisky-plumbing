@@ -9,7 +9,7 @@
     /// Implements a cryptographic helper for 24 bit keys.  This is probably a naieve implementation but it iwll server as a starter.
     /// </summary>
     public static class CryptoHelper {
-        private const int KeyLength = 24;
+        private const int KEYLENGTH = 24;
 
         /// <summary>
         /// This will use the key identity as a seed to generate a key which is used to encrypt the data, this can be a way of obsfuscating the actual
@@ -20,7 +20,7 @@
         /// <returns>A Key which can be used for encrypting data</returns>
         public static byte[] GenerateKeyFromIdentity(int keyIdentity) {
             Random r = new Random(keyIdentity);
-            byte[] key = new byte[KeyLength];
+            byte[] key = new byte[KEYLENGTH];
             r.NextBytes(key);
             return key;
         }

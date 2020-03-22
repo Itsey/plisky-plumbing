@@ -13,8 +13,8 @@ namespace Plisky.Plumbing {
 
         private static bool hashB64Enc = true;
 
-        public const int MinPassLength = 5;
-        public const string OkPasswordChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890_+-=[]{}\\/?!.,£$%^&*()";
+        public const int MINIMUM_PASSWORD_LENGTH = 5;
+        public const string VALID_PASSWORD_CHARACTERS = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890_+-=[]{}\\/?!.,£$%^&*()";
 
 
 
@@ -53,8 +53,8 @@ namespace Plisky.Plumbing {
 
             #region entry checking
 
-            if (length < MinPassLength) {
-                throw new ArgumentOutOfRangeException("length", "The length specfied must be at least the same as the MinPassLength of " + MinPassLength.ToString());
+            if (length < MINIMUM_PASSWORD_LENGTH) {
+                throw new ArgumentOutOfRangeException("length", "The length specfied must be at least the same as the MinPassLength of " + MINIMUM_PASSWORD_LENGTH.ToString());
             }
 
             #endregion
@@ -71,8 +71,8 @@ namespace Plisky.Plumbing {
             // random chars append them into a secure string
 
             int offset = 0;  // Get use of unnasigned local if i dont do this but im sure this is a false positive
-            for (int i = 0; i < length; offset = ((int)tempRandomNumbers[i++] % OkPasswordChars.Length)) {
-                result.AppendChar(OkPasswordChars[offset]);
+            for (int i = 0; i < length; offset = ((int)tempRandomNumbers[i++] % VALID_PASSWORD_CHARACTERS.Length)) {
+                result.AppendChar(VALID_PASSWORD_CHARACTERS[offset]);
             }
 
             // We now have a secure string that contains random characters from the list of OK characters.  Dont loose it!
@@ -109,8 +109,8 @@ namespace Plisky.Plumbing {
             #endregion
 
             // Create Byte array of password string
-            ASCIIEncoding encoder = new ASCIIEncoding();
-            Byte[] passwordAndSaltCombo = new byte[password.Length + 4];
+            var encoder = new ASCIIEncoding();
+            var passwordAndSaltCombo = new byte[password.Length + 4];
 
             passwordAndSaltCombo[0] = salt.Byte1;
             passwordAndSaltCombo[1] = salt.Byte2;
@@ -120,7 +120,7 @@ namespace Plisky.Plumbing {
             // Now we take the bytes from the secure string and place them into a byte array so that we can
             // perform the hash on them.  This probably moves them out of secure encrypted memory negating the
             // whole secure string thing.
-            IntPtr ptr = Marshal.SecureStringToBSTR(password);
+            var ptr = Marshal.SecureStringToBSTR(password);
             try {
                 for (int i = 0; i < password.Length; i++) {
                     // this so must break unicode.

@@ -261,7 +261,7 @@ namespace Plisky.Test {
                 DateTime endDate = DateTime.ParseExact(end, "yyyy,dd,MM", CultureInfo.InvariantCulture);
                 DateTime currentDate = DateTime.ParseExact(now, "yyyy,dd,MM", CultureInfo.InvariantCulture);
 
-                c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                c.RegisterProvider<DateTime>(ConfigHub.DATETIMESETTINGNAME, () => {
                     return currentDate;
                 });
 
@@ -298,7 +298,7 @@ namespace Plisky.Test {
                 Feature f = new Feature(fname, true);
                 f.SetDateRange(DateTime.Parse(featureActiveDate, ci), DateTime.Parse(featureEndDate, ci));
 
-                c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                c.RegisterProvider<DateTime>(ConfigHub.DATETIMESETTINGNAME, () => {
                     return DateTime.Parse(todaysDate, ci);
                 });
 
@@ -329,7 +329,7 @@ namespace Plisky.Test {
                 Feature f = new Feature(fname, true);
                 f.SetDateRange(DateTime.Parse(featureActiveDate, ci), DateTime.Parse(featureEndDate, ci), true);
 
-                c.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+                c.RegisterProvider<DateTime>(ConfigHub.DATETIMESETTINGNAME, () => {
                     return DateTime.Parse(todaysDate, ci);
                 });
 

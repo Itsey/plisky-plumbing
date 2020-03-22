@@ -76,38 +76,44 @@ csharp_new_line_before_members_in_object_initializers           = true
 csharp_new_line_before_members_in_anonymous_types               = true
 
 
-#lbg styles
-dotnet_naming_style.lbgPascalStyle.capitalization               = pascal_case
-dotnet_naming_style.lbgFullUppercaseStyle.capitalization        = all_upper
-dotnet_naming_style.lbgCamelCaseStyle.capitalization            = camel_case
+#custom styles -------------------------------------------------------------------------------------------
+
+dotnet_naming_style.customPascalStyle.capitalization               = pascal_case
+dotnet_naming_style.customFullUppercaseStyle.capitalization        = all_upper
+dotnet_naming_style.customCamelCaseStyle.capitalization            = camel_case
+dotnet_naming_style.all_variables.required_prefix                  = [a-zA-z]
 
 #naming styles
-
-
-
-
-
 # Methods Be PascalCased
 dotnet_naming_rule.all_methods_pascalcased.symbols              = all_methods
 dotnet_naming_symbols.all_methods.applicable_kinds              = method
 dotnet_naming_symbols.all_methods.applicable_accessibilities    = *
-dotnet_naming_rule.all_methods_pascalcased.style                = lbgPascalStyle
+dotnet_naming_rule.all_methods_pascalcased.style                = customPascalStyle
 dotnet_naming_rule.all_methods_pascalcased.severity             = error
 
-#Properties Be PascalCased
+#Variables Be PascalCased
 dotnet_naming_rule.all_variables_camel.symbols                  = all_variables
 dotnet_naming_symbols.all_variables.applicable_kinds            = local, parameter
 dotnet_naming_symbols.all_variables.applicable_accessibilities  = *
-dotnet_naming_rule.all_variables_camel.style                    = lbgCamelCaseStyle
+dotnet_naming_rule.all_variables_camel.style                    = customCamelCaseStyle
 dotnet_naming_rule.all_variables_camel.severity                 = error
 
-#Variables Be camelCased
+
+#Properties Be camelCased
 dotnet_naming_rule.all_properties_pascalcased.symbols           = all_properties
 dotnet_naming_symbols.all_properties.applicable_kinds           = property
 dotnet_naming_symbols.all_properties.applicable_accessibilities = *
-dotnet_naming_rule.all_properties_pascalcased.style             = lbgPascalStyle
+dotnet_naming_rule.all_properties_pascalcased.style             = customPascalStyle
 dotnet_naming_rule.all_properties_pascalcased.severity          = error
 
+
+#Constants be SHOUTEY
+dotnet_naming_rule.all_constants_upper.symbols                  = all_constants
+dotnet_naming_symbols.all_constants.required_modifiers          = const
+dotnet_naming_symbols.all_constants.applicable_kinds            = field, local
+dotnet_naming_symbols.all_constants.applicable_accessibilities  = *
+dotnet_naming_rule.all_constants_upper.style                    = customFullUppercaseStyle
+dotnet_naming_rule.all_constants_upper.severity                 = error
 
 
 # prefix_interface_interface_with_i - Interfaces must be PascalCase and the first character of an interface must be an 'I'

@@ -16,8 +16,8 @@
         private static string CONFIGHUB_EXTENSION = ".chConfig";
 
         private Bilge b = new Bilge();
-        public const string DateTimeSettingName = "defaultdatetimevalue";
-        public const string DefaultMachineName = "defaultmachinename";
+        public const string DATETIMESETTINGNAME = "defaultdatetimevalue";
+        public const string DEFAULTMACHINENAME = "defaultmachinename";
         public IDecryptStuff CryptoProvider { get; set; }
 
         private static string thisMachineName;
@@ -228,8 +228,8 @@
                     lock (lockme) {
                         if (fallbackByMachineList.ContainsKey(thisMachineName)) {
                             vmatch = fallbackByMachineList[thisMachineName](settingName);
-                        } else if (fallbackByMachineList.ContainsKey(DefaultMachineName)) {
-                            vmatch = fallbackByMachineList[DefaultMachineName](settingName);
+                        } else if (fallbackByMachineList.ContainsKey(DEFAULTMACHINENAME)) {
+                            vmatch = fallbackByMachineList[DEFAULTMACHINENAME](settingName);
                         }
                     }
                     // If the machine wasnt found then this returns null.
@@ -245,7 +245,7 @@
                         thisMachineName = Environment.MachineName.ToLower();
                     } catch (InvalidOperationException) {
                         // Probably access denied
-                        thisMachineName = DefaultMachineName;
+                        thisMachineName = DEFAULTMACHINENAME;
                     }
                 }
             }
@@ -373,7 +373,7 @@
 
         public DateTime GetNow() {
             try {
-                DateTime dt = GetSetting<DateTime>(DateTimeSettingName);
+                DateTime dt = GetSetting<DateTime>(DATETIMESETTINGNAME);
                 if (dt == default(DateTime)) {
                     dt = DateTime.Now;
                 }

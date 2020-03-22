@@ -12,10 +12,10 @@
         [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void Constructor_SetsBaseUri() {
-            const string val = "http://notarealurl/somwhere/not";
+            const string VAL = "http://notarealurl/somwhere/not";
 
-            var sut = new HttpHelper(val);
-            Assert.Equal(val, sut.BaseUri);
+            var sut = new HttpHelper(VAL);
+            Assert.Equal(VAL, sut.BaseUri);
         }
 
         [Fact(DisplayName = nameof(DefaultContentType_Json))]

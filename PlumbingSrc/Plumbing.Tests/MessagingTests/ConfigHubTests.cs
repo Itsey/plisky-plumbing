@@ -32,7 +32,7 @@ namespace Plisky.Test {
             DateTime expected = new DateTime(2019, 1, 1);
 
             ConfigHub sut = new ConfigHub();
-            sut.RegisterProvider<DateTime>(ConfigHub.DateTimeSettingName, () => {
+            sut.RegisterProvider<DateTime>(ConfigHub.DATETIMESETTINGNAME, () => {
                 return expected;
             });
 
@@ -41,7 +41,7 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfigCurrentInstance_SingleProvider_ReturnsCorrectly() {
-            string returnString = SampleTestData.GenericString1;
+            string returnString = SampleTestData.GENERIC_STRING1;
 
             ConfigHub.Current.RegisterProvider("test", () => {
                 return returnString;
@@ -254,17 +254,17 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetConfig_DirectoryFallbackProvider_Works() {
-            const string testData = "bannana";
+            const string TESTDATA = "bannana";
             string tmp = Path.GetTempPath() + Environment.MachineName + ".chcfg";
             uth.RegisterTemporaryFilename(tmp);
             XDocument x = new XDocument();
-            x.Add(new XElement("chub_settings", new XElement("settings", new XElement("monkeyfish", testData))));
+            x.Add(new XElement("chub_settings", new XElement("settings", new XElement("monkeyfish", TESTDATA))));
             x.Save(tmp);
             ConfigHub sut = new ConfigHub();
             sut.AddDirectoryFallbackProvider(Path.GetTempPath());
             var res = sut.GetSetting("monkeyfish", true);
 
-            Assert.Equal(testData, res);
+            Assert.Equal(TESTDATA, res);
         }
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
@@ -402,12 +402,13 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void RegisterMachineFallback_CallBackOccursForThisMachine() {
-            ConfigHub sut = new ConfigHub();
-            string MachineName = Environment.MachineName;
+            var sut = new ConfigHub();
+
+            string machineName = Environment.MachineName;
             string expected = "Hello";
             bool executed = false;
 
-            sut.AddMachineFallbackProvider(MachineName, (settingName) => {
+            sut.AddMachineFallbackProvider(machineName, (settingName) => {
                 executed = true;
                 return expected;
             });
@@ -419,21 +420,21 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]        
         public void RegisterMachineFallback_DuplicateName_CausesException() {
-            ConfigHub sut = new ConfigHub();
-            string MachineName = "MachineName";
+            var sut = new ConfigHub();
+            string machineName = "MachineName";
 
-            sut.AddMachineFallbackProvider(MachineName, (settingName) => {
+            sut.AddMachineFallbackProvider(machineName, (settingName) => {
                 return "Hello";
             });
             Assert.Throws<InvalidOperationException>(() =>
-              sut.AddMachineFallbackProvider(MachineName, (settingName) => {
+              sut.AddMachineFallbackProvider(machineName, (settingName) => {
                   return "Hello";
               }));
         }
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void RegisterFallbacks_ExcutedInOrderOfRegistration() {
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
             string machineName = Environment.MachineName;
             bool firstExecuted = false;
             bool secondExecuted = false;
@@ -455,7 +456,7 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void RegisterMachineFallback_NoMachineMatches_DefaultIsCalled() {
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
 
             bool firstExecuted = false;
             bool secondExecuted = false;
@@ -464,7 +465,7 @@ namespace Plisky.Test {
                 firstExecuted = true;
                 return "Hello";
             });
-            sut.AddMachineFallbackProvider(ConfigHub.DefaultMachineName, (settingName) => {
+            sut.AddMachineFallbackProvider(ConfigHub.DEFAULTMACHINENAME, (settingName) => {
                 secondExecuted = true;
                 return "Hello";
             });
@@ -477,9 +478,9 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetTypedSetting_DoesExecuteFallback() {
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
             bool fallbackExecuted = false;
-            sut.AddMachineFallbackProvider(ConfigHub.DefaultMachineName, (settingName) => {
+            sut.AddMachineFallbackProvider(ConfigHub.DEFAULTMACHINENAME, (settingName) => {
                 fallbackExecuted = true;
                 return "0";
             });
@@ -490,8 +491,8 @@ namespace Plisky.Test {
 
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsBool() {
-            ConfigHub sut = new ConfigHub();
-            sut.AddMachineFallbackProvider(ConfigHub.DefaultMachineName, (settingName) => {
+            var sut = new ConfigHub();
+            sut.AddMachineFallbackProvider(ConfigHub.DEFAULTMACHINENAME, (settingName) => {
                 return "true";
             });
 
@@ -502,7 +503,7 @@ namespace Plisky.Test {
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsInt() {
             ConfigHub sut = new ConfigHub();
-            sut.AddMachineFallbackProvider(ConfigHub.DefaultMachineName, (settingName) => {
+            sut.AddMachineFallbackProvider(ConfigHub.DEFAULTMACHINENAME, (settingName) => {
                 return "12367";
             });
 
@@ -513,7 +514,7 @@ namespace Plisky.Test {
         [Fact][Trait(Traits.Age,Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsDouble() {
             ConfigHub sut = new ConfigHub();
-            sut.AddMachineFallbackProvider(ConfigHub.DefaultMachineName, (settingName) => {
+            sut.AddMachineFallbackProvider(ConfigHub.DEFAULTMACHINENAME, (settingName) => {
                 return "1236754";
             });
 
@@ -571,10 +572,10 @@ namespace Plisky.Test {
             sut.CryptoProvider = scc;
 
             string sec = "secret oh secret";
-            string B64Bal = scc.Encrypt(sec);
+            string b64Val = scc.Encrypt(sec);
 
             sut.RegisterProvider("testVal", () => {
-                return B64Bal;
+                return b64Val;
             });
 
             var result = sut.GetSetting("testVal", true, true);

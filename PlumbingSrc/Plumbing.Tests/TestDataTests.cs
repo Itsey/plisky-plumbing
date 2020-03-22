@@ -15,7 +15,7 @@ namespace Plisky.Test {
 
         public TestDataTests() {
             b = new Bilge();
-            uth = new UnitTestHelper(b);
+            uth = new UnitTestHelper();
             uth.AddHandlerOnce(new TCPHandler("127.0.0.1", 5060, true));
         }
 
@@ -144,9 +144,9 @@ namespace Plisky.Test {
         [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void TestData_GenericString_Valid() {
-            var res1 = SampleTestData.GenericString1;
-            var res2 = SampleTestData.GenericString2;
-            var res3 = SampleTestData.GenericString3;
+            var res1 = SampleTestData.GENERIC_STRING1;
+            var res2 = SampleTestData.GENERNIC_STRING2;
+            var res3 = SampleTestData.GENERIC_STRING3;
 
             Assert.False(string.IsNullOrWhiteSpace(res1));
             Assert.False(string.IsNullOrWhiteSpace(res2));
