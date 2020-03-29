@@ -16,9 +16,11 @@
     /// </summary>
     /// <remarks> Developed in conjunction with Nemingalator, therefore may not be suitable for reuse</remarks>
     public class CommandArgumentSupport {
-        protected Bilge b;
+        protected Bilge b = new Bilge("Plisky-CLAS");
+        
         private readonly List<string> argumentErrorsDuringLastParse = new List<string>();
         private readonly List<Tuple<string, string>> Examples = new List<Tuple<string, string>>();
+        private string argumentPrefix = "-";
 
         /// <summary>
         /// Inject a new instance of bilge, or change the trace level of the current instance. To set the trace level ensure that
@@ -45,17 +47,12 @@
         /// <summary>
         /// Creates a new instance of the CommandArgumentSupport class.
         /// </summary>
-        public CommandArgumentSupport(Bilge useThisTrace = null) {
-            if (useThisTrace == null) {
-                b = new Bilge("CommandLineArguments");
-            } else {
-                b = useThisTrace;
-            }
+        public CommandArgumentSupport() {          
             ArgumentPostfix = string.Empty;
             DateTimeParseFormat = "d-M-yyyy";
         }
 
-        private string argumentPrefix = "-";
+        
 
         /// <summary>
         /// ArgumentPrefix determines the prefixed text that should be on the front of each argument specifier.  This is commonly a forwards
@@ -141,7 +138,7 @@
                 foreach (string individualArgument in arguments) {
                     bool matchOccuredForThisArgument = false;  // Determines whether any match occured for this argument
 
-                    foreach (FieldArgumentMapping singleArgumentMapping in mappingsOfFieldsToArguments) {
+                    foreach (var singleArgumentMapping in mappingsOfFieldsToArguments) {
                         if (singleArgumentMapping.MatchArgumentToField(individualArgument, ArgumentPostfix)) {
                             matchOccuredForThisArgument = true;
                             b.Verbose.Log("Match discovered for " + singleArgumentMapping.TargetField.Name + " trying to assign value now ", " using value " + individualArgument);

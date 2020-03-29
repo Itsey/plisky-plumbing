@@ -13,9 +13,10 @@
     /// the hub and recievers can call GetSetting to retrieve single pieces of information.
     /// </summary>
     public partial class ConfigHub {
+        private Bilge b = new Bilge("Plisky-ConfigHub");
         private static string CONFIGHUB_EXTENSION = ".chConfig";
 
-        private Bilge b = new Bilge();
+        
         public const string DATETIMESETTINGNAME = "defaultdatetimevalue";
         public const string DEFAULTMACHINENAME = "defaultmachinename";
         public IDecryptStuff CryptoProvider { get; set; }
@@ -50,7 +51,7 @@
         public static ConfigHub Current {
             get {
                 if (instance == null) {
-                    lock (lockme) {
+                    lock (lockme) {                        
                         instance = new ConfigHub();
                     }
                 }
@@ -70,12 +71,18 @@
 
         #endregion
 
+        public ConfigHub() {
+            b.Info.Log("ConfigHub Instance Online.");
+        }
+
 #if NET452
         /// <summary>
         /// Adds a fallback handler to look up the settings from App.Config based on the settings name.  The default app config behaviour is that
         /// the search is not case sensitive and that nested settings delimited by $$SETTINGNAME$$ can be used.
         /// </summary>
         public void AddDefaultAppConfigFallback() {
+            b.Verbose.Log("AppConfigFallback Registration Request Made");
+
             RegisterFallbackProvider((pName) => { 
 
                 #region marker constants
@@ -132,8 +139,9 @@
             string actualDir = GetDirectoryName(directory);
 
 
-            if (fileName==null) {
+            if (fileName==null) {                
                 SetupMachineName();
+                b.Verbose.Log("Filename not specified, using machinename",thisMachineName);
                 fileName = Path.ChangeExtension(thisMachineName, CONFIGHUB_EXTENSION);                
             }
 
@@ -238,13 +246,15 @@
             }
         }
 
-        private static void SetupMachineName() {
+        private void SetupMachineName() {
             if (thisMachineName == null) {
                 lock (lockme) {
                     try {
+                        b.Verbose.Log("MachineName Cache Refreshed.");
                         thisMachineName = Environment.MachineName.ToLower();
                     } catch (InvalidOperationException) {
                         // Probably access denied
+                        b.Verbose.Log("Access Denied to Machinename, falling back to default", DEFAULTMACHINENAME);
                         thisMachineName = DEFAULTMACHINENAME;
                     }
                 }
@@ -267,6 +277,7 @@
         /// <param name="name">The setting name that this specific provider returns a value for</param>
         /// <param name="getSetting">The delegate to return the correct setting value when executed.</param>
         public void RegisterProvider<T>(string name, Func<T> getSetting) {
+            name = name.ToLowerInvariant();
             fl.Add(name, getSetting);
         }
 
@@ -291,6 +302,8 @@
         }
 
         public T GetSetting<T>(string settingName, bool mustBePresent = false, bool requiresDecryption = false) {
+            settingName = settingName.ToLowerInvariant();
+
             if (fl.ContainsKey(settingName)) {
                 var v = (Func<T>)fl[settingName];
                 return v();

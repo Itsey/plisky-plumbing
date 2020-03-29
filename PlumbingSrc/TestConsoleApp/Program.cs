@@ -56,7 +56,12 @@ namespace Plisky.Test {
         }
 
         private static void ConfigHubTests() {
-//            ConfigHub.Current.AddDirectoryFallbackProvider
+            //            ConfigHub.Current.AddDirectoryFallbackProvider
+            ConfigHub.Current.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\config\\");
+            string chromeDriverPath = ConfigHub.Current.GetSetting<string>("chromedriverpath", false);
+            string edgeDriverPath = ConfigHub.Current.GetSetting<string>("EdgeDriverPath".ToLowerInvariant(), false);
+            string remoteDriver = ConfigHub.Current.GetSetting<string>("RemoteDriver", false);
+            string remoteDriverAccessKey = ConfigHub.Current.GetSetting<string>("RemoteDriverAccessKey", false);
 
             ConfigHub.Current.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\config\\", "tests");
             var s = ConfigHub.Current.GetSetting<string>("testvalue");

@@ -41,7 +41,7 @@
         [Trait(Traits.Style, Traits.Regression)]
         public void Bug_IfBilgePassed_NullRefException() {
             b.Info.Flow();
-            var clas = new CommandArgumentSupport(b);
+            var clas = new CommandArgumentSupport();
             clas.ArgumentPostfix = ":";
             string[] args = new string[] {
                 "firstonethenanother:gloop",
