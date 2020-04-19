@@ -1,0 +1,16 @@
+﻿**/PlumbingSrc/**/CommonPlumbing.cs|NetAssembly
+**/PlumbingSrc/**/CommonPlumbing.cs|NetFile
+**/PlumbingSrc/**/CommonPlumbing.cs|NetInformational
+**/PlumbingSrc/**/PliskyPlumbing.nuspec|Nuspec
+**/PlumbingSrc/**/PliskyPlumbing.nuspec|TextFile
+**/PlumbingSrc/**/Plisky.Plumbing.Standard.csproj|StdAssembly
+**/PlumbingSrc/**/Plisky.Plumbing.Standard.csproj|StdInformational
+**/PlumbingSrc/**/Plisky.Plumbing.Standard.csproj|StdFile
+**/PlumbingSrc/**/CommonPliskyTesting.cs|NetAssembly
+**/PlumbingSrc/**/CommonPliskyTesting.cs|NetFile
+**/PlumbingSrc/**/CommonPliskyTesting.cs|NetInformational
+**/PlumbingSrc/**/PliskyTesting.nuspec|Nuspec
+**/PlumbingSrc/**/PliskyTesting.nuspec|TextFile
+**/PlumbingSrc/**/Plisky.Testing.Standard.csproj|StdAssembly
+**/PlumbingSrc/**/Plisky.Testing.Standard.csproj|StdInformational
+**/PlumbingSrc/**/Plisky.Testing.Standard.csproj|StdFile

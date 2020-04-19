@@ -53,6 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\_Dependencies\versions\CommonPlumbing.cs">
+      <Link>Properties\CommonPlumbing.cs</Link>
+    </Compile>
     <Compile Include="CommandLineArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

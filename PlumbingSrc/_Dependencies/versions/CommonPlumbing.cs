@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("Plisky.net")]
 [assembly: AssemblyProduct("Plisky.Library")]
-[assembly: AssemblyTitle("Plisky.Library")]
 
 
 [assembly: AssemblyInformationalVersion("1.7.0")]

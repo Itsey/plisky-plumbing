@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Plumbing Functions including Hub, ConfigHub, CommandLineSupport.</description>
     <releaseNotes>
-                  1.7.1
+                  XXX-VERSION-XXX
                      Config Hub settings Now Case INSENSITVE
                      All Unit Tests Fixed
                      CommandLineArgs ProcessArguments now has a Generic override to create an instance of the class

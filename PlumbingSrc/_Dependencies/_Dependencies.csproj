@@ -84,9 +84,7 @@
   <ItemGroup>
     <Compile Include="oldFeature.cs" />
     <Compile Include="versions\CommonPliskyTesting.cs" />
-    <Compile Include="versions\CommonInfoListeners.cs" />
-    <Compile Include="versions\CommonInfoDiags.cs" />
-    <Compile Include="versions\CommonAssemblyInfo.cs" />
+    <Compile Include="versions\CommonPlumbing.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="Dictionary.xml" />
@@ -122,6 +120,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="automation\AutoVersion.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

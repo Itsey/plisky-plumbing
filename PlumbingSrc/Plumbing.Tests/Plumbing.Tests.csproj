@@ -57,6 +57,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="..\_Dependencies\versions\CommonPlumbing.cs">
+      <Link>Properties\CommonPlumbing.cs</Link>
+    </Compile>
     <Compile Include="FeatureTests\FeatureProviderTests.cs" />
     <Compile Include="FeatureTests\FeatureTests.cs" />
     <Compile Include="Mocks\MockFeature.cs" />
