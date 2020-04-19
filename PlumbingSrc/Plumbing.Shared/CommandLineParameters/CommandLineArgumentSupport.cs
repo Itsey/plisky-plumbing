@@ -58,7 +58,7 @@
         /// <typeparam name="T">The argument type to use</typeparam>
         /// <param name="args">The args with the parameters</param>
         /// <returns>A new instance of the arguments type, populated with values</returns>
-        public T ProcessArguments<T>(string[] args) {
+        public T ProcessArguments<T>(string[] args) where T : new() {
             T result = (T)Activator.CreateInstance(typeof(T));
             ProcessArguments(result, args);
             return result;
