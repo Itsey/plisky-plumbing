@@ -13,6 +13,7 @@
     /// the hub and recievers can call GetSetting to retrieve single pieces of information.
     /// </summary>
     public partial class ConfigHub {
+        protected List<string> fallbackRegistrationWarnings = new List<string>();
         private Bilge b = new Bilge("Plisky-ConfigHub");
         private static string CONFIGHUB_EXTENSION = ".chConfig";
 
@@ -22,7 +23,7 @@
         public IDecryptStuff CryptoProvider { get; set; }
 
         private static string thisMachineName;
-        private Dictionary<string, Func<string, string>> fallbackByMachineList;
+        private Dictionary<string, Func<string, string>> fallbackByMachineList = new Dictionary<string, Func<string, string>>();
 
         private Dictionary<string, Delegate> fl = new Dictionary<string, Delegate>();
         private Dictionary<string, Func<string>> functionList = new Dictionary<string, Func<string>>();
@@ -161,7 +162,9 @@
                     return GetSettingsFromCustomXmlFile(x, setName);
                 });
             } else {
-                b.Warning.Log("Fallback Directory Searcher - File Not Found. Fallback Provider Is NOT Registered.",fileName);
+                string warning = $"Fallback Directory Searcher Failed To Register - File Not Found. {fileName}";
+                fallbackRegistrationWarnings.Add(warning);
+                b.Warning.Log(warning);
             }
         }
 
@@ -193,12 +196,19 @@
         }
 
         private string GetSettingsFromCustomXmlFile(XDocument configFile, string settingName) {
+            settingName = settingName.ToLowerInvariant();
             try {
-                var set = configFile.Element("chub_settings").Element("settings").Element(settingName);
+                var set = configFile.Element("chub_settings").Element("settings");
+                                                   
                 if (set != null) {
+                    foreach(var el  in set.Elements()) {
+                        if (el.Name.ToString().ToLowerInvariant()==settingName) {
+                            return el.Value;
+                        } 
+                    }
                     return set.Value;
                 } else {
-                    b.Verbose.Log($"Setting Name {settingName} not found in xml file.",configFile.ToString());
+                    b.Verbose.Log($"Invalid configuration file, chub_settings and settings elements not present.",configFile.ToString());
                 }
             } catch(Exception x) {
                 b.Warning.Log("XML Parsing Failed, corrupt settings file, setting NOT Matched");
@@ -220,9 +230,8 @@
                 throw new ArgumentOutOfRangeException("machineName", "The machine name can not be empty or null");
             }
             lock (lockme) {
-                if (fallbackByMachineList == null) {
-                    SetupMachineName();
-                    fallbackByMachineList = new Dictionary<string, Func<string, string>>();
+                if (fallbackByMachineList.Count == 0) {
+                    SetupMachineName();                    
                 }
 
                 machineName = machineName.ToLower();
@@ -287,6 +296,7 @@
         /// <param name="forValue">The setting name that this specific provider returns a value for</param>
         /// <param name="provider">The delegate used to return the correct setting when executed.</param>
         public void RegisterProvider(string forValue, Func<string> provider) {
+            forValue = forValue.ToLowerInvariant();
             functionList.Add(forValue, provider);
         }
 
@@ -347,6 +357,16 @@
         /// <param name="mustBePresent">Boolean, defaults to false.  Set to true if an exception should be thrown if no value can be found.</param>
         /// <returns>A string based value indicating the setting</returns>
         public string GetSetting(string settingName, bool mustBePresent = false, bool isEncrypted = false) {
+            #region validation
+            if (settingName == null) {
+                throw new ArgumentNullException(nameof(settingName), "You must provide a setting name to get a setting");
+            }
+            if (string.IsNullOrWhiteSpace(settingName)) {
+                throw new ArgumentOutOfRangeException(nameof(settingName), "You must provide a setting name to get a settting");
+            }
+            #endregion
+
+            settingName = settingName.ToLowerInvariant();
             b.Info.Flow($"{settingName},{mustBePresent}");
             string val = null;
 
@@ -377,11 +397,36 @@
 
             if ((val == null) && (mustBePresent)) {
                 b.Warning.Log("Value not matched, and must be present set - throwing exception");
-                throw new ConfigHubMissingConfigException($"The setting {settingName ?? "null"} must be present and have a value.");
+                var ex = new ConfigHubMissingConfigException($"The setting {settingName ?? "null"} must be present and have a value.");
+                PopulateDiagnostics(ex);
+                throw ex;
             }
 
             b.Verbose.Log($"{settingName}={val}");
             return val;
+        }
+
+        private void PopulateDiagnostics(ConfigHubMissingConfigException ex) {
+            string functionListRetrievers = "";
+            foreach(var fl in functionList.Keys) {
+                functionListRetrievers += fl + ",";
+            }
+            if (functionListRetrievers.Length==0) {
+                functionListRetrievers = "Non Registered";
+            }
+            ex.Data.Add("Direct Fuction List", functionListRetrievers);
+
+            string fbr = "";
+            foreach(var f in fallbackRegistrationWarnings) {
+                fbr += f + "," + Environment.NewLine;
+            }
+            if (fbr.Length==0) {
+                fbr = "No fallback Warnings";
+            }
+            ex.Data.Add("Fallback Warnings", fbr);
+
+            string handlers = $"FL: {functionList.Keys.Count}, FB: {fallbackList1.Count}, MFB: {fallbackByMachineList.Count}";
+            ex.Data.Add("Total Handlers", handlers);
         }
 
         public DateTime GetNow() {

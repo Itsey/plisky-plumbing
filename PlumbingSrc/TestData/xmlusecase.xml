@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chub_settings>
+<settings>
+<connectionstring>server=orchid.arvixe.com;Database=papi-test;user id=notthedb;Password=notthepassword</connectionstring>
+</settings>
+</chub_settings>

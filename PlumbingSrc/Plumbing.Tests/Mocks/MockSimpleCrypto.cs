@@ -26,6 +26,9 @@ namespace Plisky.Test {
             supportedDecrypts.Add(crypto, plaintext);
         }
 
+        /// <summary>
+        /// Simply returns a preset string when asked to decrpyt a key string.
+        /// </summary>
         public MockSimpleCrypto() {
 
         }

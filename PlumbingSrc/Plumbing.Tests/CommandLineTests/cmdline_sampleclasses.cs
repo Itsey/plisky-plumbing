@@ -2,6 +2,10 @@
     using Plisky.Plumbing;
     using System;
 
+    // Special named variables in classes to allow for the use cases where people have different coding conventions and ensuring
+    // that this does not affect the usability of the args parser.
+
+#pragma warning disable IDE1006
 
     /// Sample command line class to use the command line attributes for unit testing.
     /// </summary>
@@ -28,7 +32,7 @@
         public bool OptionParameterTwo;
 
         public SampleCommandLine_C1() {
-            NameParameterOne = NameParameterTwo = String.Empty;
+            NameParameterOne = NameParameterTwo = string.Empty;
         }
     }
 
@@ -45,6 +49,13 @@
         public long NumberParam2 { get; set; }
     }
 
+
+    [CommandLineArguments]
+    public class SampleCommandLine_C3A {
+
+        [CommandLineArg("StrArray",ArraySeparatorChar =";")]
+        public string[] StrArray { get; set; }
+    }
 
     [CommandLineArguments]
     public class SampleCommandLine_C3 {
@@ -90,4 +101,6 @@
         [CommandLineArg("firstonethenanother")]
         public string third { get; set; }
     }
+
+#pragma warning restore IDE1006
 }

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.7.0.0</version>
+    <version>1.7.1.0</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -10,7 +10,13 @@
     <projectUrl>http://www.plisky.net/main/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Plumbing Functions including Hub, ConfigHub, CommandLineSupport.</description>
-    <releaseNotes>1.7.0 
+    <releaseNotes>
+                  1.7.1
+                     Config Hub settings Now Case INSENSITVE
+                     All Unit Tests Fixed
+                     CommandLineArgs ProcessArguments now has a Generic override to create an instance of the class
+                     BUGFIX -> ArraySeparator char now actually works.  Previously only , worked.
+                  1.7.0 
                      Bilge TraceSwitch Added (Plisky-CLAS)
                      Constructor no longer taks Bilge.  (Use Bilge Swtich Levlels Instead)
                   1.6.3 

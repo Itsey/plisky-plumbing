@@ -51,7 +51,24 @@
             clas.ProcessArguments(argsClass, args);
         }
 
+        [Fact(DisplayName = nameof(GenericVersion_WorksTheSame))]
+        [Trait(Traits.Style, Traits.Regression)]
+        public void GenericVersion_WorksTheSame() {
+            b.Info.Flow();
+            var clas = new CommandArgumentSupport();
+            clas.ArgumentPostfix = ":";
+            string[] args = new string[] {
+                "firstonethenanother:gloop",
+            };
 
+            var argsClassTrad = new SampleCommandLine_C6();
+            clas.ProcessArguments(argsClassTrad, args);
+            var argsClass = clas.ProcessArguments<SampleCommandLine_C6>(args);
+
+            Assert.Equal(argsClassTrad.first, argsClass.first);
+            Assert.Equal(argsClassTrad.second, argsClass.second);
+            Assert.Equal(argsClassTrad.third, argsClass.third);
+        }
 
         [Fact(DisplayName = nameof(Bug_IfPostfixSpecified_ItMustBeUsed))]
         [Trait(Traits.Style, Traits.Regression)]
@@ -283,6 +300,39 @@
             }
         }
 
+
+
+
+        [Fact(DisplayName = nameof(Array_Separator_IsConfigured))]
+        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+        public void Array_Separator_IsConfigured() {
+
+            var clas = new CommandArgumentSupport {
+                ArgumentPostfix = ":",
+                ArgumentPrefix = "",
+                ArgumentPrefixOptional = true
+            };
+
+            string[] parms = new string[] { "one", "two", "three", "four", "five" };
+
+            string strArrayConcat = "";
+
+            foreach (var f in parms) {
+                strArrayConcat += f + ";";
+            }
+
+
+            var argsClass = new SampleCommandLine_C3A();
+            string[] args = new string[] {
+                $"StrArray:{strArrayConcat}",
+            };
+            clas.ProcessArguments(argsClass, args);
+
+            Assert.Equal(parms.Length, argsClass.StrArray.Length);
+            for (int i = 0; i < parms.Length; i++) {
+                Assert.Equal(parms[i], argsClass.StrArray[i]);
+            }
+        }
 
         [Fact(DisplayName = nameof(BasicTest_GetAndSetProperties))]
         [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.

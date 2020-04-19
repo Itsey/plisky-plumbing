@@ -5,11 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="chubtestdata.xml" />
     <None Remove="SampleFileData.txt" />
+    <None Remove="xmlusecase.xml" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="chubtestdata.xml" />
     <EmbeddedResource Include="SampleFileData.txt" />
+    <EmbeddedResource Include="xmlusecase.xml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,6 +15,8 @@
         Bilge b;
         private List<string> parameterMatches = new List<string>();
 
+        public string ArraySeparatorChar = ",";
+
         /// <summary>
         /// The target reflected field that is to be populated if there is a match.
         /// </summary>
@@ -106,7 +108,7 @@
 
             if (HasBeenMatchedToArgument) { return false; }  
 
-            //Parameter matches must be sorted longest first....
+            //Parameter matches must be sorted longest first so that /Monkey=true doesnt steal /Monkeyfish=true
 
             // Check each of the possible parameter matches and if one is found then assign the value to the field and report
             // that the match has been made.  Case must be handled outside of this method.
@@ -139,7 +141,6 @@
                         HasBeenMatchedToArgument = true;
                         return true;
                     } else {
-                        // TODO Bilge.Assert(TargetField is PropertyInfo, "The target fields should all be FieldInfo or PropertyInfo types");
 
                         var pi = (PropertyInfo)TargetField;
                         if ((pi.PropertyType == typeof(bool)) && (m_lastArgVal.Length == 0)) {

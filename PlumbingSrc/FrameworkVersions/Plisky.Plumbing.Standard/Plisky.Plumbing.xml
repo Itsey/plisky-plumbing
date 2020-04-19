@@ -120,7 +120,7 @@
             of why the error occured.
             </summary>
         </member>
-        <member name="M:Plisky.Plumbing.CommandArgumentSupport.#ctor(Plisky.Diagnostics.Bilge)">
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.#ctor">
             <summary>
             Creates a new instance of the CommandArgumentSupport class.
             </summary>

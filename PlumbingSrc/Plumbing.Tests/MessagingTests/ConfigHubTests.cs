@@ -7,19 +7,87 @@ namespace Plisky.Test {
     using System.Collections.Generic;
     using System.IO;
     using System.Xml.Linq;
+    using TestData;
     using Xunit;
 
     public class ConfigHubTests {
         private UnitTestHelper uth = new UnitTestHelper();
         protected Bilge b = new Bilge();
-        
-        public ConfigHubTests () {
-            var h = new TCPHandler("127.0.0.1", 9060);            
+
+        public ConfigHubTests() {
+            var h = new TCPHandler("127.0.0.1", 9060);
             b.AddHandler(h);
         }
 
         ~ConfigHubTests() {
             uth.ClearUpTestFiles();
+        }
+
+
+
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
+        public void GetConfig_NoProvider_ThrowsIfRequired() {
+            var sut = new ConfigHub();
+            Assert.Throws<ConfigHubMissingConfigException>(() => sut.GetSetting("arflebarfle", true));
+        }
+
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
+        public void GetConfig_NoProvider_NoThrowNotRequired() {
+            var sut = new ConfigHub();
+            sut.GetSetting("arflebarfle", false);
+        }
+
+
+
+        [Fact(DisplayName = nameof(MissingConfig_ExceptionData_Present))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void MissingConfig_ExceptionData_Present() {
+            b.Info.Flow();
+
+            var sut = new ConfigHub();
+            
+            ConfigHubMissingConfigException theException = null;
+            try {
+                sut.GetSetting("arflebarfle", true);                        
+            } catch(ConfigHubMissingConfigException aex) {
+                theException = aex;
+                
+            }
+
+            Assert.NotNull(theException);
+            Assert.True(theException.Data.Keys.Count > 0);
+            
+        }
+
+        [Fact(DisplayName = nameof(FailedDirectoryFallback_DetailsInException))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void FailedDirectoryFallback_DetailsInException() {
+            b.Info.Flow();
+
+            var sut = new ConfigHub();
+            sut.AddDirectoryFallbackProvider("c:\\dontexistatll_veryunlikely", "testoleo");
+            ConfigHubMissingConfigException theException = null;
+            try {
+                sut.GetSetting("arflebarfle", true);
+            } catch (ConfigHubMissingConfigException aex) {
+                theException = aex;
+
+            }
+
+            Assert.NotNull(theException);
+            Assert.True(theException.Data.Keys.Count > 0);
+            bool matchedFilename = false;
+            foreach(var f in theException.Data.Keys) {
+                var str = theException.Data[f].ToString();
+                if (str.Contains("testoleo")) {
+                    matchedFilename = true;
+                }
+            }
+            Assert.True(matchedFilename);
         }
 
 
@@ -39,7 +107,8 @@ namespace Plisky.Test {
             Assert.Equal<DateTime>(expected, sut.GetNow());
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfigCurrentInstance_SingleProvider_ReturnsCorrectly() {
             string returnString = SampleTestData.GENERIC_STRING1;
 
@@ -59,13 +128,14 @@ namespace Plisky.Test {
         public void GetSetting_ThrowsInfNullSetting() {
             b.Info.Flow();
 
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
             Assert.Throws<ArgumentNullException>(() => {
                 sut.GetSetting(null);
-            });            
+            });
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_SingleProvider_ReturnsCorrectly() {
             string returnString = "arflebarflegloop";
 
@@ -79,7 +149,8 @@ namespace Plisky.Test {
             Assert.Equal(returnString, actual);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackProvider_ReturnsCorrectly() {
             string returnString = "arflebarflegloop";
 
@@ -95,20 +166,18 @@ namespace Plisky.Test {
             Assert.Equal(returnString, actual);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_NoProvider_ReturnsNullIfNotRequired() {
             ConfigHub sut = new ConfigHub();
             string res = sut.GetSetting("arflebarfle");
             Assert.Null(res);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]        
-        public void GetConfig_NoProvider_ThrowsIfRequired() {
-            ConfigHub sut = new ConfigHub();
-            Assert.Throws<ConfigHubMissingConfigException>( () => sut.GetSetting("arflebarfle", true));
-        }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackProviderLoaded_DoesNotReturnForNotSpecified() {
             string returnString = "arflebarflegloop";
 
@@ -133,10 +202,10 @@ namespace Plisky.Test {
             b.Info.Flow();
 
             ConfigHub sut = new ConfigHub();
-            
-            var cd = sut.Test_GetDirectoryName(string.Empty);            
+
+            var cd = sut.Test_GetDirectoryName(string.Empty);
             Assert.False(string.IsNullOrWhiteSpace(cd));
-            
+
         }
 
         [Fact(DisplayName = nameof(Directory_ResolvesEnvironmentVariable))]
@@ -149,7 +218,7 @@ namespace Plisky.Test {
             Assert.NotNull(par);  // Validation check that this machine is configured correct.
 
             ConfigHub sut = new ConfigHub();
-            
+
             var dn = sut.Test_GetDirectoryName("%PLISKYAPPROOT%\\MyDir");
             Assert.Equal(par + "\\MyDir", dn);
         }
@@ -170,7 +239,7 @@ namespace Plisky.Test {
             sut.InjectBilge(b);
 
             string output = ConfigHub.Current.Test_GetDirectoryName("[APP]");
-                
+
             Assert.NotNull(output);
             Assert.False(output.EndsWith(".dll"));
 
@@ -186,20 +255,31 @@ namespace Plisky.Test {
             // This bug was because "ToLower" was used in the settings therefore the connectionString could not be found
             // as it wasnt lowercase in the file.  This is currently failing as have fixed the file.
 
-            // TODO - Implement case insensitivity option.
-            ConfigHub sut = new ConfigHub();
-            sut.InjectBilge(b);
-
-            ConfigHub.Current.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config", "appservices.xml");
-            string cs = ConfigHub.Current.GetSetting("connectionString", true, false);            
+            var ch = GetConfigHubWithSampleDataFallbackFile(TestResourcesReferences.XMLUseCaseFile);
+           
+            string cs = ch.GetSetting("connectionstring", true, false);
             Assert.NotNull(cs);
 
-            cs = ConfigHub.Current.GetSetting("coNNectionString", true, false);
+            cs = ch.GetSetting("connectionString", true, false);
             Assert.NotNull(cs);
 
-            cs = ConfigHub.Current.GetSetting("CONNECTIONSTRING", true, false);
+            cs = ch.GetSetting("coNNectionString", true, false);
             Assert.NotNull(cs);
 
+            cs = ch.GetSetting("CONNECTIONSTRING", true, false);
+            Assert.NotNull(cs);
+
+        }
+
+        public ConfigHub GetConfigHubWithSampleDataFallbackFile(TestResourcesReferences whichFile) {
+            var ch = new ConfigHub();
+            string df = uth.GetTestDataFile(TestResources.GetIdentifiers(whichFile));
+            string dirForFile = Path.GetDirectoryName(df);
+            string filename = Path.GetFileName(df);
+
+            ch.AddDirectoryFallbackProvider("C:\\DoesNotExistAtAll", "notfoundfile.xml");
+            ch.AddDirectoryFallbackProvider(dirForFile, filename);
+            return ch;
         }
 
         [Fact(DisplayName = nameof(Directory_DoubleFallbackWorks))]
@@ -208,15 +288,19 @@ namespace Plisky.Test {
         public void Directory_DoubleFallbackWorks() {
             b.Info.Flow();
 
+            var sut = new ConfigHub();
 
-            ConfigHub sut = new ConfigHub();
-            sut.InjectBilge(b);
-            sut.AddDirectoryFallbackProvider("C:\\DoesNotExistAtAll", "tests.xml");
-            sut.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config", "tests.xml");
+            string df = uth.GetTestDataFile(TestResources.GetIdentifiers(TestResourcesReferences.ConfigHubTestData));
+            string dirForFile = Path.GetDirectoryName(df);
+            string filename = Path.GetFileName(df);
 
-            var str = sut.GetSetting("testconstr", true);
 
-            Assert.Equal("CONSTR-Value", str);
+            sut.AddDirectoryFallbackProvider("C:\\DoesNotExistAtAll", "notfoundfile.xml");
+            sut.AddDirectoryFallbackProvider(dirForFile, filename);
+
+            var str = sut.GetSetting("setting1", true);
+
+            Assert.Equal("setting1value", str);
         }
 
         [Fact(DisplayName = nameof(Directory_FullConfigStringRetrieval))]
@@ -225,13 +309,10 @@ namespace Plisky.Test {
         public void Directory_FullConfigStringRetrieval() {
             b.Info.Flow();
 
-            
-            ConfigHub sut = new ConfigHub();
+            var sut = GetConfigHubWithSampleDataFallbackFile(TestResourcesReferences.ConfigHubTestData);
+            var str = sut.GetSetting("setting1", true);
 
-            sut.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config","tests.xml");
-            var str = sut.GetSetting("testconstr",true);
-
-            Assert.Equal("CONSTR-Value", str);
+            Assert.Equal("setting1value", str);
         }
 
 
@@ -242,32 +323,39 @@ namespace Plisky.Test {
             b.Info.Flow();
             const string PLAINTEXT = "ItAllWorked";
 
-            ConfigHub sut = new ConfigHub();
+            var sut = GetConfigHubWithSampleDataFallbackFile(TestResourcesReferences.ConfigHubTestData);
+            
             var mcr = new MockSimpleCrypto();
-            mcr.AddDecryption("CONSTR-Value", PLAINTEXT);
+            mcr.AddDecryption("setting1value", PLAINTEXT);
             sut.CryptoProvider = mcr;
-            sut.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config", "tests.xml");
-            var str = sut.GetSetting("testconstr", true,true);
+
+            
+            var str = sut.GetSetting("setting1", true, true);
 
             Assert.Equal(PLAINTEXT, str);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_DirectoryFallbackProvider_Works() {
             const string TESTDATA = "bannana";
-            string tmp = Path.GetTempPath() + Environment.MachineName + ".chcfg";
-            uth.RegisterTemporaryFilename(tmp);
-            XDocument x = new XDocument();
+            var fn = uth.NewTemporaryFileName();
+
+                       
+            var x = new XDocument();
             x.Add(new XElement("chub_settings", new XElement("settings", new XElement("monkeyfish", TESTDATA))));
-            x.Save(tmp);
+            x.Save(fn);
+
             ConfigHub sut = new ConfigHub();
-            sut.AddDirectoryFallbackProvider(Path.GetTempPath());
+            
+            sut.AddDirectoryFallbackProvider(Path.GetDirectoryName(fn),Path.GetFileName(fn));
             var res = sut.GetSetting("monkeyfish", true);
 
             Assert.Equal(TESTDATA, res);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackProvider_CalledForAllRequests() {
             Dictionary<string, bool> testSettings = new Dictionary<string, bool>();
 
@@ -297,7 +385,8 @@ namespace Plisky.Test {
             }
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackProvider_CalledForAllStrings() {
             SampleTestData td = new SampleTestData();
             ConfigHub sut = new ConfigHub();
@@ -318,7 +407,8 @@ namespace Plisky.Test {
             Assert.Equal<int>(i, hits);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_TwoProviders_SpecificOverridesFallback() {
             ConfigHub sut = new ConfigHub();
             sut.RegisterFallbackProvider((pName) => {
@@ -334,7 +424,8 @@ namespace Plisky.Test {
             Assert.Equal("result2", actual);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackAppConfigProvider_Returnsconfiguration() {
             ConfigHub sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
@@ -342,14 +433,16 @@ namespace Plisky.Test {
             Assert.Equal("arfleBARFLEgloop", val);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackAppConfigProvider_NotInstalledByDefault() {
             ConfigHub sut = new ConfigHub();
             string val = sut.GetSetting("testSettingValue");
             Assert.Null(val);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackAppConfigProvider_IsCaseInsensitive() {
             ConfigHub sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
@@ -357,7 +450,8 @@ namespace Plisky.Test {
             Assert.Equal("arfleBARFLEgloop", val);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_CustomType_ReturnsCorrectly() {
             ConfigHub sut = new ConfigHub();
             sut.RegisterProvider<TestMessage>("settingVal", () => {
@@ -368,7 +462,8 @@ namespace Plisky.Test {
             Assert.Equal("HelloWorld", result.Data);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackAppConfig_NestedIsEmptyWhenNotPresent() {
             string combinedString = "ARFLEUSBarfleyGloopify";
             ConfigHub sut = new ConfigHub();
@@ -378,7 +473,8 @@ namespace Plisky.Test {
             Assert.Equal(combinedString, val);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackAppConfig_SupportsNestedReplacements() {
             string combinedString = "contactinatedIntoARFLEUSBarfleyGloopify";
             ConfigHub sut = new ConfigHub();
@@ -389,7 +485,8 @@ namespace Plisky.Test {
             Assert.Equal(combinedString, val);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_GetSetting_SpecificOveridesFallback() {
             ConfigHub sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
@@ -400,7 +497,8 @@ namespace Plisky.Test {
             Assert.Equal("NothingHere", val);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void RegisterMachineFallback_CallBackOccursForThisMachine() {
             var sut = new ConfigHub();
 
@@ -418,7 +516,8 @@ namespace Plisky.Test {
             Assert.Equal(expected, result);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]        
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void RegisterMachineFallback_DuplicateName_CausesException() {
             var sut = new ConfigHub();
             string machineName = "MachineName";
@@ -432,7 +531,8 @@ namespace Plisky.Test {
               }));
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void RegisterFallbacks_ExcutedInOrderOfRegistration() {
             var sut = new ConfigHub();
             string machineName = Environment.MachineName;
@@ -454,7 +554,8 @@ namespace Plisky.Test {
             Assert.False(secondExecuted, "The second one should not have been executed");
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void RegisterMachineFallback_NoMachineMatches_DefaultIsCalled() {
             var sut = new ConfigHub();
 
@@ -476,7 +577,8 @@ namespace Plisky.Test {
             Assert.True(secondExecuted, "The second one should have been executed as a default");
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetTypedSetting_DoesExecuteFallback() {
             var sut = new ConfigHub();
             bool fallbackExecuted = false;
@@ -489,7 +591,8 @@ namespace Plisky.Test {
             Assert.True(fallbackExecuted, "The fallback was not execued");
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsBool() {
             var sut = new ConfigHub();
             sut.AddMachineFallbackProvider(ConfigHub.DEFAULTMACHINENAME, (settingName) => {
@@ -500,7 +603,8 @@ namespace Plisky.Test {
             Assert.True(val, "The incorrect value was returned");
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsInt() {
             ConfigHub sut = new ConfigHub();
             sut.AddMachineFallbackProvider(ConfigHub.DEFAULTMACHINENAME, (settingName) => {
@@ -511,7 +615,8 @@ namespace Plisky.Test {
             Assert.Equal(12367, val);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void GetTypedSetting_FromFallback_ReturnsDouble() {
             ConfigHub sut = new ConfigHub();
             sut.AddMachineFallbackProvider(ConfigHub.DEFAULTMACHINENAME, (settingName) => {
@@ -522,7 +627,8 @@ namespace Plisky.Test {
             Assert.Equal(1236754, val);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void Crypto_DecryptorPresent_ChangesValue() {
             ConfigHub sut = new ConfigHub();
             MockSimpleCrypto msc = new MockSimpleCrypto();
@@ -537,7 +643,8 @@ namespace Plisky.Test {
             Assert.Equal(msc.AlwaysThisValue, s);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void Crypto_DecryptorPresent_NoChangeNonEncrypted() {
             string inputVal = "xxx";
             ConfigHub sut = new ConfigHub();
@@ -552,23 +659,25 @@ namespace Plisky.Test {
             Assert.Equal(s, inputVal);
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]        
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void Crypto_DecryptNeeded_NoCrypto_ThrowsException() {
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
 
             sut.RegisterProvider("CryptoTest", () => {
                 return "xxx";
             });
 
-            Assert.Throws<ConfigHubConfigurationFailureException> ( () => 
-                sut.GetSetting<string>("CryptoTest", false, true)
+            Assert.Throws<ConfigHubConfigurationFailureException>(() =>
+              sut.GetSetting<string>("CryptoTest", false, true)
             );
         }
 
-        [Fact][Trait(Traits.Age,Traits.Regression)]
+        [Fact]
+        [Trait(Traits.Age, Traits.Regression)]
         public void Crypto_SimpleCryptoWorks() {
-            ConfigHub sut = new ConfigHub();
-            SimpleCryptoConfigProvider scc = new SimpleCryptoConfigProvider(12);
+            var sut = new ConfigHub();
+            var scc = new SimpleCryptoConfigProvider(12);
             sut.CryptoProvider = scc;
 
             string sec = "secret oh secret";

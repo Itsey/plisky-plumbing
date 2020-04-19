@@ -16,6 +16,9 @@ namespace Plisky.Test {
         public string[] Remainder { get; set; }
     }
 
+    // Special case where using someone elses class to test a known bug, but coding convention from other persons class
+    // does not meet current preferred appraoch therefore disabled warnings to keep test case valid.
+#pragma warning disable IDE1006
     [CommandLineArgumentsAttribute()]
     public class Sean_DateUseCase {
 
@@ -25,5 +28,7 @@ namespace Plisky.Test {
         [CommandLineArgAttribute("t")]
         public DateTime to { get; set; }
     }
+
+#pragma warning restore IDE1006
 
 }

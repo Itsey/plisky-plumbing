@@ -52,7 +52,19 @@
             DateTimeParseFormat = "d-M-yyyy";
         }
 
-        
+        /// <summary>
+        /// FancyPants Generic Overload, by request, but its just a slower version of passing it in.
+        /// </summary>
+        /// <typeparam name="T">The argument type to use</typeparam>
+        /// <param name="args">The args with the parameters</param>
+        /// <returns>A new instance of the arguments type, populated with values</returns>
+        public T ProcessArguments<T>(string[] args) {
+            T result = (T)Activator.CreateInstance(typeof(T));
+            ProcessArguments(result, args);
+            return result;
+        }
+
+
 
         /// <summary>
         /// ArgumentPrefix determines the prefixed text that should be on the front of each argument specifier.  This is commonly a forwards
@@ -99,7 +111,7 @@
             b.Info.E();
             try {
 
-                #region entry code
+                #region validation
 
                 if (argumentValuesClassInstance == null) { throw new ArgumentNullException("argumentValuesClassInstance", "The argumentVals class can not be null for a call to ProcessArguments"); }
                 if (arguments.Length == 0) { return; }
@@ -117,8 +129,8 @@
 
                 #endregion
 
-                b.Info.Log("ProcessArguments about to process all passed arguments.");
-                b.Verbose.Log("Prefix:" + argumentPrefix, "PostFix:" + ArgumentPostfix);
+                b.Info.Log($"ProcessArguments Prefix: {argumentPrefix}, PostFix:{ArgumentPostfix}");
+         
                 argumentErrorsDuringLastParse.Clear();
 
                 var argumentClass = argumentValuesClassInstance.GetType();
@@ -132,11 +144,11 @@
 
                 // We now have a series of mappings established.
                 b.Info.Log("Mappings established, there are " + mappingsOfFieldsToArguments.Count.ToString() + " mappings");
-                b.Info.Dump(mappingsOfFieldsToArguments, "Array of mappigns");
-                List<string> unmatchedParameters = new List<string>();
+                b.Info.Dump(mappingsOfFieldsToArguments, "Array of mappings");
+                var unmatchedParameters = new List<string>();
 
                 foreach (string individualArgument in arguments) {
-                    bool matchOccuredForThisArgument = false;  // Determines whether any match occured for this argument
+                    bool matchOccuredForThisArgument = false;  // Was a parameter found that matched this argument.
 
                     foreach (var singleArgumentMapping in mappingsOfFieldsToArguments) {
                         if (singleArgumentMapping.MatchArgumentToField(individualArgument, ArgumentPostfix)) {
@@ -146,7 +158,7 @@
                             string convertedArgValue = ConvertArgumentToRemovePostfixes(singleArgumentMapping.LastArgumentValue());
 
                             try {
-                                AssignValueToMember(singleArgumentMapping.TargetField, argumentValuesClassInstance, convertedArgValue);
+                                AssignValueToMember(singleArgumentMapping, argumentValuesClassInstance, convertedArgValue);
                             } catch (ArgumentException aex) {
                                 string errorText = aex.Message;
                                 if (aex.InnerException != null) { errorText = aex.InnerException.Message; }
@@ -166,15 +178,15 @@
                 // Now we have gone through all of the arguments and seen if we can match them to any of the mappings that were
                 // established we look to see what the user wants to do with the unmatched arguments.  If they want them kept
                 // then there should be a default field.
-                foreach (FieldArgumentMapping fam in mappingsOfFieldsToArguments) {
+                foreach (var fam in mappingsOfFieldsToArguments) {
                     if (fam.MatchesAllUnmatchedArguments) {
-                        DirectAssginValue(fam.TargetField, argumentValuesClassInstance, unmatchedParameters.ToArray());
+                        DirectAssginValue(fam, argumentValuesClassInstance, unmatchedParameters.ToArray());
                         break;
                     }
                 }
 
                 // Now validate that all required arguments are present.
-                foreach (FieldArgumentMapping fam in mappingsOfFieldsToArguments) {
+                foreach (var fam in mappingsOfFieldsToArguments) {
                     foreach (var f in fam.TargetField.CustomAttributes) {
                         var nargs = f.NamedArguments.Where(a => a.MemberName == "IsRequired");
                         foreach (var p in nargs) {
@@ -214,7 +226,7 @@
 
 
 
-        private object GetValue(Type memberType, string theValue) {
+        private object GetValue(Type memberType, string theValue, string arraySeparatorChar) {
             try {
                 // If the target field is a boolean we also support y and yes for true values.
                 object result = theValue;
@@ -244,15 +256,15 @@
 
                 if (memberType.IsArray) {
 
-                    string theSep = ",";
-                    if (theValue.StartsWith(theSep)) {
+                    
+                    if (theValue.StartsWith(arraySeparatorChar)) {
                         theValue = theValue.Substring(1);
                     }
-                    if (theValue.EndsWith(theSep)) {
+                    if (theValue.EndsWith(arraySeparatorChar)) {
                         theValue = theValue.Substring(0, theValue.Length - 1);
                     }
 
-                    var s = theValue.Split(theSep.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    var s = theValue.Split(arraySeparatorChar.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
                     // Cant work out a good way to do this so just hardcoding it
                     if (memberType.FullName.ToLower() == "system.int32[]") {
@@ -283,26 +295,27 @@
         /// <param name="theMember">The field on the object to set</param>
         /// <param name="theObject">The object containing the field</param>
         /// <param name="argumentValueToParse">The value to set it to.</param>
-        private void AssignValueToMember(MemberInfo theMember, object theObject, string argumentValueToParse) {
+        private void AssignValueToMember(FieldArgumentMapping fam, object theObject, string argumentValueToParse) {
+           
             Type t = null;
-            var f = theMember as FieldInfo;
+            var f = fam.TargetField as FieldInfo;
             if (f != null) {
                 t = f.FieldType;
             }
-            var x = theMember as PropertyInfo;
+            var x = fam.TargetField as PropertyInfo;
             if (x != null) {
                 t = x.PropertyType;
             }
 
-            var o = GetValue(t, argumentValueToParse);
-            DirectAssginValue(theMember, theObject, o);
+            var o = GetValue(t, argumentValueToParse,fam.ArraySeparatorChar);
+            DirectAssginValue(fam, theObject, o);
         }
 
-        private void DirectAssginValue(MemberInfo theMember, object theObject, object argumentValueToParse) {
-            if (theMember.MemberType == MemberTypes.Field) {
-                AssignValueToField((FieldInfo)theMember, theObject, argumentValueToParse);
+        private void DirectAssginValue(FieldArgumentMapping fam, object theObject, object argumentValueToParse) {
+            if (fam.TargetField.MemberType == MemberTypes.Field) {
+                AssignValueToField((FieldInfo)fam.TargetField, theObject, argumentValueToParse);
             } else {
-                AssignValueToProperty((PropertyInfo)theMember, theObject, argumentValueToParse);
+                AssignValueToProperty((PropertyInfo)fam.TargetField, theObject, argumentValueToParse);
             }
         }
 
@@ -404,17 +417,17 @@
                 };
 
                 var custAttribs = (CommandLineArgumentBaseAttribute[])f.GetCustomAttributes(typeof(CommandLineArgumentBaseAttribute), true);
-                foreach (CommandLineArgumentBaseAttribute claba in custAttribs) {
-                    //b.Assert.True(claba.Description != null, "The description should be empty or full, never null");
-                    //b.Assert.True(claba.FullDescription != null, "The description should be empty or full, never null");
+                foreach (var claba in custAttribs) {
 
                     nextMapping.ShortDescription = claba.Description;
                     nextMapping.LongDescription = claba.FullDescription;
-
+                    
                     if (claba is CommandLineArgAttribute argAtt) {
-                        //b.Assert.True(argumentPrefix != null, "The argument prefix should be empty if it is not required");
 
                         nextMapping.IsDefaultSingleArgument = argAtt.IsSingleParameterDefault;
+                        if (!string.IsNullOrEmpty(argAtt.ArraySeparatorChar)) {
+                            nextMapping.ArraySeparatorChar = argAtt.ArraySeparatorChar;
+                        }
 
                         if (this.argumentPrefix.Length > 0) {
                             // there is an argument prefix therefore add this to the argument.

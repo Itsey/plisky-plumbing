@@ -43,25 +43,11 @@ namespace Plisky.Test {
         public void HardcodedFP_NoFeatureIsNull() {
             b.Info.Flow();
 
-            FeatureHardCodedProvider sut = new FeatureHardCodedProvider();
+            var sut = new FeatureHardCodedProvider();
             var result = sut.GetFeature(FEATURENAME);
 
 
             Assert.Null( result);
-        }
-
-
-        [Fact(DisplayName = nameof(JsonProvider_GetsFeature))]
-        [Trait(Traits.Age, Traits.Fresh)]
-        [Trait(Traits.Style, Traits.Unit)]
-        public void JsonProvider_GetsFeature() {
-            b.Info.Flow();
-
-            Assert.Throws<ArgumentOutOfRangeException>(() => {
-                var js = new FeatureLocalJsonProvider();
-                var bfo = new BaseFeatureOptions(null);
-                js.Initialise(bfo);
-            });
         }
 
 
