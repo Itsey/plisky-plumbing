@@ -168,7 +168,7 @@
             }
         }
 
-        private string GetDirectoryName(string directory) {
+        protected string GetDirectoryName(string directory) {
             b.Verbose.Log($"GEtDirectoryName {directory}");
 
             string result = directory;

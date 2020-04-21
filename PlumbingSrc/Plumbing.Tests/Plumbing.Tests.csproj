@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="FeatureTests\FeatureProviderTests.cs" />
     <Compile Include="FeatureTests\FeatureTests.cs" />
+    <Compile Include="Mocks\MockConfigHub.cs" />
     <Compile Include="Mocks\MockFeature.cs" />
     <Compile Include="Mocks\MockFeatureProvider.cs" />
     <Compile Include="TestDataTests.cs" />

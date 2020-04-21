@@ -125,6 +125,14 @@
             Creates a new instance of the CommandArgumentSupport class.
             </summary>
         </member>
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.ProcessArguments``1(System.String[])">
+            <summary>
+            FancyPants Generic Overload, by request, but its just a slower version of passing it in.
+            </summary>
+            <typeparam name="T">The argument type to use</typeparam>
+            <param name="args">The args with the parameters</param>
+            <returns>A new instance of the arguments type, populated with values</returns>
+        </member>
         <member name="P:Plisky.Plumbing.CommandArgumentSupport.ArgumentPrefix">
             <summary>
             ArgumentPrefix determines the prefixed text that should be on the front of each argument specifier.  This is commonly a forwards
@@ -160,7 +168,7 @@
             <param name="argumentValuesClassInstance">The class representing the arguments, decorated by CmdLineArgAttributes</param>
             <param name="arguments">The string list of arguments passed to the application.</param>
         </member>
-        <member name="M:Plisky.Plumbing.CommandArgumentSupport.AssignValueToMember(System.Reflection.MemberInfo,System.Object,System.String)">
+        <member name="M:Plisky.Plumbing.CommandArgumentSupport.AssignValueToMember(Plisky.Plumbing.FieldArgumentMapping,System.Object,System.String)">
             <summary>
             This is the default assignment which attempts to put the value in as an object
             </summary>

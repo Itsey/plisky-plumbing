@@ -200,9 +200,9 @@ namespace Plisky.Test {
         [Trait(Traits.Style, Traits.Developer)]
         public void EmptyDirectory_DefaultsToCurrent() {
             b.Info.Flow();
-            var sut = new ConfigHub();
+            var sut = new MockConfigHub();
 
-            string cd = sut.Test_GetDirectoryName(string.Empty);
+            string cd = sut.Mock.GetDirectoryName(string.Empty);
 
             Assert.False(string.IsNullOrWhiteSpace(cd));
 
@@ -218,9 +218,9 @@ namespace Plisky.Test {
             b.Info.Log($"Checking {par}");
             Assert.NotNull(par);  // Validation check that this machine is configured correct.
 
-            var sut = new ConfigHub();
+            var sut = new MockConfigHub();
 
-            var dn = sut.Test_GetDirectoryName("%PLISKYAPPROOT%\\MyDir");
+            var dn = sut.Mock.GetDirectoryName("%PLISKYAPPROOT%\\MyDir");
             Assert.Equal(par + "\\MyDir", dn);
         }
 
@@ -234,10 +234,10 @@ namespace Plisky.Test {
             // as it wasnt lowercase in the file.  This is currently failing as have fixed the file.
 
             // TODO - Implement case insensitivity option.
-            ConfigHub sut = new ConfigHub();
+            var sut = new MockConfigHub();
             sut.InjectBilge(b);
 
-            string output = ConfigHub.Current.Test_GetDirectoryName("[APP]");
+            string output = sut.Mock.GetDirectoryName("[APP]");
 
             Assert.NotNull(output);
             Assert.False(output.EndsWith(".dll"));

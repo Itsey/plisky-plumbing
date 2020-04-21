@@ -26,7 +26,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)HttpHelper\WebCallResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHub.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHubMissingConfigException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Messaging\ConfigHub_Internals.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Hub.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\HubMessageBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IDecryptStuff.cs" />
