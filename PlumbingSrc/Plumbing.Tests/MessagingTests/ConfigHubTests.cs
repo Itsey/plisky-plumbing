@@ -15,7 +15,7 @@ namespace Plisky.Test {
         protected Bilge b = new Bilge();
 
         public ConfigHubTests() {
-            var h = new TCPHandler("127.0.0.1", 9060);
+            var h = new TCPHandler("192.168.1.15", 9060);
             b.AddHandler(h);
         }
 
@@ -194,16 +194,16 @@ namespace Plisky.Test {
         }
 
 
-#if DEBUG
+
         [Fact(DisplayName = nameof(EmptyDirectory_DefaultsToCurrent))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.Developer)]
         public void EmptyDirectory_DefaultsToCurrent() {
             b.Info.Flow();
+            var sut = new ConfigHub();
 
-            ConfigHub sut = new ConfigHub();
+            string cd = sut.Test_GetDirectoryName(string.Empty);
 
-            var cd = sut.Test_GetDirectoryName(string.Empty);
             Assert.False(string.IsNullOrWhiteSpace(cd));
 
         }
@@ -215,16 +215,15 @@ namespace Plisky.Test {
             b.Info.Flow();
 
             var par = Environment.GetEnvironmentVariable("PLISKYAPPROOT");
+            b.Info.Log($"Checking {par}");
             Assert.NotNull(par);  // Validation check that this machine is configured correct.
 
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
 
             var dn = sut.Test_GetDirectoryName("%PLISKYAPPROOT%\\MyDir");
             Assert.Equal(par + "\\MyDir", dn);
         }
-#endif
 
-#if DEBUG
         [Fact(DisplayName = nameof(Bug_AppTagMarkerIncludesExeName))]
         [Trait(Traits.Age, Traits.Fresh)]
         [Trait(Traits.Style, Traits.LiveBug)]
@@ -244,7 +243,7 @@ namespace Plisky.Test {
             Assert.False(output.EndsWith(".dll"));
 
         }
-#endif
+
 
         [Fact(DisplayName = nameof(Bug_CanNotFindConnectionString))]
         [Trait(Traits.Age, Traits.Fresh)]

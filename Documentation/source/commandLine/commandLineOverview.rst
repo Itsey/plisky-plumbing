@@ -46,10 +46,10 @@ The postfix and prefix determines how the arguments are passed - in this instanc
 There is no specified prefix on the arguments, but a postfix of : is used.    Long strings and special characters (like | and <>) can be provided by putting quotes around
 the argument.
 
-Alternative Generic Syntax:
+Alternative Generic Syntax.
 =========================
 There is an alternative generic based syntax that will save you a tiny bit of typing at the cost of a tiny bit of runtime overhead.  If you prefer the syntax the 
-functionality is identical
+functionality is identical.  This will only work for argument attributed classes that have a default constructor.
 
 ' var argsClass = ProcessArguments<SampleCommandLine_C2>(args)
 ' // Is the same as

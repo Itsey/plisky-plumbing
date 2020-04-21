@@ -11,6 +11,8 @@ Plisky.Plumbing - Docs.
    :caption: Contents:
 
    /configHub/configHubStart
+   /features/featuresOverview
+   /commandLine/commandLineOverview
 
 Indices and tables
 ==================

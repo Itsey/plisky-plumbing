@@ -169,11 +169,15 @@
         }
 
         private string GetDirectoryName(string directory) {
+            b.Verbose.Log($"GEtDirectoryName {directory}");
+
             string result = directory;
             if (string.IsNullOrEmpty(directory)) {
                 result = Environment.CurrentDirectory;
+                b.Verbose.Log("Using CurrentDirectory");
             }
             if (directory.StartsWith("[APP]")) {
+                
                 string path;
                 var asm = Assembly.GetEntryAssembly();
                 if (asm!=null) {
@@ -187,11 +191,15 @@
                     }
                 }
                 result = directory.Replace("[APP]",path );
+                b.Verbose.Log($"Replacing [APP] With application routing [{result}]");
             }
             if (directory.Contains("%")) {
                 // Environment variable tokenisation
                 result = Environment.ExpandEnvironmentVariables(directory);
+                b.Verbose.Log($"Expanded [{result}]");
             }
+
+            b.Verbose.Log($"Result [{result}]");
             return result;
         }
 
