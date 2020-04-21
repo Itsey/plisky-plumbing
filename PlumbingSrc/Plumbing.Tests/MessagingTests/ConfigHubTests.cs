@@ -235,7 +235,6 @@ namespace Plisky.Test {
 
             // TODO - Implement case insensitivity option.
             var sut = new MockConfigHub();
-            sut.InjectBilge(b);
 
             string output = sut.Mock.GetDirectoryName("[APP]");
 

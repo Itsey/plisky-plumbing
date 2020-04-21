@@ -24,7 +24,7 @@ namespace Plisky.Test {
 
 
             public string GetDirectoryName(string inDir) {
-                return GetDirectoryName(inDir);
+                return parent.GetDirectoryName(inDir);
             }
         }
         #endregion
