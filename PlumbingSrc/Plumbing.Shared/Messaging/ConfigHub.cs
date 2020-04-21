@@ -178,28 +178,51 @@
             }
             if (directory.StartsWith("[APP]")) {
                 
-                string path;
-                var asm = Assembly.GetEntryAssembly();
-                if (asm!=null) {
-                    path = Path.GetDirectoryName(asm.Location);
-                } else {
-                    asm = Assembly.GetExecutingAssembly();
-                    if (asm!=null) {
-                        path = Path.GetDirectoryName(asm.Location);
-                    } else {
-                        path = Directory.GetCurrentDirectory();
-                    }
-                }
+                
+                string path = ActualGetEntryPointPath();
+                
                 result = directory.Replace("[APP]",path );
                 b.Verbose.Log($"Replacing [APP] With application routing [{result}]");
             }
-            if (directory.Contains("%")) {
+
+            result = ActualExpandForEnvironmentVariables(result);
+
+           
+            b.Verbose.Log($"Result [{result}]");
+            return result;
+        }
+
+        /// <summary>
+        /// OS Abstraction, Environment Variable Expansion
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        protected virtual string ActualExpandForEnvironmentVariables(string result) {
+            if (result.Contains("%")) {
                 // Environment variable tokenisation
-                result = Environment.ExpandEnvironmentVariables(directory);
+                result = Environment.ExpandEnvironmentVariables(result);
                 b.Verbose.Log($"Expanded [{result}]");
             }
+            return result;
+        }
 
-            b.Verbose.Log($"Result [{result}]");
+        /// <summary>
+        /// OS Abstraction, get the entry point for this app.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string ActualGetEntryPointPath() {
+            string result;
+            var asm = Assembly.GetEntryAssembly();
+            if (asm != null) {
+                result = Path.GetDirectoryName(asm.Location);
+            } else {
+                asm = Assembly.GetExecutingAssembly();
+                if (asm != null) {
+                    result = Path.GetDirectoryName(asm.Location);
+                } else {
+                    result = Directory.GetCurrentDirectory();
+                }
+            }
             return result;
         }
 

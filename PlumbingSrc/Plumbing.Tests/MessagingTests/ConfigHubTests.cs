@@ -214,14 +214,13 @@ namespace Plisky.Test {
         public void Directory_ResolvesEnvironmentVariable() {
             b.Info.Flow();
 
-            var par = Environment.GetEnvironmentVariable("PLISKYAPPROOT");
-            b.Info.Log($"Checking {par}");
-            Assert.NotNull(par);  // Validation check that this machine is configured correct.
-
             var sut = new MockConfigHub();
+            sut.Mock.AddEnvironmentVariable("MOCKENVVAR", "C:\\EnvVarDir");
 
-            var dn = sut.Mock.GetDirectoryName("%PLISKYAPPROOT%\\MyDir");
-            Assert.Equal(par + "\\MyDir", dn);
+            var dn = sut.Mock.GetDirectoryName("%MOCKENVVAR%\\MyDir");
+
+
+            Assert.Equal("C:\\EnvVarDir\\MyDir", dn);
         }
 
         [Fact(DisplayName = nameof(Bug_AppTagMarkerIncludesExeName))]
@@ -239,7 +238,7 @@ namespace Plisky.Test {
             string output = sut.Mock.GetDirectoryName("[APP]");
 
             Assert.NotNull(output);
-            Assert.False(output.EndsWith(".dll"));
+            Assert.DoesNotContain("[APP]", output);            
 
         }
 
