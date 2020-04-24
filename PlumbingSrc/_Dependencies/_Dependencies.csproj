@@ -90,6 +90,7 @@
     <CodeAnalysisDictionary Include="Dictionary.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="automation\GitReleaseSync.cmd" />
     <None Include="Packaging\PliskyTesting.nuspec">
       <SubType>Designer</SubType>
     </None>
