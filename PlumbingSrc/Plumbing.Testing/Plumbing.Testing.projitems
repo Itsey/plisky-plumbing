@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)SampleTestData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TestSupport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Traits.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UnitTestHelper.cs" />
   </ItemGroup>
   <ItemGroup>

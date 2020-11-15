@@ -21,12 +21,12 @@
 
 
         /// <summary>
-        /// Fresh tests are new, hot off the press.  They are for new features of code and therefore less stable than other types of test.
+        /// Age - Fresh tests are new, hot off the press.  They are for new features of code and therefore less stable than other types of test.
         /// </summary>
         public const string Fresh = "Fresh";
 
         /// <summary>
-        /// Regression tests define the code that is well established, these should not be failing.
+        /// Age - Regression tests define the code that is well established, these should not be failing.
         /// </summary>
         public const string Regression = "Regression";
 
@@ -66,6 +66,11 @@
         /// this is to ensure that we dont regress these in future and learn from our mistakes.
         /// </summary>
         public const string LiveBug = "Bug";
+
+        /// <summary>
+        /// Style - Manual tests are not designed to be run during automated builds or regression tests.
+        /// </summary>
+        public const string Manual = "Manual";
     }
 
 #pragma warning restore IDE1006 // Naming Styles
