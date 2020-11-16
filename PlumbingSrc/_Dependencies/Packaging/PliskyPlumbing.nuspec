@@ -27,7 +27,7 @@
     <copyright>Copyright 2020</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>
     <dependencies>
-      <dependency id="Plisky.Diagnostics" version="2"/>
+      <dependency id="Plisky.Diagnostics" version="2.8"/>
     </dependencies>
   </metadata>
   <files>
