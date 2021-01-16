@@ -237,7 +237,7 @@
                             return el.Value;
                         } 
                     }
-                    return set.Value;
+                    return null;
                 } else {
                     b.Verbose.Log($"Invalid configuration file, chub_settings and settings elements not present.",configFile.ToString());
                 }

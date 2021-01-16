@@ -463,7 +463,7 @@ namespace Plisky.Test {
         [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackAppConfig_NestedIsEmptyWhenNotPresent() {
             string combinedString = "ARFLEUSBarfleyGloopify";
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
 
             string val = sut.GetSetting("testSettingSubValue2");
@@ -474,7 +474,7 @@ namespace Plisky.Test {
         [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackAppConfig_SupportsNestedReplacements() {
             string combinedString = "contactinatedIntoARFLEUSBarfleyGloopify";
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
 
             string val = sut.GetSetting("testSettingSubValue");
@@ -485,7 +485,7 @@ namespace Plisky.Test {
         [Fact]
         [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_GetSetting_SpecificOveridesFallback() {
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
             sut.AddDefaultAppConfigFallback();
             sut.RegisterProvider("testSettingSubValue2", () => {
                 return "NothingHere";
@@ -688,5 +688,26 @@ namespace Plisky.Test {
 
             Assert.Equal(sec, result);
         }
+
+
+
+        [Fact(DisplayName = nameof(Bug_ConfigHubExceptionExposedAllSettings))]
+        [Trait(Traits.Age, Traits.Fresh)]
+        [Trait(Traits.Style, Traits.Unit)]
+        public void Bug_ConfigHubExceptionExposedAllSettings() {
+            b.Info.Flow();
+
+
+            // Bug introduced with the case insensitive fix, meant that in the event of no match
+            // all of the contents of a settings file were returned.
+
+            var sut = new ConfigHub();
+            sut.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config\\", "tkd1100.settings");
+            bool b2 = sut.GetSetting<bool>("doesnotexist");
+
+            Assert.False(b2);
+
+        }
+
     }
 }
