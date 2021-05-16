@@ -12,6 +12,8 @@
     <description>Plisky Plumbing Functions including Hub, ConfigHub, CommandLineSupport.</description>
     <releaseNotes>
                   XXX-VERSION-XXX
+                     Bugfix - All settings could be returned for a missing setting entry since case Insensitive code fix deployed.
+                  1.7.2
                      Config Hub settings Now Case INSENSITVE
                      All Unit Tests Fixed
                      CommandLineArgs ProcessArguments now has a Generic override to create an instance of the class

@@ -17,7 +17,7 @@
         private Bilge b = new Bilge("Plisky-ConfigHub");
         private static string CONFIGHUB_EXTENSION = ".chConfig";
 
-        
+
         public const string DATETIMESETTINGNAME = "defaultdatetimevalue";
         public const string DEFAULTMACHINENAME = "defaultmachinename";
         public IDecryptStuff CryptoProvider { get; set; }
@@ -52,7 +52,7 @@
         public static ConfigHub Current {
             get {
                 if (instance == null) {
-                    lock (lockme) {                        
+                    lock (lockme) {
                         instance = new ConfigHub();
                     }
                 }
@@ -84,7 +84,7 @@
         public void AddDefaultAppConfigFallback() {
             b.Verbose.Log("AppConfigFallback Registration Request Made");
 
-            RegisterFallbackProvider((pName) => { 
+            RegisterFallbackProvider((pName) => {
 
                 #region marker constants
 
@@ -140,10 +140,10 @@
             string actualDir = GetDirectoryName(directory);
 
 
-            if (fileName==null) {                
+            if (fileName == null) {
                 SetupMachineName();
-                b.Verbose.Log("Filename not specified, using machinename",thisMachineName);
-                fileName = Path.ChangeExtension(thisMachineName, CONFIGHUB_EXTENSION);                
+                b.Verbose.Log("Filename not specified, using machinename", thisMachineName);
+                fileName = Path.ChangeExtension(thisMachineName, CONFIGHUB_EXTENSION);
             }
 
             string machineBasedFilename = Path.Combine(actualDir, fileName);
@@ -157,8 +157,8 @@
             if (File.Exists(machineBasedFilename)) {
                 RegisterFallbackProvider((setName) => {
 
-                    b.Verbose.Log($"Directory Fallback Called for {setName}", $"fallback provider file: {machineBasedFilename}");
-                    XDocument x = XDocument.Load(machineBasedFilename);
+                    b.Verbose.Log($"Directory Fallback - Setting:{setName}", $"fallback provider file: {machineBasedFilename}");
+                    var x = XDocument.Load(machineBasedFilename);
                     return GetSettingsFromCustomXmlFile(x, setName);
                 });
             } else {
@@ -169,25 +169,24 @@
         }
 
         protected string GetDirectoryName(string directory) {
-            b.Verbose.Log($"GEtDirectoryName {directory}");
+            b.Info.Flow($"{directory}");
 
             string result = directory;
             if (string.IsNullOrEmpty(directory)) {
                 result = Environment.CurrentDirectory;
                 b.Verbose.Log("Using CurrentDirectory");
             }
+
             if (directory.StartsWith("[APP]")) {
-                
-                
                 string path = ActualGetEntryPointPath();
-                
-                result = directory.Replace("[APP]",path );
+
+                result = directory.Replace("[APP]", path);
                 b.Verbose.Log($"Replacing [APP] With application routing [{result}]");
             }
 
             result = ActualExpandForEnvironmentVariables(result);
 
-           
+
             b.Verbose.Log($"Result [{result}]");
             return result;
         }
@@ -230,20 +229,22 @@
             settingName = settingName.ToLowerInvariant();
             try {
                 var set = configFile.Element("chub_settings").Element("settings");
-                                                   
+
                 if (set != null) {
-                    foreach(var el  in set.Elements()) {
-                        if (el.Name.ToString().ToLowerInvariant()==settingName) {
+                    foreach (var el in set.Elements()) {
+                        b.Verbose.Log($"Trying {el.Name}");
+                        if (el.Name.ToString().ToLowerInvariant() == settingName) {
                             return el.Value;
-                        } 
+                        }
                     }
+                    b.Verbose.Log("No setting found, no match");
                     return null;
                 } else {
-                    b.Verbose.Log($"Invalid configuration file, chub_settings and settings elements not present.",configFile.ToString());
+                    b.Verbose.Log($"Invalid configuration file, chub_settings and settings elements not present.", configFile.ToString());
                 }
-            } catch(Exception x) {
+            } catch (Exception x) {
                 b.Warning.Log("XML Parsing Failed, corrupt settings file, setting NOT Matched");
-                b.Info.Dump(x,"XML Exception Reading Config");
+                b.Info.Dump(x, "XML Exception Reading Config");
             }
             return null;
         }
@@ -262,7 +263,7 @@
             }
             lock (lockme) {
                 if (fallbackByMachineList.Count == 0) {
-                    SetupMachineName();                    
+                    SetupMachineName();
                 }
 
                 machineName = machineName.ToLower();
@@ -351,7 +352,7 @@
             } else {
                 string s = GetSetting(settingName, mustBePresent);
 
-                if (s == null) {                   
+                if (s == null) {
                     return default(T);
                 }
 
@@ -408,14 +409,12 @@
 
             if (val == null) {
 
+                b.Verbose.Log($"Setting Value Is Null, Trying Fallback List {fallbackList1.Count} fallbacks registered.");
+
                 foreach (var v in fallbackList1) {
-
-                    b.Verbose.Log($"Fallback Function Call");
-
                     val = v(settingName);
                     if (val != null) {
-
-                        b.Verbose.Log($"Value Found {val}");
+                        b.Verbose.Log($"Fallback -> Value Match-]{val}");
                         break;
                     }
                 }
@@ -439,19 +438,19 @@
 
         private void PopulateDiagnostics(ConfigHubMissingConfigException ex) {
             string functionListRetrievers = "";
-            foreach(var fl in functionList.Keys) {
+            foreach (var fl in functionList.Keys) {
                 functionListRetrievers += fl + ",";
             }
-            if (functionListRetrievers.Length==0) {
+            if (functionListRetrievers.Length == 0) {
                 functionListRetrievers = "Non Registered";
             }
             ex.Data.Add("Direct Fuction List", functionListRetrievers);
 
             string fbr = "";
-            foreach(var f in fallbackRegistrationWarnings) {
+            foreach (var f in fallbackRegistrationWarnings) {
                 fbr += f + "," + Environment.NewLine;
             }
-            if (fbr.Length==0) {
+            if (fbr.Length == 0) {
                 fbr = "No fallback Warnings";
             }
             ex.Data.Add("Fallback Warnings", fbr);
