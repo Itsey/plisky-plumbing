@@ -50,7 +50,7 @@
         /// <param name="partialRefName">The partial name of the manifest reference to load as a file.</param>
         /// <param name="assemblyName">The partial name of the assembly where the manifest lives, defaults TestData</param>
         /// <returns></returns>
-        public string GetTestDataFile(string partialRefName, string assemblyName = "TestData") {
+        public string GetTestDataFile(string partialRefName, string assemblyName = "TestData", string forceFilename=null) {
          
 
             #region parameter validation
@@ -64,7 +64,15 @@
             #endregion
 
             assemblyName = assemblyName.ToLowerInvariant();
+
             string fname = NewTemporaryFileName(true);
+            
+            if (forceFilename!=null) {
+                string pth = Path.GetDirectoryName(fname);
+                fname= Path.Combine(pth, forceFilename);
+                RegisterTemporaryFilename(fname);
+            }
+            
             
 
             b.Info.Log($"GetTestDataFile >> Finding ({assemblyName})  reference {partialRefName}");
@@ -122,7 +130,16 @@
             var refAsms = asm.GetReferencedAssemblies();
             b.Info.Log($"Checking {asm.FullName} found refs {refAsms.Length}");
 
-            foreach (var f in refAsms) {
+
+            // TODO: Needs cleaning up, this is a dirty fix for when the passed in assembly is the one that we are looking for
+
+            List<AssemblyName> assemblysToCheckForTestData = new List<AssemblyName>();
+            assemblysToCheckForTestData.Add(asm.GetName());
+            assemblysToCheckForTestData.AddRange(refAsms);
+            
+
+
+            foreach (var f in assemblysToCheckForTestData) {
                 string str = f.FullName.ToLower();
 
                 if ((str.StartsWith(MS_ASM_NAMEPREFIX)) || (str.StartsWith(SYSTEM_ASM_NAMEPREFIX)) || (str.StartsWith(XUNIT_ASM_NAMEPREFIX))) {

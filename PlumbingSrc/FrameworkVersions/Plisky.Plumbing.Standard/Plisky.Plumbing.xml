@@ -418,6 +418,19 @@
             <param name="directory">The directory to search [APP] can be used as the app directory and [APP]\subdir works too. Null uses current directory.  Environment variables are expanded</param>
             <param name="fileName">Optional: Filename that is added in the directory, defaults to machinename.chConfig, appends chConfig to the string you supply if not already there.</param>
         </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.ActualExpandForEnvironmentVariables(System.String)">
+            <summary>
+            OS Abstraction, Environment Variable Expansion
+            </summary>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Plisky.Plumbing.ConfigHub.ActualGetEntryPointPath">
+            <summary>
+            OS Abstraction, get the entry point for this app.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Plisky.Plumbing.ConfigHub.AddMachineFallbackProvider(System.String,System.Func{System.String,System.String})">
             <summary>
             Adds a fallback provider which is called only when the machine that the configuration hub runs on is matched to the machine name specified in the registration
