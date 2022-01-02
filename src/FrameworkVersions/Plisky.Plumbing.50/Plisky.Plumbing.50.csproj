@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Plisky.Plumbing._50</RootNamespace>
+  </PropertyGroup>
+
+  <Import Project="..\..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="Plisky.Diagnostics" Version="3.1.3" />
+  </ItemGroup>
+
+</Project>
