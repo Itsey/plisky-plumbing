@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Plisky.Plumbing</AssemblyName>
+    <RootNamespace>Plisky.Plumbing</RootNamespace>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>c:\files\\keyfiles\plisky_keyfile.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <AssemblyVersion>1.7.0.0</AssemblyVersion>
+    <FileVersion>1.7.0.0</FileVersion>
+    <Version>1.7.0</Version>
+    <Copyright>Plisky 2020</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>C:\Files\Code\git\PliskyPlumbing\PlumbingSrc\FrameworkVersions\Plisky.Plumbing.Standard\Plisky.Plumbing.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+
+  <Import Project="..\..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />
+
+
+  <ItemGroup>
+    <None Remove="Plisky.Plumbing.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="c:\files\keyfiles\plisky_keyfile.snk" Link="plisky_keyfile.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Plisky.Diagnostics" Version="3.1.3" />
+  </ItemGroup>
+
+</Project>
