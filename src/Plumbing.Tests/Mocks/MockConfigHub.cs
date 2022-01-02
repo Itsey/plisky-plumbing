@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Plisky.Plumbing;
-
-namespace Plisky.Test {
-    
+﻿namespace Plisky.Test {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Plisky.Plumbing;
 
     public class MockConfigHub  : ConfigHub{
         private Dictionary<string, string> envVars = new Dictionary<string, string>();

@@ -1,12 +1,12 @@
-﻿using Plisky.Diagnostics;
-using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Security.Cryptography;
-using System.Text;
+﻿namespace Plisky.Plumbing {
+    using Plisky.Diagnostics;
+    using System;
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Security.Cryptography;
+    using System.Text;
 
-namespace Plisky.Plumbing {
 
     public class SaltyPassword {
         protected Bilge b = new Bilge("plisky-plumbing-spw");
@@ -133,14 +133,21 @@ namespace Plisky.Plumbing {
 
         public PasswordSalt Salt;
 
+        /// <summary>
+        /// Returns the password hadh
+        /// </summary>
         public string PasswordSaltHash {
             get {
                 return SaltyPassword.ComputeSaltedHash(m_password, Salt);
             }
         }
 
+        /// <summary>
+        /// Creates a new SaltyPassword with a random pasword
+        /// </summary>
+        /// <returns></returns>
         public static SaltyPassword CreateNew() {
-            SaltyPassword result = new SaltyPassword();
+            var result = new SaltyPassword();
             result.Password = SaltyPassword.CreateRandomPassword(15);
             result.Salt.FillWithSalt();
             return result;
@@ -156,16 +163,29 @@ namespace Plisky.Plumbing {
             return result;
         }
 
+        /// <summary>
+        /// Createa new salty password
+        /// </summary>
+        /// <param name="password">The password to use</param>
+        /// <param name="pws">The salt to use</param>
         public SaltyPassword(SecureString password, PasswordSalt pws) {
             this.Password = password;
             this.Salt.IntegerSalt = pws.IntegerSalt;
         }
 
+        /// <summary>
+        /// Createa new salty password
+        /// </summary>
+        /// <param name="password">The password to use</param>
+        /// <param name="pws">The salt to use</param>
         public SaltyPassword(SecureString password, int pws) {
             this.Password = password;
             this.Salt.IntegerSalt = pws;
         }
 
+        /// <summary>
+        /// Createa new empty salty password
+        /// </summary>
         private SaltyPassword() {
             this.Password = new SecureString();
             this.Salt = new PasswordSalt();

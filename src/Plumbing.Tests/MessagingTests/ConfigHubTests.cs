@@ -82,7 +82,7 @@ namespace Plisky.Test {
             Assert.True(theException.Data.Keys.Count > 0);
             bool matchedFilename = false;
             foreach(var f in theException.Data.Keys) {
-                var str = theException.Data[f].ToString();
+                string str = theException.Data[f].ToString();
                 if (str.Contains("testoleo")) {
                     matchedFilename = true;
                 }
@@ -295,7 +295,7 @@ namespace Plisky.Test {
             sut.AddDirectoryFallbackProvider("C:\\DoesNotExistAtAll", "notfoundfile.xml");
             sut.AddDirectoryFallbackProvider(dirForFile, filename);
 
-            var str = sut.GetSetting("setting1", true);
+            string str = sut.GetSetting("setting1", true);
 
             Assert.Equal("setting1value", str);
         }
@@ -307,7 +307,7 @@ namespace Plisky.Test {
             b.Info.Flow();
 
             var sut = GetConfigHubWithSampleDataFallbackFile(TestResourcesReferences.ConfigHubTestData);
-            var str = sut.GetSetting("setting1", true);
+            string str = sut.GetSetting("setting1", true);
 
             Assert.Equal("setting1value", str);
         }
@@ -327,7 +327,7 @@ namespace Plisky.Test {
             sut.CryptoProvider = mcr;
 
             
-            var str = sut.GetSetting("setting1", true, true);
+            string str = sut.GetSetting("setting1", true, true);
 
             Assert.Equal(PLAINTEXT, str);
         }
@@ -336,7 +336,7 @@ namespace Plisky.Test {
         [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_DirectoryFallbackProvider_Works() {
             const string TESTDATA = "bannana";
-            var fn = uth.NewTemporaryFileName();
+            string fn = uth.NewTemporaryFileName();
 
                        
             var x = new XDocument();
@@ -346,7 +346,7 @@ namespace Plisky.Test {
             ConfigHub sut = new ConfigHub();
             
             sut.AddDirectoryFallbackProvider(Path.GetDirectoryName(fn),Path.GetFileName(fn));
-            var res = sut.GetSetting("monkeyfish", true);
+            string res = sut.GetSetting("monkeyfish", true);
 
             Assert.Equal(TESTDATA, res);
         }
@@ -357,7 +357,7 @@ namespace Plisky.Test {
             Dictionary<string, bool> testSettings = new Dictionary<string, bool>();
 
             // Used to avoid issue where changing collection below causes fault.
-            List<string> settingNames = new List<string>();
+            var settingNames = new List<string>();
 
             for (int i = 0; i < 10; i++) {
                 string next = "testsetting" + i.ToString();
@@ -365,7 +365,7 @@ namespace Plisky.Test {
                 settingNames.Add(next);
             }
 
-            ConfigHub sut = new ConfigHub();
+            var sut = new ConfigHub();
             sut.RegisterFallbackProvider((pName) => {
                 if (testSettings.ContainsKey(pName)) {
                     testSettings[pName] = true;
@@ -373,11 +373,11 @@ namespace Plisky.Test {
                 return null;
             });
 
-            foreach (var v in settingNames) {
+            foreach (string v in settingNames) {
                 sut.GetSetting(v);
             }
 
-            foreach (var test in testSettings.Keys) {
+            foreach (string test in testSettings.Keys) {
                 Assert.True(testSettings[test], "The setting " + test + " was not hit");
             }
         }
@@ -385,8 +385,8 @@ namespace Plisky.Test {
         [Fact]
         [Trait(Traits.Age, Traits.Regression)]
         public void GetConfig_FallbackProvider_CalledForAllStrings() {
-            SampleTestData td = new SampleTestData();
-            ConfigHub sut = new ConfigHub();
+            var td = new SampleTestData();
+            var sut = new ConfigHub();
             int hits = 0;
 
             sut.RegisterFallbackProvider((pname) => {
@@ -627,14 +627,14 @@ namespace Plisky.Test {
         [Fact]
         [Trait(Traits.Age, Traits.Regression)]
         public void Crypto_DecryptorPresent_ChangesValue() {
-            ConfigHub sut = new ConfigHub();
-            MockSimpleCrypto msc = new MockSimpleCrypto();
+            var sut = new ConfigHub();
+            var msc = new MockSimpleCrypto();
             sut.RegisterProvider("CryptoTest", () => {
                 return "xxx";
             });
 
             sut.CryptoProvider = msc;
-            var s = sut.GetSetting<string>("CryptoTest", false, true);
+            string s = sut.GetSetting<string>("CryptoTest", false, true);
 
             Assert.NotNull(s);
             Assert.Equal(msc.AlwaysThisValue, s);
@@ -644,14 +644,14 @@ namespace Plisky.Test {
         [Trait(Traits.Age, Traits.Regression)]
         public void Crypto_DecryptorPresent_NoChangeNonEncrypted() {
             string inputVal = "xxx";
-            ConfigHub sut = new ConfigHub();
-            MockSimpleCrypto msc = new MockSimpleCrypto();
+            var sut = new ConfigHub();
+            var msc = new MockSimpleCrypto();
             sut.RegisterProvider("CryptoTest", () => {
                 return inputVal;
             });
 
             sut.CryptoProvider = msc;
-            var s = sut.GetSetting<string>("CryptoTest", false, false);
+            string s = sut.GetSetting<string>("CryptoTest", false, false);
 
             Assert.Equal(s, inputVal);
         }

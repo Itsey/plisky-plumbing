@@ -93,6 +93,7 @@
     <CodeAnalysisDictionary Include="Dictionary.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="automation\ManualyQueueVersionIncrement.cmd" />
     <None Include="automation\GitReleaseSync.cmd" />
     <None Include="packages.config" />
     <None Include="Packaging\PliskyTesting.nuspec">

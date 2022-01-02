@@ -409,19 +409,7 @@
             }
         }
 
-#if false
 
-           /// Returns true or false.
-        /// </summary>
-        /// <returns>True or False</returns>
-        public bool HeadsTails() {
-            if (m_random.Next(1000) >= 500) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-#endif
 
         /// <summary>
         /// Performs a match on matchData within searchData, checking each of the search strings to see if it contains an isntance

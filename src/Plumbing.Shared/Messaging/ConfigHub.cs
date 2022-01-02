@@ -76,12 +76,13 @@
             b.Info.Log("ConfigHub Instance Online.");
         }
 
-#if NET452
+
         /// <summary>
         /// Adds a fallback handler to look up the settings from App.Config based on the settings name.  The default app config behaviour is that
         /// the search is not case sensitive and that nested settings delimited by $$SETTINGNAME$$ can be used.
         /// </summary>
         public void AddDefaultAppConfigFallback() {
+#if PLISKYNETFRAMEWORK
             b.Verbose.Log("AppConfigFallback Registration Request Made");
 
             RegisterFallbackProvider((pName) => {
@@ -109,10 +110,12 @@
                 }
                 return vmatch;
             });
+#else
+        b.Warning.Log("AppConfigFallback not suportted under net core");
+#endif
         }
 
 
-#endif
 
 
 
@@ -377,14 +380,14 @@
         /// <param name="mustBePresent">Boolean, defaults to false.  Set to true if an exception should be thrown if no value can be found.</param>
         /// <returns>A string based value indicating the setting</returns>
         public string GetSetting(string settingName, bool mustBePresent = false, bool isEncrypted = false) {
-            #region validation
+#region validation
             if (settingName == null) {
                 throw new ArgumentNullException(nameof(settingName), "You must provide a setting name to get a setting");
             }
             if (string.IsNullOrWhiteSpace(settingName)) {
                 throw new ArgumentOutOfRangeException(nameof(settingName), "You must provide a setting name to get a settting");
             }
-            #endregion
+#endregion
 
             settingName = settingName.ToLowerInvariant();
             b.Info.Flow($"{settingName},{mustBePresent}");
@@ -426,7 +429,7 @@
 
         private void PopulateDiagnostics(ConfigHubMissingConfigException ex) {
             string functionListRetrievers = "";
-            foreach (var fl in functionList.Keys) {
+            foreach (string fl in functionList.Keys) {
                 functionListRetrievers += fl + ",";
             }
             if (functionListRetrievers.Length == 0) {
@@ -435,7 +438,7 @@
             ex.Data.Add("Direct Fuction List", functionListRetrievers);
 
             string fbr = "";
-            foreach (var f in fallbackRegistrationWarnings) {
+            foreach (string f in fallbackRegistrationWarnings) {
                 fbr += f + "," + Environment.NewLine;
             }
             if (fbr.Length == 0) {
@@ -449,7 +452,7 @@
 
         public DateTime GetNow() {
             try {
-                DateTime dt = GetSetting<DateTime>(DATETIMESETTINGNAME);
+                var dt = GetSetting<DateTime>(DATETIMESETTINGNAME);
                 if (dt == default(DateTime)) {
                     dt = DateTime.Now;
                 }

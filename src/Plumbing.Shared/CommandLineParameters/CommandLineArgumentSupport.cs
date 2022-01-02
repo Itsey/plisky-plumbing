@@ -194,7 +194,7 @@
             FieldInfo[] allFieldsFromClass = argumentClass.GetFields();
             PropertyInfo[] allPropertiesFromClass = argumentClass.GetProperties();
 
-            List<MemberInfo> result = new List<MemberInfo>();
+            var result = new List<MemberInfo>();
             result.AddRange(allFieldsFromClass);
 
             foreach (var propertyFound in allPropertiesFromClass) {
@@ -250,7 +250,7 @@
                         theValue = theValue.Substring(0, theValue.Length - 1);
                     }
 
-                    var s = theValue.Split(arraySeparatorChar.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    string[] s = theValue.Split(arraySeparatorChar.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
                     // Cant work out a good way to do this so just hardcoding it
                     if (memberType.FullName.ToLower() == "system.int32[]") {
@@ -278,7 +278,7 @@
         /// <summary>
         /// This is the default assignment which attempts to put the value in as an object
         /// </summary>
-        /// <param name="theMember">The field on the object to set</param>
+        /// <param name="fam">Mapping fo field to argument</param>
         /// <param name="theObject">The object containing the field</param>
         /// <param name="argumentValueToParse">The value to set it to.</param>
         private void AssignValueToMember(FieldArgumentMapping fam, object theObject, string argumentValueToParse) {
@@ -293,7 +293,7 @@
                 t = x.PropertyType;
             }
 
-            var o = GetValue(t, argumentValueToParse,fam.ArraySeparatorChar);
+            object o = GetValue(t, argumentValueToParse,fam.ArraySeparatorChar);
             DirectAssginValue(fam, theObject, o);
         }
 

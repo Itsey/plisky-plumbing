@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Plisky.Plumbing._60</RootNamespace>
+    <RootNamespace>Plisky.Plumbing</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>Plisky.Plumbing</AssemblyName>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <Import Project="..\..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />

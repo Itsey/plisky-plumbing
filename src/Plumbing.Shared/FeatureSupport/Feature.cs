@@ -1,9 +1,9 @@
-﻿using Plisky.Diagnostics;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Plisky.Plumbing {
+    using Plisky.Diagnostics;
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
 
-namespace Plisky.Plumbing {
     public class Feature {
         protected Bilge b = new Bilge();
         protected static ConfigHub configResolver = ConfigHub.Current;
@@ -145,7 +145,7 @@ namespace Plisky.Plumbing {
         /// Creates a new instance of the Feature class, giving it a level.
         /// </summary>
         /// <param name="featureName">The Feature Name</param>
-        /// <param name="featureValue">A value for the level, when set to zero the feature is not active.</param>
+        /// <param name="newFeatureLevel">A value for the level, when set to zero the feature is not active.</param>
         public Feature(string featureName, int newFeatureLevel) {
             Name = featureName;
             featureLevel = newFeatureLevel;

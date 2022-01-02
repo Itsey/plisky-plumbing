@@ -14,12 +14,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;PLISKYPLUMB;NETSTANDARD</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>C:\Files\Code\git\PliskyPlumbing\PlumbingSrc\FrameworkVersions\Plisky.Plumbing.Standard\Plisky.Plumbing.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;PLISKYPLUMB;NETSTANDARD</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
 

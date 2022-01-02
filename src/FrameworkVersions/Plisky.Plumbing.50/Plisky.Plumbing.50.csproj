@@ -2,7 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Plisky.Plumbing._50</RootNamespace>
+    <RootNamespace>Plisky.Plumbing</RootNamespace>
+    <AssemblyName>Plisky.Plumbing</AssemblyName>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <Import Project="..\..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />

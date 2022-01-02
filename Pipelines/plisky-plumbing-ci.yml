@@ -67,5 +67,5 @@ steps:
   inputs:
     script: |
       echo Stashing the completed Packages
-      copy $(Build.ArtifactStagingDirectory)\Plisky.PliskyPlumbing*.nupkg C:\files\publishing\ /Y           
+      copy $(Build.ArtifactStagingDirectory)\Plisky.Plumbing*.nupkg C:\files\publishing\ /Y           
       echo Packages Copied.

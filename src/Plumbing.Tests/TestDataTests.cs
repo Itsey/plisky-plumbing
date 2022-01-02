@@ -1,8 +1,7 @@
-﻿using System.IO;
-using Plisky.Diagnostics.Listeners;
-using TestData;
-
-namespace Plisky.Test {
+﻿namespace Plisky.Test {
+    using System.IO;
+    using Plisky.Diagnostics.Listeners;
+    using TestData;
     using System;
     using System.Net;
     using Xunit;
@@ -26,7 +25,7 @@ namespace Plisky.Test {
             b.Info.Flow();
 
             var sut = new UnitTestHelper();
-            var ident = TestResources.GetIdentifiers(TestResourcesReferences.SingleTextFile);
+            string ident = TestResources.GetIdentifiers(TestResourcesReferences.SingleTextFile);
 
             string fname = sut.GetTestDataFile(ident);
             bool fileExistsBeforeCleanup = File.Exists(fname);
@@ -46,7 +45,7 @@ namespace Plisky.Test {
 
             var sut = new UnitTestHelper();
             try {
-                var ident = TestResources.GetIdentifiers(TestResourcesReferences.SingleTextFile);
+                string ident = TestResources.GetIdentifiers(TestResourcesReferences.SingleTextFile);
 
                 string fname = sut.GetTestDataFile(ident);
 
@@ -86,7 +85,7 @@ namespace Plisky.Test {
 
             var sut = new UnitTestHelper();
             try {
-                var ident = TestResources.GetIdentifiers(TestResourcesReferences.SingleTextFile);
+                string ident = TestResources.GetIdentifiers(TestResourcesReferences.SingleTextFile);
 
                 string fname = sut.GetTestDataFile(ident);
 
@@ -144,9 +143,9 @@ namespace Plisky.Test {
         [Trait(Traits.Age, Traits.Regression)]
         [Trait(Traits.Style, Traits.Unit)]
         public void TestData_GenericString_Valid() {
-            var res1 = SampleTestData.GENERIC_STRING1;
-            var res2 = SampleTestData.GENERNIC_STRING2;
-            var res3 = SampleTestData.GENERIC_STRING3;
+            string res1 = SampleTestData.GENERIC_STRING1;
+            string res2 = SampleTestData.GENERNIC_STRING2;
+            string res3 = SampleTestData.GENERIC_STRING3;
 
             Assert.False(string.IsNullOrWhiteSpace(res1));
             Assert.False(string.IsNullOrWhiteSpace(res2));
@@ -163,7 +162,7 @@ namespace Plisky.Test {
             SampleTestData td = new SampleTestData();
             var urls = td.GetTestURLs(10);
             int count = 0;
-            foreach (var u in urls) {
+            foreach (string u in urls) {
                 count++;
                 Assert.False(string.IsNullOrWhiteSpace(u));
                 var f = u.ToLowerInvariant();

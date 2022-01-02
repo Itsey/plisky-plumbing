@@ -223,8 +223,7 @@
         /// <summary>
         /// Removes the registered action from the list of actions.  Pass in the message identifier that was first associated with this action
         /// and the action to have it removed.  If the action is not found in the list nothing happens.
-        /// </summary>
-        /// <param name="targetMessage">The generic message identifier</param>
+        /// </summary>        
         /// <param name="opener">The action that was passed to LookFor</param>
         public virtual void StopLooking<T1>(Action<T1> opener) {
             Type msgType = typeof(T1);
@@ -237,7 +236,7 @@
         /// Removes the registered action from the list of actions.  Pass in the message identifier that was first associated with this action
         /// and the action to have it removed.  If the action is not found in the list nothing happens.
         /// </summary>
-        /// <param name="targetMessage">The string message identifier</param>
+        /// <param name="simpleMessage">The string message identifier</param>
         /// <param name="opener">The action that was passed to LookFor</param>
         public virtual void StopLooking(string simpleMessage, Action<string> opener) {
             Type msgType = typeof(string);

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Plisky.Test {
+﻿namespace Plisky.Test {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
     public class SampleTestData {
         private readonly Random r = new Random();
         

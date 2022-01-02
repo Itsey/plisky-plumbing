@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
-using Plisky.Diagnostics;
-using Plisky.Diagnostics.Listeners;
-using Plisky.Plumbing;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-
-namespace Plisky.Test {
+﻿namespace Plisky.Test {
+    using Newtonsoft.Json.Linq;
+    using Plisky.Diagnostics;
+    using Plisky.Diagnostics.Listeners;
+    using Plisky.Plumbing;
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Net.Http;
+    using System.Threading.Tasks;
 
     internal class Program {
 
@@ -25,8 +24,8 @@ namespace Plisky.Test {
 
             }
 
-            CommandLineArgs cla = new CommandLineArgs();
-            CommandArgumentSupport clas = new CommandArgumentSupport();
+            var cla = new CommandLineArgs();
+            var clas = new CommandArgumentSupport();
             clas.ProcessArguments(cla, args);
             clas.AddExample("TestConsoleApp.exe -x", "Runs it with an x parameter");
             string sa = clas.GenerateShortHelp(cla, "TestConsoleApp");
@@ -56,7 +55,7 @@ namespace Plisky.Test {
             string remoteDriverAccessKey = ConfigHub.Current.GetSetting<string>("RemoteDriverAccessKey", false);
 
             ConfigHub.Current.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\config\\", "tests");
-            var s = ConfigHub.Current.GetSetting<string>("testvalue");
+            string s = ConfigHub.Current.GetSetting<string>("testvalue");
 
             if (s != "CONSTR-Value") {
                 throw new InvalidOperationException();
@@ -66,7 +65,7 @@ namespace Plisky.Test {
 
         private static void LiveFaultOnJSB() {
             ConfigHub.Current.AddDirectoryFallbackProvider("%PLISKYAPPROOT%\\Config\\", "jsb_1000.donotcommit");
-            Feature f = new Feature("JSB_FEATURED_HALLOWEEN", true);
+            var f = new Feature("JSB_FEATURED_HALLOWEEN", true);
             f.SetDateRange(new DateTime(2019, 10, 1), new DateTime(2019, 10, 31), true);
             
         }
