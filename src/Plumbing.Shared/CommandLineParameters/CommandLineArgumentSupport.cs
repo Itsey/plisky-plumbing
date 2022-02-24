@@ -17,7 +17,7 @@
     /// <remarks> Developed in conjunction with Nemingalator, therefore may not be suitable for reuse</remarks>
     public class CommandArgumentSupport {
         protected Bilge b = new Bilge("Plisky-CLAS");
-        
+
         private readonly List<string> argumentErrorsDuringLastParse = new List<string>();
         private readonly List<Tuple<string, string>> Examples = new List<Tuple<string, string>>();
         private string argumentPrefix = "-";
@@ -33,7 +33,7 @@
         /// <summary>
         /// Creates a new instance of the CommandArgumentSupport class.
         /// </summary>
-        public CommandArgumentSupport() {          
+        public CommandArgumentSupport() {
             ArgumentPostfix = string.Empty;
             DateTimeParseFormat = "d-M-yyyy";
         }
@@ -116,7 +116,7 @@
                 #endregion
 
                 b.Info.Log($"ProcessArguments Prefix: {argumentPrefix}, PostFix:{ArgumentPostfix}");
-         
+
                 argumentErrorsDuringLastParse.Clear();
 
                 var argumentClass = argumentValuesClassInstance.GetType();
@@ -242,7 +242,7 @@
 
                 if (memberType.IsArray) {
 
-                    
+
                     if (theValue.StartsWith(arraySeparatorChar)) {
                         theValue = theValue.Substring(1);
                     }
@@ -282,7 +282,7 @@
         /// <param name="theObject">The object containing the field</param>
         /// <param name="argumentValueToParse">The value to set it to.</param>
         private void AssignValueToMember(FieldArgumentMapping fam, object theObject, string argumentValueToParse) {
-           
+
             Type t = null;
             var f = fam.TargetField as FieldInfo;
             if (f != null) {
@@ -293,7 +293,7 @@
                 t = x.PropertyType;
             }
 
-            object o = GetValue(t, argumentValueToParse,fam.ArraySeparatorChar);
+            object o = GetValue(t, argumentValueToParse, fam.ArraySeparatorChar);
             DirectAssginValue(fam, theObject, o);
         }
 
@@ -407,7 +407,7 @@
 
                     nextMapping.ShortDescription = claba.Description;
                     nextMapping.LongDescription = claba.FullDescription;
-                    
+
                     if (claba is CommandLineArgAttribute argAtt) {
 
                         nextMapping.IsDefaultSingleArgument = argAtt.IsSingleParameterDefault;
@@ -456,62 +456,58 @@
         /// <param name="appName">The application name to write out into the help.</param>
         /// <returns>A string of short form comments, with newlines in to format correctly.</returns>
         public string GenerateShortHelp(object argumentValues, string appName) {
-            b.Info.E();
-            try {
+            b.Info.Flow();
+            #region entry code
 
-                #region entry code
+            if (argumentValues == null) { throw new ArgumentNullException("argumentValues", "The argumentVals class can not be null for a call to ProcessArguments"); }
 
-                if (argumentValues == null) { throw new ArgumentNullException("argumentValues", "The argumentVals class can not be null for a call to ProcessArguments"); }
-
-                // validate that the first parameter has the CommandLineArgumentsAttribute set.
-                object[] ats = argumentValues.GetType().GetCustomAttributes(typeof(CommandLineArgumentsAttribute), true);
-                bool cmdLineArgsAttFound = false;
-                if (ats.Length > 0) {
-                    foreach (object o in ats) {
-                        if (o is CommandLineArgumentsAttribute) { cmdLineArgsAttFound = true; break; }
-                    }
+            // validate that the first parameter has the CommandLineArgumentsAttribute set.
+            object[] ats = argumentValues.GetType().GetCustomAttributes(typeof(CommandLineArgumentsAttribute), true);
+            bool cmdLineArgsAttFound = false;
+            if (ats.Length > 0) {
+                foreach (object o in ats) {
+                    if (o is CommandLineArgumentsAttribute) { cmdLineArgsAttFound = true; break; }
                 }
-
-                if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentValues class must have CommandLineArgumentsAttribute specified", "argumentValues"); }
-
-                #endregion
-
-                b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
-
-                Type argumentClass = argumentValues.GetType();
-                var membersToCheckForHelp = GetMembersFromArgumentClassAndVerify(argumentClass);
-
-                // We now have a list of all of the fields that we are expecting to find command line argument
-                // information on.  We run through this trying to find which argument for which field.
-                var fams = new List<FieldArgumentMapping>();
-
-                // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
-                // to the parameters that are passed in.
-
-                PopulateFieldMappings(membersToCheckForHelp, fams);
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
-                sb.Append(appName + " ");
-
-                foreach (FieldArgumentMapping fam in fams) {
-                    if (fam.ParameterMatchesCount > 0) {
-                        sb.Append(fam.ParameterMatches.First() + " ");
-                    }
-                }
-                sb.Append(Environment.NewLine + Environment.NewLine);
-
-                foreach (FieldArgumentMapping fam in fams) {
-                    if (fam.ParameterMatchesCount > 0) {
-                        sb.Append(fam.ParameterMatches.First() + " " + fam.ShortDescription + Environment.NewLine);
-                    }
-                }
-
-                AppendExamples(sb);
-                return sb.ToString();
-            } finally {
-                b.Info.X();
             }
+
+            if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentValues class must have CommandLineArgumentsAttribute specified", "argumentValues"); }
+
+            #endregion
+
+            b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
+
+            var argumentClass = argumentValues.GetType();
+            var membersToCheckForHelp = GetMembersFromArgumentClassAndVerify(argumentClass);
+
+            // We now have a list of all of the fields that we are expecting to find command line argument
+            // information on.  We run through this trying to find which argument for which field.
+            var fams = new List<FieldArgumentMapping>();
+
+            // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
+            // to the parameters that are passed in.
+
+            PopulateFieldMappings(membersToCheckForHelp, fams);
+
+            var sb = new StringBuilder();
+            sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
+            sb.Append(appName + " ");
+
+            foreach (var fam in fams) {
+                if (fam.ParameterMatchesCount > 0) {
+                    sb.Append(fam.ParameterMatches.First() + " ");
+                }
+            }
+            sb.Append(Environment.NewLine + Environment.NewLine);
+
+            foreach (var fam in fams) {
+                if (fam.ParameterMatchesCount > 0) {
+                    sb.Append(fam.ParameterMatches.First() + " " + fam.ShortDescription + Environment.NewLine);
+                }
+            }
+
+            AppendExamples(sb,true);
+            return sb.ToString();
+
         }
 
         /// <summary>
@@ -524,75 +520,75 @@
         /// <param name="appName">The application name</param>
         /// <returns>A string of short form comments</returns>
         public string GenerateHelp(object commandLineArgumentClass, string appName) {
-            b.Info.E();
-            try {
+            b.Info.Flow();
 
-                #region entry code
 
-                if (commandLineArgumentClass == null) { throw new ArgumentNullException("commandLineArgumentClass", "The argumentVals class can not be null for a call to ProcessArguments"); }
+            #region entry code
 
-                // validate that the first parameter has the CommandLineArgumentsAttribute set.
-                object[] ats = commandLineArgumentClass.GetType().GetCustomAttributes(typeof(CommandLineArgumentsAttribute), true);
-                bool cmdLineArgsAttFound = false;
-                if (ats.Length > 0) {
-                    foreach (object o in ats) {
-                        if (o is CommandLineArgumentsAttribute) { cmdLineArgsAttFound = true; break; }
-                    }
+            if (commandLineArgumentClass == null) { throw new ArgumentNullException("commandLineArgumentClass", "The argumentVals class can not be null for a call to ProcessArguments"); }
+
+            // validate that the first parameter has the CommandLineArgumentsAttribute set.
+            object[] ats = commandLineArgumentClass.GetType().GetCustomAttributes(typeof(CommandLineArgumentsAttribute), true);
+            bool cmdLineArgsAttFound = false;
+            if (ats.Length > 0) {
+                foreach (object o in ats) {
+                    if (o is CommandLineArgumentsAttribute) { cmdLineArgsAttFound = true; break; }
                 }
-
-                if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentVals class must have CommandLineArgumentsAttribute specified", "commandLineArgumentClass"); }
-
-                #endregion
-
-                b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
-
-                Type argumentClass = commandLineArgumentClass.GetType();
-
-                List<MemberInfo> getMembersToPopulate = GetMembersFromArgumentClassAndVerify(argumentClass);
-
-                // We now have a list of all of the fields that we are expecting to find command line argument
-                // information on.  We run through this trying to find which argument for which field.
-                List<FieldArgumentMapping> fams = new List<FieldArgumentMapping>();
-
-                // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
-                // to the parameters that are passed in.
-
-                PopulateFieldMappings(getMembersToPopulate, fams);
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
-                sb.Append(appName + " ");
-
-                foreach (FieldArgumentMapping fam in fams) {
-                    if (fam.ParameterMatchesCount > 0) {
-                        sb.Append(fam.ParameterMatches.First() + " ");
-                    }
-                }
-                sb.Append(Environment.NewLine + Environment.NewLine);
-
-                foreach (FieldArgumentMapping fam in fams) {
-                    if (fam.ParameterMatchesCount > 0) {
-                        sb.Append(fam.ParameterMatches.First() + " " + fam.LongDescription + Environment.NewLine);
-                    }
-                }
-                AppendExamples(sb);
-                return sb.ToString();
             }
-            finally {
-                b.Info.X();
+
+            if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentVals class must have CommandLineArgumentsAttribute specified", "commandLineArgumentClass"); }
+
+            #endregion
+
+            b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
+
+            var argumentClass = commandLineArgumentClass.GetType();
+
+            var getMembersToPopulate = GetMembersFromArgumentClassAndVerify(argumentClass);
+
+            // We now have a list of all of the fields that we are expecting to find command line argument
+            // information on.  We run through this trying to find which argument for which field.
+            var fams = new List<FieldArgumentMapping>();
+
+            // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
+            // to the parameters that are passed in.
+
+            PopulateFieldMappings(getMembersToPopulate, fams);
+
+            var sb = new StringBuilder();
+            sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
+            sb.Append(appName + " ");
+
+            foreach (var fam in fams) {
+                if (fam.ParameterMatchesCount > 0) {
+                    sb.Append(fam.ParameterMatches.First() + " ");
+                }
             }
+            sb.Append(Environment.NewLine + Environment.NewLine);
+
+            foreach (var fam in fams) {
+                if (fam.ParameterMatchesCount > 0) {
+                    sb.Append(fam.ParameterMatches.First() + " " + fam.LongDescription + Environment.NewLine);
+                }
+            }
+            AppendExamples(sb);
+            return sb.ToString();
         }
 
-        private void AppendExamples(StringBuilder sb) {
+        private void AppendExamples(StringBuilder sb, bool firstOnly=false) {
             if (Examples.Any()) {
-                sb.AppendLine();
-                sb.AppendLine("*** EXAMPLES ***");
-                sb.AppendLine();
+                if (!firstOnly) {
+                    sb.AppendLine();
+                    sb.AppendLine("*** EXAMPLES ***");
+                    sb.AppendLine();
+                }
                 for (int i = 0; i < Examples.Count(); i++) {
-                    var f = Examples[i];
                     sb.AppendLine("Example: " + Examples[i].Item1);
                     sb.AppendLine(Examples[i].Item2);
                     sb.AppendLine();
+                    if (firstOnly) {
+                        break;
+                    }
                 }
             }
         }
