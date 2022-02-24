@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.7.2.0</version>
+    <version>1.8.1</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -11,6 +11,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Plumbing Functions including Hub, ConfigHub, CommandLineSupport.</description>
     <releaseNotes>
+                  1.8.1 
+                     BugFix - Help now generates examples properly.
                   1.8.0
                      Bugfix - All settings could be returned for a missing setting entry since case Insensitive code fix deployed.
                      Interface Break - No longer supports bilge injection, use Bilge preconfiguration rather than injection.
