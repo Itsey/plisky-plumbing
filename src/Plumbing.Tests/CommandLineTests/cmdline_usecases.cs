@@ -49,7 +49,7 @@ namespace Plisky.Test {
             var suc = new Sean_DateUseCase();
             var clas = new CommandArgumentSupport();
             clas.ArgumentPrefix = "/";
-            
+
             DateTime first = new DateTime(2018, 11, 22);
             DateTime to = new DateTime(2018, 12, 30);
 
@@ -184,13 +184,13 @@ namespace Plisky.Test {
             var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
             for (int i = 1; i <= 5; i++) {
-                clas.AddExample($"Example{i}", $"Details{i}"); 
+                clas.AddExample($"Example{i}", $"Details{i}");
             }
             string longHelp = clas.GenerateHelp(tcc, "Bugger");
             output.WriteLine(longHelp);
             for (int i = 1; i <= 5; i++) {
                 Assert.True(longHelp.Contains($"Example{i}"), $"The #{i} Example was not in long help");
-                Assert.True(longHelp.Contains($"Details{i}"), $"The #{i} Example detail was not in long help"); 
+                Assert.True(longHelp.Contains($"Details{i}"), $"The #{i} Example detail was not in long help");
             }
 
         }
@@ -205,10 +205,10 @@ namespace Plisky.Test {
             }
             string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
             output.WriteLine(shortHelp);
-            for (int i = 1; i <= 5; i++) {
-                Assert.True(shortHelp.Contains($"Example{i}"), $"The #{i} Example was not in long help");
-                Assert.True(shortHelp.Contains($"Details{i}"), $"The #{i} Example detail was not in long help");
-            }
+
+            Assert.True(shortHelp.Contains($"Example{1}"), $"The #{1} Example was not in long help");
+            Assert.True(shortHelp.Contains($"Details{1}"), $"The #{1} Example detail was not in long help");
+
 
         }
 

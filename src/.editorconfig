@@ -123,3 +123,50 @@ dotnet_naming_style.prefix_interface_interface_with_i.required_prefix = I
 dotnet_naming_rule.interface_types_must_be_prefixed_with_i.severity = error
 dotnet_naming_rule.interface_types_must_be_prefixed_with_i.symbols = interface_types
 dotnet_naming_rule.interface_types_must_be_prefixed_with_i.style = prefix_interface_interface_with_i
+
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = silent
+
+# SA1121: Use built-in type alias
+dotnet_diagnostic.SA1121.severity = error
+
+# SA1122: Use string.Empty for empty strings
+dotnet_diagnostic.SA1122.severity = error
+
+# SA1413: Use trailing comma in multi-line initializers
+dotnet_diagnostic.SA1413.severity = silent
+
+# SA1500: Braces for multi-line statements should not share line
+dotnet_diagnostic.SA1500.severity = silent
+
+# SA1623: Property summary documentation should match accessors
+dotnet_diagnostic.SA1623.severity = suggestion
+
+# SA1501: Statement should not be on a single line
+dotnet_diagnostic.SA1501.severity = silent
+
+# SA1505: Opening braces should not be followed by blank line
+dotnet_diagnostic.SA1505.severity = silent
+dotnet_diagnostic.SA1633.severity=silent
+dotnet_diagnostic.SA1634.severity=silent
+dotnet_diagnostic.SA1635.severity=silent
+dotnet_diagnostic.SA1636.severity=silent
+dotnet_diagnostic.SA1637.severity=silent
+dotnet_diagnostic.SA1638.severity=silent
+dotnet_diagnostic.SA1640.severity=silent
+dotnet_diagnostic.SA1641.severity=silent
+dotnet_diagnostic.SA1629.severity=suggestion
+dotnet_diagnostic.SA1117.severity=silent
+dotnet_diagnostic.SA1512.severity=silent
+dotnet_diagnostic.SA1515.severity=silent
+dotnet_diagnostic.SA1310.severity=silent
+dotnet_diagnostic.SA1309.severity=error
+dotnet_diagnostic.SA1302.severity=error
+dotnet_diagnostic.SA1128.severity=silent
+dotnet_diagnostic.SA1401.severity=silent
+dotnet_diagnostic.SA1403.severity=error
+dotnet_diagnostic.SA1306.severity=silent
+
+# SA1503: Braces should not be omitted
+dotnet_diagnostic.SA1503.severity = error

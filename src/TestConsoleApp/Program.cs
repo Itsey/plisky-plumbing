@@ -15,6 +15,7 @@
             Console.WriteLine("online");
             ConfigHubTests();
             // Test
+#if false
             var f = new FeatureHardCodedProvider();
             f.AddFeature(new Feature("TEST", true));
 
@@ -23,12 +24,14 @@
             if (Feature.GetFeatureByName("TEST").Active) {
 
             }
-
+#endif
             var cla = new CommandLineArgs();
             var clas = new CommandArgumentSupport();
             clas.ProcessArguments(cla, args);
             clas.AddExample("TestConsoleApp.exe -x", "Runs it with an x parameter");
+            clas.AddExample("MonkeyFishBannana -x -y", "Does something cool");
             string sa = clas.GenerateShortHelp(cla, "TestConsoleApp");
+            
             Console.WriteLine("sec");
             Console.WriteLine(sa);
 
