@@ -551,37 +551,37 @@
 
                 Type argumentClass = commandLineArgumentClass.GetType();
 
-                List<MemberInfo> getMembersToPopulate = GetMembersFromArgumentClassAndVerify(argumentClass);
+                var getMembersToPopulate = GetMembersFromArgumentClassAndVerify(argumentClass);
 
                 // We now have a list of all of the fields that we are expecting to find command line argument
                 // information on.  We run through this trying to find which argument for which field.
-                List<FieldArgumentMapping> fams = new List<FieldArgumentMapping>();
+                var fams = new List<FieldArgumentMapping>();
 
                 // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
                 // to the parameters that are passed in.
 
                 PopulateFieldMappings(getMembersToPopulate, fams);
 
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
                 sb.Append(appName + " ");
 
-                foreach (FieldArgumentMapping fam in fams) {
+                foreach (var fam in fams) {
                     if (fam.ParameterMatchesCount > 0) {
                         sb.Append(fam.ParameterMatches.First() + " ");
                     }
                 }
                 sb.Append(Environment.NewLine + Environment.NewLine);
 
-                foreach (FieldArgumentMapping fam in fams) {
+                foreach (var fam in fams) {
                     if (fam.ParameterMatchesCount > 0) {
                         sb.Append(fam.ParameterMatches.First() + " " + fam.LongDescription + Environment.NewLine);
                     }
                 }
 
                 foreach (var f in Examples) {
-                    sb.Append("Example: " + Examples[0].Item1 + Environment.NewLine);
-                    sb.Append(Examples[0].Item2 + Environment.NewLine);
+                    sb.Append("Example: " +f.Item1 + Environment.NewLine);
+                    sb.Append(f.Item2 + Environment.NewLine);
                 }
                 return sb.ToString();
             } finally {

@@ -28,6 +28,7 @@
             var clas = new CommandArgumentSupport();
             clas.ProcessArguments(cla, args);
             clas.AddExample("TestConsoleApp.exe -x", "Runs it with an x parameter");
+            clas.AddExample("MonkeyFishBannana -x -y", "Does something cool");
             string sa = clas.GenerateShortHelp(cla, "TestConsoleApp");
             Console.WriteLine("sec");
             Console.WriteLine(sa);
