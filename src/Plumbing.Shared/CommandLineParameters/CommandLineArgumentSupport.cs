@@ -507,10 +507,7 @@
                     }
                 }
 
-                if (Examples.Count > 0) {
-                    sb.Append("Example: " + Examples[0].Item1 + Environment.NewLine);
-                    sb.Append(Examples[0].Item2 + Environment.NewLine);
-                }
+                AppendExamples(sb);
                 return sb.ToString();
             } finally {
                 b.Info.X();
@@ -578,14 +575,25 @@
                         sb.Append(fam.ParameterMatches.First() + " " + fam.LongDescription + Environment.NewLine);
                     }
                 }
-
-                foreach (var f in Examples) {
-                    sb.Append("Example: " + Examples[0].Item1 + Environment.NewLine);
-                    sb.Append(Examples[0].Item2 + Environment.NewLine);
-                }
+                AppendExamples(sb);
                 return sb.ToString();
-            } finally {
+            }
+            finally {
                 b.Info.X();
+            }
+        }
+
+        private void AppendExamples(StringBuilder sb) {
+            if (Examples.Any()) {
+                sb.AppendLine();
+                sb.AppendLine("*** EXAMPLES ***");
+                sb.AppendLine();
+                for (int i = 0; i < Examples.Count(); i++) {
+                    var f = Examples[i];
+                    sb.AppendLine("Example: " + Examples[i].Item1);
+                    sb.AppendLine(Examples[i].Item2);
+                    sb.AppendLine();
+                }
             }
         }
     }

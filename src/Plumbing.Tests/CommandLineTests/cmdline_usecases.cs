@@ -4,12 +4,14 @@ namespace Plisky.Test {
     using Plisky.Plumbing;
     using System;
     using Xunit;
-
+    using Xunit.Abstractions;
 
     public class CommandLineSupport_UseCases {
         private Bilge b = new Bilge();
+        private readonly ITestOutputHelper output;
 
-        public CommandLineSupport_UseCases() {
+        public CommandLineSupport_UseCases(ITestOutputHelper output) {
+            this.output = output;
 
         }
 
@@ -159,6 +161,7 @@ namespace Plisky.Test {
             var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
             string longHelp = clas.GenerateHelp(tcc, "Bugger");
+            output.WriteLine(longHelp);
             Assert.True(longHelp.Contains("Bugger"), "The application name was not present in long help");
         }
 
@@ -169,10 +172,44 @@ namespace Plisky.Test {
             var clas = new CommandArgumentSupport();
 
             string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
-
+            output.WriteLine(shortHelp);
             Assert.True(shortHelp.Contains("Bugger"), "the application name was not present in long help");
             Assert.True(shortHelp.Contains("Pass the build"), "one of the descriptions did not make it into short help");
             Assert.True(shortHelp.Contains("Pass a filename"), "one of the descriptions did not make it into short help");
+        }
+
+        [Fact]
+        [Trait(Traits.Style, Traits.Fresh)]
+        public void TestingKevsUseCase4() {
+            var tcc = new Kev_TFS_UseCase();
+            var clas = new CommandArgumentSupport();
+            for (int i = 1; i <= 5; i++) {
+                clas.AddExample($"Example{i}", $"Details{i}"); 
+            }
+            string longHelp = clas.GenerateHelp(tcc, "Bugger");
+            output.WriteLine(longHelp);
+            for (int i = 1; i <= 5; i++) {
+                Assert.True(longHelp.Contains($"Example{i}"), $"The #{i} Example was not in long help");
+                Assert.True(longHelp.Contains($"Details{i}"), $"The #{i} Example detail was not in long help"); 
+            }
+
+        }
+
+        [Fact]
+        [Trait(Traits.Style, Traits.Fresh)]
+        public void TestingKevsUseCase5() {
+            var tcc = new Kev_TFS_UseCase();
+            var clas = new CommandArgumentSupport();
+            for (int i = 1; i <= 5; i++) {
+                clas.AddExample($"Example{i}", $"Details{i}");
+            }
+            string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
+            output.WriteLine(shortHelp);
+            for (int i = 1; i <= 5; i++) {
+                Assert.True(shortHelp.Contains($"Example{i}"), $"The #{i} Example was not in long help");
+                Assert.True(shortHelp.Contains($"Details{i}"), $"The #{i} Example detail was not in long help");
+            }
+
         }
 
         [Fact]
