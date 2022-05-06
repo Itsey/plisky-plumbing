@@ -5,7 +5,7 @@
 #pragma warning disable IDE1006
 
     /// <summary>
-    /// Defines Common strings for the traits used in xunit tests.
+    /// Defines common strings for the traits used in xunit tests.
     /// </summary>
     public class Traits {
         /// <summary>
@@ -14,11 +14,9 @@
         public const string Age = "Age";
 
         /// <summary>
-        /// Describes the stlye of the test, such as its dependencyt on deployments or database.  Examples are Integration, Unit, Smoke.
+        /// Describes the style of the test, such as its dependency on deployments or database.  Examples are Integration, Unit, Smoke.
         /// </summary>
-
         public const string Style = "Style";
-
 
         /// <summary>
         /// Age - Fresh tests are new, hot off the press.  They are for new features of code and therefore less stable than other types of test.
@@ -31,7 +29,7 @@
         public const string Regression = "Regression";
 
         /// <summary>
-        /// Style - Exploratory tests relate to bleeding edge or features that require environmental configuration, they are often skipped during build testnig
+        /// Style - Exploratory tests relate to bleeding edge or features that require environmental configuration, they are often skipped during build testing
         /// </summary>
         public const string Exploratory = "Exploratory";
 
@@ -46,7 +44,7 @@
         public const string Integration = "Integration";
 
         /// <summary>
-        /// Style - Unit tests involve small isolated lements of the code 
+        /// Style - Unit tests involve small isolated elements of the code 
         /// </summary>
         public const string Unit = "Unit";
 
@@ -57,7 +55,7 @@
         public const string Developer = "Dev";
 
         /// <summary>
-        /// Style - Smoke tests are integrated, but leightweight non distructive - suitable for production tests.
+        /// Style - Smoke tests are integrated, but lightweight non destructive - suitable for production tests.
         /// </summary>
         public const string Smoke = "Smoke";
 
@@ -71,6 +69,16 @@
         /// Style - Manual tests are not designed to be run during automated builds or regression tests.
         /// </summary>
         public const string Manual = "Manual";
+
+        /// <summary>
+        /// Style - In Memory tests are those Integration Tests that instead of invoking the system with cross-process communications, use an in memory test host to run server-side code, e.g. gRPC or .Net ASP Core.
+        /// </summary>
+        public const string InMemory = "InMemory";
+
+        /// <summary>
+        /// Style - Mocked tests are those Tests that isolate the code to be tested by using mocks or stubs.
+        /// </summary>
+        public const string Mocked = "Mocked";
     }
 
 #pragma warning restore IDE1006 // Naming Styles
