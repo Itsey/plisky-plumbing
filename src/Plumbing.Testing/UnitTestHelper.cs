@@ -36,7 +36,6 @@
             ClearUpTestFiles();
         }
 
-
         /// <summary>
         /// GetTestDataFile, returns a test data file stored to the file system and read from the referenced assembly.  To use this pass in the partial name of the
         /// embedded resource and a partial name of a referenced assembly of the current appdomain.  This defaults to "TestData", therefore if you create a project
@@ -44,9 +43,8 @@
         /// </summary>
         /// <param name="partialRefName">The partial name of the manifest reference to load as a file.</param>
         /// <param name="assemblyName">The partial name of the assembly where the manifest lives, defaults TestData</param>
-        /// <returns></returns>
-        public string GetTestDataFile(string partialRefName, string assemblyName = "TestData", string forceFilename=null) {
-         
+        /// <returns>The contents of the resource file</returns>
+        public string GetTestDataFromFile(string partialRefName, string assemblyName = "TestData") {
 
             #region parameter validation
             if (string.IsNullOrWhiteSpace(partialRefName)) {
@@ -60,15 +58,6 @@
 
             assemblyName = assemblyName.ToLowerInvariant();
 
-            string fname = NewTemporaryFileName(true);
-            
-            if (forceFilename!=null) {
-                string pth = Path.GetDirectoryName(fname);
-                fname= Path.Combine(pth, forceFilename);
-                RegisterTemporaryFilename(fname);
-            }
-            
-            
 
             b.Info.Log($"GetTestDataFile >> Finding ({assemblyName})  reference {partialRefName}");
 
@@ -98,16 +87,39 @@
                 throw new InvalidOperationException("Unable to find the resource");
             }
 
+            string result;
             using (var stream = matchedTestData.GetManifestResourceStream(resMatched)) {
                 if (stream != null) {
                     var reader = new StreamReader(stream);
-                    string rd = reader.ReadToEnd();
-                    File.WriteAllText(fname, rd);
+                    result = reader.ReadToEnd();                    
                 } else {
                     b.Warning.Log("Could not find stream, failing to update the file. Exception being thrown");
                     throw new InvalidOperationException("The stream could not be read from the matched resource. No data.");
                 }
             }
+            return result;
+        }
+
+        /// <summary>
+        /// GetTestDataFile, returns a test data file stored to the file system and read from the referenced assembly.  To use this pass in the partial name of the
+        /// embedded resource and a partial name of a referenced assembly of the current appdomain.  This defaults to "TestData", therefore if you create a project
+        /// called TestData, reference it in your unit test project and load a class from it the match will work.
+        /// </summary>
+        /// <param name="partialRefName">The partial name of the manifest reference to load as a file.</param>
+        /// <param name="assemblyName">The partial name of the assembly where the manifest lives, defaults TestData</param>
+        /// <returns>A temporary filename with the contents of the resource file</returns>
+        public string GetTestDataFile(string partialRefName, string assemblyName = "TestData", string forceFilename=null) {
+         
+            string rd = GetTestDataFromFile(partialRefName, assemblyName);
+
+            string fname = NewTemporaryFileName(true);
+
+            if (forceFilename != null) {
+                string pth = Path.GetDirectoryName(fname);
+                fname = Path.Combine(pth, forceFilename);
+                RegisterTemporaryFilename(fname);
+            }
+            File.WriteAllText(fname, rd);
 
             b.Verbose.Log($"Returns {fname}");
             return fname;
