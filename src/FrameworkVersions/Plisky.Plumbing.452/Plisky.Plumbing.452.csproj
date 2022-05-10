@@ -35,12 +35,10 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>plisky_publickey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Plisky.Diagnostics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b10b71488634d122, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\Plisky.Diagnostics.3.1.3\lib\net452\Plisky.Diagnostics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -60,11 +58,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\..\Fsync\plisky_keyfile.snk">
-      <Link>plisky_keyfile.snk</Link>
-    </None>
-    <None Include="packages.config" />
-    <None Include="plisky_publickey.snk" />
+    <PackageReference Include="Plisky.Diagnostics">
+      <Version>3.1.5</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="..\..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

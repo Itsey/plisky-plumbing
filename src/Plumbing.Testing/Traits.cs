@@ -8,6 +8,9 @@
     /// Defines common strings for the traits used in xunit tests.
     /// </summary>
     public class Traits {
+        internal const string AssemblyName = "Plisky.Testing";
+
+        public const string Category = "Category";
         /// <summary>
         /// Describes the age of the test, Exploratory, Fresh, Regression, Interface
         /// </summary>
@@ -79,6 +82,10 @@
         /// Style - Mocked tests are those Tests that isolate the code to be tested by using mocks or stubs.
         /// </summary>
         public const string Mocked = "Mocked";
+
+        public const string Isolated = "Isolated";
+
+        
     }
 
 #pragma warning restore IDE1006 // Naming Styles

@@ -12,5 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)SampleTestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Traits.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UnitTestHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XUnitAttributes.cs" />
   </ItemGroup>
 </Project>

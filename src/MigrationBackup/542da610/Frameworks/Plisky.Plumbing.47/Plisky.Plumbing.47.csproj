@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1B7CC383-E196-49BF-A824-4EC1AAEBEE4D}</ProjectGuid>
+    <ProjectGuid>{76C8F9F5-05F2-4251-BE0C-50ABC65F80F9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Plisky.Testing</RootNamespace>
-    <AssemblyName>Plisky.Testing</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <RootNamespace>Plisky.Plumbing</RootNamespace>
+    <AssemblyName>Plisky.Plumbing</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,9 +30,20 @@
     <DefineConstants>TRACE;PLISKYNETFRAMEWORK</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Plisky.Plumbing.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\..\..\..\..\Fsync\plisky_keyfile.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Plisky.Diagnostics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b10b71488634d122, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Packages\Plisky.Diagnostics.3.1.5\lib\net462\Plisky.Diagnostics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,19 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\_Dependencies\versions\CommonPliskyTesting.cs">
-      <Link>Properties\CommonPliskyTesting.cs</Link>
+    <Compile Include="..\..\_Dependencies\versions\CommonPlumbing.cs">
+      <Link>Properties\CommonPlumbing.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Plisky.Diagnostics">
-      <Version>3.1.5</Version>
-    </PackageReference>
-    <PackageReference Include="xunit.core">
-      <Version>2.4.1</Version>
-    </PackageReference>
+    <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\..\Plumbing.Testing\Plumbing.Testing.projitems" Label="Shared" />
+  <Import Project="..\..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

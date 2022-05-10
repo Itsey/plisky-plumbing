@@ -49,9 +49,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.48", "Frame
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing", "Plisky.Plumbing\Plisky.Plumbing.csproj", "{EF45F241-140C-4002-A5F9-551E88F06445}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.60", "FrameworkVersions\Plisky.Plumbing.60\Plisky.Plumbing.60.csproj", "{76AB6D9C-A375-4A5D-ABEA-9E9A992098FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing.60", "FrameworkVersions\Plisky.Plumbing.60\Plisky.Plumbing.60.csproj", "{76AB6D9C-A375-4A5D-ABEA-9E9A992098FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.50", "FrameworkVersions\Plisky.Plumbing.50\Plisky.Plumbing.50.csproj", "{8F2A2097-9FC0-4634-A6E9-F6BA03C3EBE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing.50", "FrameworkVersions\Plisky.Plumbing.50\Plisky.Plumbing.50.csproj", "{8F2A2097-9FC0-4634-A6E9-F6BA03C3EBE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.60", "FrameworkVersions\Plisky.Testing.60\Plisky.Testing.60.csproj", "{CC431451-6385-45A0-A14C-429568B31425}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -66,6 +68,7 @@ Global
 		Plumbing.Shared\Plumbing.Shared.projitems*{8f2a2097-9fc0-4634-a6e9-f6ba03c3ebe4}*SharedItemsImports = 5
 		Plumbing.Shared\Plumbing.Shared.projitems*{a94681e7-2d80-4c40-9d6c-0db22e5823eb}*SharedItemsImports = 13
 		Plumbing.Shared\Plumbing.Shared.projitems*{aab5d441-24a1-4b45-ae82-a041fee3475a}*SharedItemsImports = 4
+		Plumbing.Testing\Plumbing.Testing.projitems*{cc431451-6385-45a0-a14c-429568b31425}*SharedItemsImports = 5
 		Plumbing.Shared\Plumbing.Shared.projitems*{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}*SharedItemsImports = 4
 		Plumbing.Shared\Plumbing.Shared.projitems*{d37a44a0-db6e-4945-b904-7aa00c2d8e34}*SharedItemsImports = 4
 		Plumbing.Testing\Plumbing.Testing.projitems*{d85b0bf8-248c-4a53-a874-52d4c81d5e95}*SharedItemsImports = 4
@@ -170,6 +173,12 @@ Global
 		{8F2A2097-9FC0-4634-A6E9-F6BA03C3EBE4}.Develop|Any CPU.Build.0 = Debug|Any CPU
 		{8F2A2097-9FC0-4634-A6E9-F6BA03C3EBE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F2A2097-9FC0-4634-A6E9-F6BA03C3EBE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC431451-6385-45A0-A14C-429568B31425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC431451-6385-45A0-A14C-429568B31425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC431451-6385-45A0-A14C-429568B31425}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC431451-6385-45A0-A14C-429568B31425}.Develop|Any CPU.Build.0 = Debug|Any CPU
+		{CC431451-6385-45A0-A14C-429568B31425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC431451-6385-45A0-A14C-429568B31425}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,6 +195,7 @@ Global
 		{CD65FD48-0C2B-4F52-B74A-ABFAA4DA0C5A} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 		{76AB6D9C-A375-4A5D-ABEA-9E9A992098FE} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 		{8F2A2097-9FC0-4634-A6E9-F6BA03C3EBE4} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
+		{CC431451-6385-45A0-A14C-429568B31425} = {F3E804B5-CBD0-49B8-B150-38D7C0CFEFFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FDF37E7-BBEF-4A79-8975-0DDA5195F4BC}

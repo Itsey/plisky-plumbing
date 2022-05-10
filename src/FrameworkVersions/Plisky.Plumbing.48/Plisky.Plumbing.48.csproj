@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Plisky.Diagnostics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b10b71488634d122, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\Plisky.Diagnostics.3.1.3\lib\net48\Plisky.Diagnostics.dll</HintPath>
+      <HintPath>..\..\..\Packages\Plisky.Diagnostics.3.1.5\lib\net48\Plisky.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

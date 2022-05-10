@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Testing</id>
-    <version>1.2.2.0</version>
+    <version>1.3.0.0</version>
     <title>Plisky Infrastructure Testing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -11,6 +11,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plisky Unit Testing Support, TestData TestSupport and Test File Handling.</description>
     <releaseNotes>
+      1.3.0 - Addition of additional attributes to ease test identification.  
+              Addition of get test datafile as string.
       1.2.2 - Bugfix when the assembly that the datafile is in is the current assembly.  
             - Add passing filename to gettestfile to specify correct filename.
       1.2.0 - Interface Breaks for naming consistancy and code style. Soz.
@@ -23,10 +25,22 @@
       1.0.1 License Update
       1.0 Initial Release, Moving out of Plisky.Plumbing and into its own Assembly
     </releaseNotes>
-    <copyright>Copyright 2018</copyright>
-    <tags>plisky plumbing hub messaging command line commandline</tags>
+    <copyright>Copyright 2022</copyright>
+    <tags>plisky testing unittesting</tags>
     <dependencies>
-      <dependency id="Plisky.Diagnostics" version="2.8.0"/>
+      <group targetFramework=".NETFramework4.5.2" />
+      <group targetFramework=".NETFramework4.6.2" />
+      <group targetFramework=".NETFramework4.8" />
+      <group targetFramework=".NETFramework4.7.2" />
+      <group targetFramework=".NETStandard2.0" />
+      <group targetFramework="net5.0" />
+      <group targetFramework="net6.0" />
+      
+      <dependency id="Plisky.Diagnostics" version="3.1.0"/>
+      <dependency id="Plisky.Diagnostics" version="3.1.0"/>
+      <dependency id="xunit.abstractions" Version="2.0.3" />
+      <dependency id="xunit.core" Version="2.4.1" />
+      <dependency id="xunit.extensibility.core" Version="2.4.1" />
     </dependencies>
   </metadata>
   <files>
@@ -47,6 +61,10 @@
     <!-- Net Standard 2.0-->
     <file src="..\..\FrameworkVersions\Plisky.Testing.Standard\Bin\$configuration$\netstandard2.0\Plisky.Testing.Dll" target="lib\netstandard2.0\"/>
     <file src="..\..\FrameworkVersions\Plisky.Testing.Standard\Bin\$configuration$\netstandard2.0\Plisky.Testing.Pdb" target="lib\netstandard2.0\"/>
+
+    <!-- Net 60-->
+    <file src="..\..\FrameworkVersions\Plisky.Testing.60\Bin\$configuration$\net6.0\Plisky.Testing.Dll" target="lib\net6.0\"/>
+    <file src="..\..\FrameworkVersions\Plisky.Testing.60\Bin\$configuration$\net6.0\Plisky.Testing.Pdb" target="lib\net6.0\"/>
 
   </files>
 
