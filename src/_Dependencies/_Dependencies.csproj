@@ -128,7 +128,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="automation\AutoVersion.txt" />
+    <Content Include="automation\AutoVersion_Testing.txt" />
+    <Content Include="automation\AutoVersion_Plumbing.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -20,27 +20,26 @@
       1.1.3 - Fixed bug whereby ref from nuget altered behaviour compared with local testing.  GetTestDataFile should now work as expected.
       1.1.2 - Debugging added to new GetTestDataFile implementaiton.
       1.1.1 - Interface Break - TestData renamed to SampleTestData, new Feature - GetTestDataFile(string ident)
-      1.0.3 Corrects fault in standard versioning
-      1.0.2 Adds Bilge Injection
-      1.0.1 License Update
-      1.0 Initial Release, Moving out of Plisky.Plumbing and into its own Assembly
+      1.0.3 - Corrects fault in standard versioning
+      1.0.2 - Adds Bilge Injection
+      1.0.1 - License Update
+      1.0   - Initial Release, Moving out of Plisky.Plumbing and into its own Assembly
     </releaseNotes>
     <copyright>Copyright 2022</copyright>
     <tags>plisky testing unittesting</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5.2" />
-      <group targetFramework=".NETFramework4.6.2" />
-      <group targetFramework=".NETFramework4.8" />
+      <group targetFramework=".NETFramework4.6.2" />      
       <group targetFramework=".NETFramework4.7.2" />
-      <group targetFramework=".NETStandard2.0" />
-      <group targetFramework="net5.0" />
+      <group targetFramework=".NETStandard2.0" />      
       <group targetFramework="net6.0" />
-      
+      <group>
       <dependency id="Plisky.Diagnostics" version="3.1.0"/>
       <dependency id="Plisky.Diagnostics" version="3.1.0"/>
-      <dependency id="xunit.abstractions" Version="2.0.3" />
-      <dependency id="xunit.core" Version="2.4.1" />
-      <dependency id="xunit.extensibility.core" Version="2.4.1" />
+      <dependency id="xunit.abstractions" version="2.0.3" />
+      <dependency id="xunit.core" version="2.4.1" />
+      <dependency id="xunit.extensibility.core" version="2.4.1" />
+      </group>
     </dependencies>
   </metadata>
   <files>

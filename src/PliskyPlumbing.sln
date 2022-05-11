@@ -43,6 +43,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B722207E-3EA5-48EB-91C0-E495D09F2032}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		..\Build\plisky-plumbing-ci.yml = ..\Build\plisky-plumbing-ci.yml
+		..\Build\plisky-plumbing-release.yml = ..\Build\plisky-plumbing-release.yml
+		..\Build\plisky-testing-ci.yml = ..\Build\plisky-testing-ci.yml
+		..\Build\plisky-testing-release.yml = ..\Build\plisky-testing-release.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Plumbing.48", "FrameworkVersions\Plisky.Plumbing.48\Plisky.Plumbing.48.csproj", "{CD65FD48-0C2B-4F52-B74A-ABFAA4DA0C5A}"
@@ -53,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing.60", "Frame
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing.50", "FrameworkVersions\Plisky.Plumbing.50\Plisky.Plumbing.50.csproj", "{8F2A2097-9FC0-4634-A6E9-F6BA03C3EBE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.60", "FrameworkVersions\Plisky.Testing.60\Plisky.Testing.60.csproj", "{CC431451-6385-45A0-A14C-429568B31425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Testing.60", "FrameworkVersions\Plisky.Testing.60\Plisky.Testing.60.csproj", "{CC431451-6385-45A0-A14C-429568B31425}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

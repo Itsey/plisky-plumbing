@@ -12,12 +12,3 @@
 **/src/**/Plisky.Plumbing.60.csproj|StdAssembly
 **/src/**/Plisky.Plumbing.60.csproj|StdInformational
 **/src/**/Plisky.Plumbing.60.csproj|StdFile
-**/src/**/CommonPliskyTesting.cs|NetAssembly
-**/src/**/CommonPliskyTesting.cs|NetFile
-**/src/**/CommonPliskyTesting.cs|NetInformational
-**/src/**/PliskyTesting.nuspec|Nuspec
-**/src/**/PliskyTesting.nuspec|TextFile
-**/src/**/Plisky.Testing.Standard.csproj|StdAssembly
-**/src/**/Plisky.Testing.Standard.csproj|StdInformational
-**/src/**/Plisky.Testing.Standard.csproj|StdFile
-
