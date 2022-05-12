@@ -9,6 +9,7 @@
     /// </summary>
     public class Traits {
         internal const string AssemblyName = "Plisky.Testing";
+        internal const string Namespace = "Plisky.Test";
 
         public const string Category = "Category";
         /// <summary>

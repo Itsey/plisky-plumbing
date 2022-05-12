@@ -53,27 +53,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing.60", "Frame
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Plumbing.50", "FrameworkVersions\Plisky.Plumbing.50\Plisky.Plumbing.50.csproj", "{8F2A2097-9FC0-4634-A6E9-F6BA03C3EBE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plisky.Testing.60", "FrameworkVersions\Plisky.Testing.60\Plisky.Testing.60.csproj", "{CC431451-6385-45A0-A14C-429568B31425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plisky.Testing.60", "FrameworkVersions\Plisky.Testing.60\Plisky.Testing.60.csproj", "{CC431451-6385-45A0-A14C-429568B31425}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Plumbing.Testing\Plumbing.Testing.projitems*{1b7cc383-e196-49bf-a824-4ec1aaebee4d}*SharedItemsImports = 4
-		Plumbing.Testing\Plumbing.Testing.projitems*{3c202ac2-6155-4829-a73d-8468af639b77}*SharedItemsImports = 5
-		Plumbing.Testing\Plumbing.Testing.projitems*{47365c71-bf09-4eb0-b4a4-325a347d39c5}*SharedItemsImports = 4
-		Plumbing.Testing\Plumbing.Testing.projitems*{70d3dacf-379c-4105-9df4-995023b8602e}*SharedItemsImports = 13
-		Plumbing.Shared\Plumbing.Shared.projitems*{73287a0e-5084-4e71-a7f0-676544b068f6}*SharedItemsImports = 5
-		Plumbing.Shared\Plumbing.Shared.projitems*{76ab6d9c-a375-4a5d-abea-9e9a992098fe}*SharedItemsImports = 5
-		Plumbing.Shared\Plumbing.Shared.projitems*{76c8f9f5-05f2-4251-be0c-50abc65f80f9}*SharedItemsImports = 4
-		Plumbing.Testing\Plumbing.Testing.projitems*{79784982-59c1-46a4-9bb2-bfd83fa8fe6e}*SharedItemsImports = 4
-		Plumbing.Shared\Plumbing.Shared.projitems*{8f2a2097-9fc0-4634-a6e9-f6ba03c3ebe4}*SharedItemsImports = 5
-		Plumbing.Shared\Plumbing.Shared.projitems*{a94681e7-2d80-4c40-9d6c-0db22e5823eb}*SharedItemsImports = 13
-		Plumbing.Shared\Plumbing.Shared.projitems*{aab5d441-24a1-4b45-ae82-a041fee3475a}*SharedItemsImports = 4
-		Plumbing.Testing\Plumbing.Testing.projitems*{cc431451-6385-45a0-a14c-429568b31425}*SharedItemsImports = 5
-		Plumbing.Shared\Plumbing.Shared.projitems*{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}*SharedItemsImports = 4
-		Plumbing.Shared\Plumbing.Shared.projitems*{d37a44a0-db6e-4945-b904-7aa00c2d8e34}*SharedItemsImports = 4
-		Plumbing.Testing\Plumbing.Testing.projitems*{d85b0bf8-248c-4a53-a874-52d4c81d5e95}*SharedItemsImports = 4
-		Plumbing.Shared\Plumbing.Shared.projitems*{ef45f241-140c-4002-a5f9-551e88f06445}*SharedItemsImports = 5
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Develop|Any CPU = Develop|Any CPU
@@ -199,5 +181,22 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FDF37E7-BBEF-4A79-8975-0DDA5195F4BC}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Plumbing.Testing\Plumbing.Testing.projitems*{1b7cc383-e196-49bf-a824-4ec1aaebee4d}*SharedItemsImports = 4
+		Plumbing.Testing\Plumbing.Testing.projitems*{3c202ac2-6155-4829-a73d-8468af639b77}*SharedItemsImports = 5
+		Plumbing.Testing\Plumbing.Testing.projitems*{47365c71-bf09-4eb0-b4a4-325a347d39c5}*SharedItemsImports = 4
+		Plumbing.Testing\Plumbing.Testing.projitems*{70d3dacf-379c-4105-9df4-995023b8602e}*SharedItemsImports = 13
+		Plumbing.Shared\Plumbing.Shared.projitems*{73287a0e-5084-4e71-a7f0-676544b068f6}*SharedItemsImports = 5
+		Plumbing.Shared\Plumbing.Shared.projitems*{76ab6d9c-a375-4a5d-abea-9e9a992098fe}*SharedItemsImports = 5
+		Plumbing.Shared\Plumbing.Shared.projitems*{76c8f9f5-05f2-4251-be0c-50abc65f80f9}*SharedItemsImports = 4
+		Plumbing.Shared\Plumbing.Shared.projitems*{8f2a2097-9fc0-4634-a6e9-f6ba03c3ebe4}*SharedItemsImports = 5
+		Plumbing.Shared\Plumbing.Shared.projitems*{a94681e7-2d80-4c40-9d6c-0db22e5823eb}*SharedItemsImports = 13
+		Plumbing.Shared\Plumbing.Shared.projitems*{aab5d441-24a1-4b45-ae82-a041fee3475a}*SharedItemsImports = 4
+		Plumbing.Testing\Plumbing.Testing.projitems*{cc431451-6385-45a0-a14c-429568b31425}*SharedItemsImports = 5
+		Plumbing.Shared\Plumbing.Shared.projitems*{cd65fd48-0c2b-4f52-b74a-abfaa4da0c5a}*SharedItemsImports = 4
+		Plumbing.Shared\Plumbing.Shared.projitems*{d37a44a0-db6e-4945-b904-7aa00c2d8e34}*SharedItemsImports = 4
+		Plumbing.Testing\Plumbing.Testing.projitems*{d85b0bf8-248c-4a53-a874-52d4c81d5e95}*SharedItemsImports = 4
+		Plumbing.Shared\Plumbing.Shared.projitems*{ef45f241-140c-4002-a5f9-551e88f06445}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
