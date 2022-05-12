@@ -58,6 +58,9 @@
     <Compile Include="..\_Dependencies\versions\CommonPlumbing.cs">
       <Link>Properties\CommonPlumbing.cs</Link>
     </Compile>
+    <Compile Include="AttributeTests\ClassUnderTest.cs" />
+    <Compile Include="AttributeTests\AttributeHelper.cs" />
+    <Compile Include="AttributeTests\AttributeTests.cs" />
     <Compile Include="FeatureTests\FeatureProviderTests.cs" />
     <Compile Include="FeatureTests\FeatureTests.cs" />
     <Compile Include="Mocks\MockConfigHub.cs" />
@@ -90,6 +93,10 @@
       <Project>{76c8f9f5-05f2-4251-be0c-50abc65f80f9}</Project>
       <Name>Plisky.Plumbing.47</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FrameworkVersions\Plisky.Testing.47\Plisky.Testing.47.csproj">
+      <Project>{d85b0bf8-248c-4a53-a874-52d4c81d5e95}</Project>
+      <Name>Plisky.Testing.47</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestData\TestData.csproj">
       <Project>{E22D0EDB-0D91-4E99-BA59-913C0D57A50A}</Project>
       <Name>TestData</Name>
@@ -118,7 +125,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  <Import Project="..\Plumbing.Testing\Plumbing.Testing.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
