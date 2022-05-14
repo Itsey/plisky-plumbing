@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Text;
 
@@ -14,16 +15,7 @@
     public sealed class UnitTestHelper {
         private List<string> m_storedFilenames = new List<string>();
         private Bilge b = new Bilge("Plisky-UnitTestHelper");
-        private bool handlerAdded = false;
-
-        public Bilge TestBilge {
-            get {
-                return b;
-            }
-        }
-
-
-
+        
         /// <summary>
         /// Creates a new instance of the UnitTestHelper class
         /// </summary>
@@ -60,14 +52,9 @@
 
 
             b.Info.Log($"GetTestDataFile >> Finding ({assemblyName})  reference {partialRefName}");
-
-            var asm = Assembly.GetCallingAssembly();
-            var matchedTestData = GetMatchedTestDataFromAssembly(asm, assemblyName);
-            if (matchedTestData == null) {
-                matchedTestData = GetMatchedTestDataFromAssembly(Assembly.GetExecutingAssembly(), assemblyName);
-
-            }
-
+            
+            var matchedTestData = GetMatchedTestDataFromAssembly(assemblyName);
+          
             if (matchedTestData == null) {
                 b.Warning.Log("Unable to Match assembly, Exception being thrown");
                 throw new InvalidOperationException($"No referenced assembly {assemblyName}.  Did you reference and use the assembly in the test project?");
@@ -126,27 +113,16 @@
         }
 
         //Assembly name is already tolower.
-        private Assembly GetMatchedTestDataFromAssembly(Assembly asm, string assemblyName) {
+        private Assembly GetMatchedTestDataFromAssembly(string assemblyName) {
             #region constants
             const string MS_ASM_NAMEPREFIX = "microsoft";
             const string SYSTEM_ASM_NAMEPREFIX = "system";
             const string XUNIT_ASM_NAMEPREFIX = "xunit";
             #endregion
-
-            Assembly result = null;
-            var refAsms = asm.GetReferencedAssemblies();
-            b.Info.Log($"Checking {asm.FullName} found refs {refAsms.Length}");
-
-
-            // TODO: Needs cleaning up, this is a dirty fix for when the passed in assembly is the one that we are looking for
-
-            List<AssemblyName> assemblysToCheckForTestData = new List<AssemblyName>();
-            assemblysToCheckForTestData.Add(asm.GetName());
-            assemblysToCheckForTestData.AddRange(refAsms);
             
+            var refAsms = AppDomain.CurrentDomain.GetAssemblies(); 
 
-
-            foreach (var f in assemblysToCheckForTestData) {
+            foreach (var f in refAsms) {
                 string str = f.FullName.ToLower();
 
                 if ((str.StartsWith(MS_ASM_NAMEPREFIX)) || (str.StartsWith(SYSTEM_ASM_NAMEPREFIX)) || (str.StartsWith(XUNIT_ASM_NAMEPREFIX))) {
@@ -156,18 +132,11 @@
 
 
                 if (str.Contains(assemblyName)) {
-                    foreach (var mtcher in AppDomain.CurrentDomain.GetAssemblies()) {
-                        b.Verbose.Log($"Checking {str} against {mtcher.FullName}");
-                        if (mtcher.FullName == f.FullName) {
-                            result = mtcher;
-                        }
-                    }
-
-                    break;
+                    return f;                    
                 }
             }
 
-            return result;
+            return null;
         }
 
         /// <summary>
