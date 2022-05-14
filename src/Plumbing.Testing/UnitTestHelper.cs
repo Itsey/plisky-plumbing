@@ -77,8 +77,10 @@
             string result;
             using (var stream = matchedTestData.GetManifestResourceStream(resMatched)) {
                 if (stream != null) {
-                    var reader = new StreamReader(stream);
-                    result = reader.ReadToEnd();                    
+
+                    using (var reader = new StreamReader(stream)) {
+                        result = reader.ReadToEnd();
+                    }
                 } else {
                     b.Warning.Log("Could not find stream, failing to update the file. Exception being thrown");
                     throw new InvalidOperationException("The stream could not be read from the matched resource. No data.");
