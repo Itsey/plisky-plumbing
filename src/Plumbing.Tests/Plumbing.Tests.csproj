@@ -58,6 +58,9 @@
     <Compile Include="..\_Dependencies\versions\CommonPlumbing.cs">
       <Link>Properties\CommonPlumbing.cs</Link>
     </Compile>
+    <Compile Include="AttributeTests\ClassUnderTest.cs" />
+    <Compile Include="AttributeTests\AttributeHelper.cs" />
+    <Compile Include="AttributeTests\AttributeTests.cs" />
     <Compile Include="FeatureTests\FeatureProviderTests.cs" />
     <Compile Include="FeatureTests\FeatureTests.cs" />
     <Compile Include="Mocks\MockConfigHub.cs" />
@@ -89,6 +92,10 @@
     <ProjectReference Include="..\FrameworkVersions\Plisky.Plumbing.47\Plisky.Plumbing.47.csproj">
       <Project>{76c8f9f5-05f2-4251-be0c-50abc65f80f9}</Project>
       <Name>Plisky.Plumbing.47</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkVersions\Plisky.Testing.47\Plisky.Testing.47.csproj">
+      <Project>{d85b0bf8-248c-4a53-a874-52d4c81d5e95}</Project>
+      <Name>Plisky.Testing.47</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestData\TestData.csproj">
       <Project>{E22D0EDB-0D91-4E99-BA59-913C0D57A50A}</Project>

@@ -69,3 +69,17 @@ steps:
       echo Stashing the completed Packages
       copy $(Build.ArtifactStagingDirectory)\Plisky.Plumbing*.nupkg C:\files\publishing\ /Y           
       echo Packages Copied.
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/PliskyTesting.nuspec;'
+    versioningScheme: 'off'
+    includeSymbols: true
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo Stashing the completed Plisky Testing Packages
+      copy $(Build.ArtifactStagingDirectory)\Plisky.Testing*.nupkg C:\files\publishing\ /Y           
+      echo Plisky Testing Packages Copied.
