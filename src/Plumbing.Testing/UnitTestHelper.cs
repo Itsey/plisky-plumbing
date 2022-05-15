@@ -96,6 +96,7 @@
         /// </summary>
         /// <param name="partialRefName">The partial name of the manifest reference to load as a file.</param>
         /// <param name="assemblyName">The partial name of the assembly where the manifest lives, defaults TestData</param>
+        /// <param name="forceFilename">Specifies the filename of the generated file, if it starts wtih *. then only the extension will be set</param>
         /// <returns>A temporary filename with the contents of the resource file</returns>
         public string GetTestDataFile(string partialRefName, string assemblyName = "TestData", string forceFilename=null) {
          
@@ -104,10 +105,15 @@
             string fname = NewTemporaryFileName(true);
 
             if (forceFilename != null) {
-                string pth = Path.GetDirectoryName(fname);
-                fname = Path.Combine(pth, forceFilename);
-                RegisterTemporaryFilename(fname);
-            }
+                if (forceFilename.StartsWith("*.")) {
+                    fname = Path.ChangeExtension(fname, forceFilename.Substring(2));
+                    RegisterTemporaryFilename(fname);
+                } else {
+                    string pth = Path.GetDirectoryName(fname);
+                    fname = Path.Combine(pth, forceFilename);
+                    RegisterTemporaryFilename(fname);
+                }
+            } 
             File.WriteAllText(fname, rd);
 
             b.Verbose.Log($"Returns {fname}");
