@@ -1,20 +1,21 @@
-﻿namespace Plisky.Test {    
+﻿namespace Plisky.Test {
+
     using Plisky.Plumbing;
 
     [CommandLineArguments]
     public class TFSBuildToolArgs {
 
-        [CommandLineArg("tfs")]
-        public string tfs;
-
-        [CommandLineArg("teamProject")]
-        public string teamProject;
+        [CommandLineArg("agent")]
+        [CommandLineArg("agenturi")]
+        public string agentUri;
 
         [CommandLineArg("buildDefinition")]
         public string buildDefinition;
 
-        [CommandLineArg("agent")]
-        [CommandLineArg("agenturi")]
-        public string agentUri;
+        [CommandLineArg("teamProject")]
+        public string teamProject;
+
+        [CommandLineArg("tfs")]
+        public string tfs;
     }
 }

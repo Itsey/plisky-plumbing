@@ -1,13 +1,10 @@
 ﻿namespace Plisky.Test {
-    using Plisky.Diagnostics;
-    using Plisky.Plumbing;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Text;
-
+    using Plisky.Diagnostics;
 
     /// <summary>
     /// Class designed to support the adoption of unit tests and provide helper functions for typical common elements.
@@ -15,12 +12,11 @@
     public sealed class UnitTestHelper {
         private List<string> m_storedFilenames = new List<string>();
         private Bilge b = new Bilge("Plisky-UnitTestHelper");
-        
+
         /// <summary>
         /// Creates a new instance of the UnitTestHelper class
         /// </summary>
         public UnitTestHelper() {
-          
             CaseSensitiveMatches = false;
         }
 
@@ -39,6 +35,7 @@
         public string GetTestDataFromFile(string partialRefName, string assemblyName = "TestData") {
 
             #region parameter validation
+
             if (string.IsNullOrWhiteSpace(partialRefName)) {
                 throw new ArgumentOutOfRangeException(nameof(partialRefName), "The resource name must be specified, at least partially, to retrieve it.");
             }
@@ -46,15 +43,15 @@
             if (string.IsNullOrWhiteSpace(assemblyName)) {
                 throw new ArgumentOutOfRangeException(nameof(assemblyName), "The assembly name should be defaulted or specified, it can not be empty.");
             }
-            #endregion
+
+            #endregion parameter validation
 
             assemblyName = assemblyName.ToLowerInvariant();
 
-
             b.Info.Log($"GetTestDataFile >> Finding ({assemblyName})  reference {partialRefName}");
-            
+
             var matchedTestData = GetMatchedTestDataFromAssembly(assemblyName);
-          
+
             if (matchedTestData == null) {
                 b.Warning.Log("Unable to Match assembly, Exception being thrown");
                 throw new InvalidOperationException($"No referenced assembly {assemblyName}.  Did you reference and use the assembly in the test project?");
@@ -77,7 +74,6 @@
             string result;
             using (var stream = matchedTestData.GetManifestResourceStream(resMatched)) {
                 if (stream != null) {
-
                     using (var reader = new StreamReader(stream)) {
                         result = reader.ReadToEnd();
                     }
@@ -98,8 +94,7 @@
         /// <param name="assemblyName">The partial name of the assembly where the manifest lives, defaults TestData</param>
         /// <param name="forceFilename">Specifies the filename of the generated file, if it starts wtih *. then only the extension will be set</param>
         /// <returns>A temporary filename with the contents of the resource file</returns>
-        public string GetTestDataFile(string partialRefName, string assemblyName = "TestData", string forceFilename=null) {
-         
+        public string GetTestDataFile(string partialRefName, string assemblyName = "TestData", string forceFilename = null) {
             string rd = GetTestDataFromFile(partialRefName, assemblyName);
 
             string fname = NewTemporaryFileName(true);
@@ -113,7 +108,7 @@
                     fname = Path.Combine(pth, forceFilename);
                     RegisterTemporaryFilename(fname);
                 }
-            } 
+            }
             File.WriteAllText(fname, rd);
 
             b.Verbose.Log($"Returns {fname}");
@@ -122,13 +117,16 @@
 
         //Assembly name is already tolower.
         private Assembly GetMatchedTestDataFromAssembly(string assemblyName) {
+
             #region constants
+
             const string MS_ASM_NAMEPREFIX = "microsoft";
             const string SYSTEM_ASM_NAMEPREFIX = "system";
             const string XUNIT_ASM_NAMEPREFIX = "xunit";
-            #endregion
-            
-            var refAsms = AppDomain.CurrentDomain.GetAssemblies(); 
+
+            #endregion constants
+
+            var refAsms = AppDomain.CurrentDomain.GetAssemblies();
 
             foreach (var f in refAsms) {
                 string str = f.FullName.ToLower();
@@ -138,9 +136,8 @@
                     continue;
                 }
 
-
                 if (str.Contains(assemblyName)) {
-                    return f;                    
+                    return f;
                 }
             }
 
@@ -152,8 +149,6 @@
         /// </summary>
         /// <remarks>Defaults to false, making all matches insensitive</remarks>
         public bool CaseSensitiveMatches { get; set; }
-
-        
 
         /// <summary>
         /// Returns a TemporaryFilename which can be used for storing data during unit tests.  This filename is stored within
@@ -292,8 +287,6 @@
             return target;
         }
 
-
-
         /// <summary>
         /// Attempts to delete all of the test files that are used.
         /// </summary>
@@ -343,7 +336,6 @@
         public bool StringContainsAll(string dataToTest, params string[] requiredElements) {
             for (int i = 0; i < requiredElements.Length; i++) {
                 if (!StringContains(dataToTest, requiredElements[i])) {
-
                     return false;
                 }
             }
@@ -397,8 +389,6 @@
                 return doesThis.ToLower().Contains(containThis.ToLower());
             }
         }
-
-
 
         /// <summary>
         /// Performs a match on matchData within searchData, checking each of the search strings to see if it contains an isntance

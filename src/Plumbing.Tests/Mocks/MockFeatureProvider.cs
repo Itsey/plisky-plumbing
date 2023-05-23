@@ -1,18 +1,13 @@
-﻿using Plisky.Plumbing;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Plisky.Plumbing;
 
 namespace Plisky.Test {
+
     internal class MockFeatureProvider : IResolveFeatures {
         private Dictionary<string, bool> boolFeatures = new Dictionary<string, bool>();
         private Dictionary<string, int> callCount = new Dictionary<string, int>();
 
-        public void MockAddBoolFeature(string name, bool val) {
-            boolFeatures.Add(name, val);
-        }
-
-        public void InjectHub(ConfigHub h) {
-            throw new System.NotImplementedException();
+        public MockFeatureProvider() {
         }
 
         public Feature GetFeature(string byName) {
@@ -33,7 +28,12 @@ namespace Plisky.Test {
             throw new System.NotImplementedException();
         }
 
-        public MockFeatureProvider() {
+        public void InjectHub(ConfigHub h) {
+            throw new System.NotImplementedException();
+        }
+
+        public void MockAddBoolFeature(string name, bool val) {
+            boolFeatures.Add(name, val);
         }
 
         internal int HowManyCallsForThisFeature(string nameToCheck) {

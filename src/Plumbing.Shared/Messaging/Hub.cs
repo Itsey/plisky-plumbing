@@ -1,10 +1,9 @@
 ﻿namespace Plisky.Plumbing {
 
-    using Plisky.Diagnostics;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Threading;
+    using Plisky.Diagnostics;
 
     /// <summary>
     /// Holds a hub for messaging, sending messages from one part of the application to another.
@@ -19,18 +18,9 @@
 
         #region static areas for single instance hubs
 
-        private static object hubLock = new object();
         private static Hub currentInstance;
+        private static object hubLock = new object();
         private static int instanceCount = 0;
-
-        /// <summary>
-        /// Destroys the static "current" in order that all listeners are lost.
-        /// </summary>
-        public static void Relinquish() {
-            lock (hubLock) {
-                currentInstance = new Hub();
-            }
-        }
 
         public static Hub Current {
             get {
@@ -43,7 +33,16 @@
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Destroys the static "current" in order that all listeners are lost.
+        /// </summary>
+        public static void Relinquish() {
+            lock (hubLock) {
+                currentInstance = new Hub();
+            }
+        }
+
+        #endregion static areas for single instance hubs
 
         #region privates
 
@@ -51,15 +50,6 @@
 
         private string GetTraceMessage(string v) {
             return tracePrefix + " " + v;
-        }
-
-        private void RemoveIfItsThere(List<HubMessageBase> list, object opener) {
-            for (int i = 0; i < list.Count; i++) {
-                if (list[i].ContainsThisAction(opener)) {
-                    list.RemoveAt(i);
-                    break;
-                }
-            }
         }
 
         private void LaunchSimple(int messageIdentity, bool async) {
@@ -82,7 +72,18 @@
             }
         }
 
-        #endregion
+        private void RemoveIfItsThere(List<HubMessageBase> list, object opener) {
+            for (int i = 0; i < list.Count; i++) {
+                if (list[i].ContainsThisAction(opener)) {
+                    list.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        #endregion privates
+
+        public string InstanceName { get; internal set; }
 
         /// <summary>
         /// Indicates whether the hub should hold a reference to the Actions that are passed into the LookFor methods, in the case where you are using
@@ -91,13 +92,19 @@
         /// </summary>
         public bool UseStrongReferences { get; set; }
 
-        public string InstanceName { get; internal set; }
-
         #region constructors
 
         public Hub() {
             ConstructMe(false, null);
             ;
+        }
+
+        public Hub(bool useStrongReferences) {
+            ConstructMe(useStrongReferences, null);
+        }
+
+        public Hub(string v) {
+            ConstructMe(false, v);
         }
 
         private void ConstructMe(bool v, string instanceNameHint) {
@@ -111,62 +118,7 @@
             b.Verbose.Log(GetTraceMessage($"Messaging hub is online [{InstanceName}]"));
         }
 
-        public Hub(bool useStrongReferences) {
-            ConstructMe(useStrongReferences, null);
-        }
-
-        public Hub(string v) {
-            ConstructMe(false, v);
-        }
-
-        #endregion
-
-        // public virtual Func<T1, T1> LookFor<T1>(Func<T1,T1> openMessage) {
-        public virtual Action<T1> LookFor<T1>(Action<T1> openMessage) {
-            Type msgType = typeof(T1);
-
-            b.Verbose.Log(GetTraceMessage($"Adding listener for message type {msgType}"));
-            if (!peopleSearching.ContainsKey(msgType)) {
-                peopleSearching.Add(msgType, new List<HubMessageBase>());
-            }
-
-            HubMessageBase msg;
-            if (UseStrongReferences) {
-                msg = new StrongMessageReader<T1>(openMessage);
-            } else {
-                msg = new WeakMessageReader<T1>(openMessage);
-            }
-            peopleSearching[msgType].Add(msg);
-            return openMessage;
-        }
-
-        public virtual Action<int> LookFor(int thisMessage, Action<int> openMessage) {
-            if (!simpleMessagePeopleSearching.ContainsKey(thisMessage)) {
-                simpleMessagePeopleSearching.Add(thisMessage, new List<HubMessageBase>());
-            }
-
-            b.Verbose.Log(GetTraceMessage($"Adding listener for simple int message type {thisMessage}"));
-            HubMessageBase msg;
-            if (UseStrongReferences) {
-                msg = new StrongMessageReader<int>(openMessage);
-            } else {
-                msg = new WeakMessageReader<int>(openMessage);
-            }
-            simpleMessagePeopleSearching[thisMessage].Add(msg);
-            return openMessage;
-        }
-
-        public virtual Action<string> LookFor(string thisMessage, Action<string> openMessage) {
-            Type msgType = typeof(string);
-            b.Verbose.Log(GetTraceMessage($"Adding listener for simple string message type {thisMessage}"));
-            if (!peopleSearching.ContainsKey(msgType)) {
-                peopleSearching.Add(msgType, new List<HubMessageBase>());
-            }
-
-            peopleSearching[msgType].Add(new MessageReaderSimple(thisMessage, openMessage));
-
-            return openMessage;
-        }
+        #endregion constructors
 
         public virtual void Launch<TMessage>(TMessage message, bool async = false) {
             int messagesDispatched = 0;
@@ -220,10 +172,57 @@
             Launch<string>(messageContext, async);
         }
 
+        // public virtual Func<T1, T1> LookFor<T1>(Func<T1,T1> openMessage) {
+        public virtual Action<T1> LookFor<T1>(Action<T1> openMessage) {
+            Type msgType = typeof(T1);
+
+            b.Verbose.Log(GetTraceMessage($"Adding listener for message type {msgType}"));
+            if (!peopleSearching.ContainsKey(msgType)) {
+                peopleSearching.Add(msgType, new List<HubMessageBase>());
+            }
+
+            HubMessageBase msg;
+            if (UseStrongReferences) {
+                msg = new StrongMessageReader<T1>(openMessage);
+            } else {
+                msg = new WeakMessageReader<T1>(openMessage);
+            }
+            peopleSearching[msgType].Add(msg);
+            return openMessage;
+        }
+
+        public virtual Action<int> LookFor(int thisMessage, Action<int> openMessage) {
+            if (!simpleMessagePeopleSearching.ContainsKey(thisMessage)) {
+                simpleMessagePeopleSearching.Add(thisMessage, new List<HubMessageBase>());
+            }
+
+            b.Verbose.Log(GetTraceMessage($"Adding listener for simple int message type {thisMessage}"));
+            HubMessageBase msg;
+            if (UseStrongReferences) {
+                msg = new StrongMessageReader<int>(openMessage);
+            } else {
+                msg = new WeakMessageReader<int>(openMessage);
+            }
+            simpleMessagePeopleSearching[thisMessage].Add(msg);
+            return openMessage;
+        }
+
+        public virtual Action<string> LookFor(string thisMessage, Action<string> openMessage) {
+            Type msgType = typeof(string);
+            b.Verbose.Log(GetTraceMessage($"Adding listener for simple string message type {thisMessage}"));
+            if (!peopleSearching.ContainsKey(msgType)) {
+                peopleSearching.Add(msgType, new List<HubMessageBase>());
+            }
+
+            peopleSearching[msgType].Add(new MessageReaderSimple(thisMessage, openMessage));
+
+            return openMessage;
+        }
+
         /// <summary>
         /// Removes the registered action from the list of actions.  Pass in the message identifier that was first associated with this action
         /// and the action to have it removed.  If the action is not found in the list nothing happens.
-        /// </summary>        
+        /// </summary>
         /// <param name="opener">The action that was passed to LookFor</param>
         public virtual void StopLooking<T1>(Action<T1> opener) {
             Type msgType = typeof(T1);

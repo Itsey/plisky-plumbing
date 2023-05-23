@@ -1,19 +1,16 @@
-﻿
+﻿using System.Collections.Generic;
 using Plisky.Plumbing;
-using System.Collections.Generic;
 
 namespace Plisky.Test {
 
     public class MockSimpleCrypto : IDecryptStuff {
-        Dictionary<string, string> supportedDecrypts = new Dictionary<string, string>();
-
         private string retval = "yyy";
+        private Dictionary<string, string> supportedDecrypts = new Dictionary<string, string>();
 
-        public string DecryptValue(string input) {
-            if (supportedDecrypts.ContainsKey(input)) {
-                return supportedDecrypts[input];
-            }
-            return retval;
+        /// <summary>
+        /// Simply returns a preset string when asked to decrpyt a key string.
+        /// </summary>
+        public MockSimpleCrypto() {
         }
 
         public string AlwaysThisValue {
@@ -26,11 +23,11 @@ namespace Plisky.Test {
             supportedDecrypts.Add(crypto, plaintext);
         }
 
-        /// <summary>
-        /// Simply returns a preset string when asked to decrpyt a key string.
-        /// </summary>
-        public MockSimpleCrypto() {
-
+        public string DecryptValue(string input) {
+            if (supportedDecrypts.ContainsKey(input)) {
+                return supportedDecrypts[input];
+            }
+            return retval;
         }
     }
 }

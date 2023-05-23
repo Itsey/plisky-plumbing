@@ -15,6 +15,10 @@
             opener = addOpener;
         }
 
+        internal override bool ContainsThisAction(object testSubject) {
+            return object.ReferenceEquals(opener, testSubject);
+        }
+
         internal override void OpenNote() {
             opener(default(T1));
         }
@@ -28,9 +32,5 @@
             opener(withParameter);
         }
          * */
-
-        internal override bool ContainsThisAction(object testSubject) {
-            return object.ReferenceEquals(opener, testSubject);
-        }
     }
 }

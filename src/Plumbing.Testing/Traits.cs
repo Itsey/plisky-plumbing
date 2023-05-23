@@ -1,5 +1,4 @@
 ﻿namespace Plisky.Test {
-
     // Naming Styles are suppressed for this particular file, as the way that traits are used are inside attributes and it just looks better if they are not constants, therefore
     // the usual constants are all capitals rule is suppressed in code here.
 #pragma warning disable IDE1006
@@ -12,6 +11,7 @@
         internal const string Namespace = "Plisky.Test";
 
         public const string Category = "Category";
+
         /// <summary>
         /// Describes the age of the test, Exploratory, Fresh, Regression, Interface
         /// </summary>
@@ -48,7 +48,7 @@
         public const string Integration = "Integration";
 
         /// <summary>
-        /// Style - Unit tests involve small isolated elements of the code 
+        /// Style - Unit tests involve small isolated elements of the code
         /// </summary>
         public const string Unit = "Unit";
 
@@ -85,8 +85,6 @@
         public const string Mocked = "Mocked";
 
         public const string Isolated = "Isolated";
-
-        
     }
 
 #pragma warning restore IDE1006 // Naming Styles

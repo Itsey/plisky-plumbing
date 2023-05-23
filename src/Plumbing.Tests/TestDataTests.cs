@@ -19,8 +19,8 @@
         }
 
         [Fact(DisplayName = nameof(TestDataFile_CleanUpWorks))]
-        [Trait(Traits.Age, Traits.Regression)]
-        [Trait(Traits.Style, Traits.Unit)]
+        
+        
         public void TestDataFile_CleanUpWorks() {
             b.Info.Flow();
 
@@ -38,8 +38,8 @@
         }
 
         [Fact(DisplayName = nameof(File_GetTestData_Works))]
-        [Trait(Traits.Age, Traits.Regression)]
-        [Trait(Traits.Style, Traits.Unit)]
+        
+        
         public void File_GetTestData_Works() {
             b.Info.Flow();
 
@@ -58,8 +58,8 @@
         }
 
         [Fact(DisplayName = nameof(Blows_IfResourceName_Invalid))]
-        [Trait(Traits.Age, Traits.Regression)]
-        [Trait(Traits.Style, Traits.Unit)]
+        
+        
         public void Blows_IfResourceName_Invalid() {
             b.Info.Flow();
 
@@ -77,8 +77,8 @@
         }
 
         [Fact(DisplayName = nameof(File_GetTestData_HasRightContent))]
-        [Trait(Traits.Age, Traits.Regression)]
-        [Trait(Traits.Style, Traits.Unit)]
+        
+        
         public void File_GetTestData_HasRightContent() {
             const string TEXT_FROM_FILE = "arfle barfle gloop";
             b.Info.Flow();
@@ -101,8 +101,8 @@
 
 
         [Fact(DisplayName = nameof(GetTestDatFile_BlowsOnNull))]
-        [Trait(Traits.Age, Traits.Regression)]
-        [Trait(Traits.Style, Traits.Unit)]
+        
+        
         public void GetTestDatFile_BlowsOnNull() {
             b.Info.Flow();
 
@@ -119,8 +119,8 @@
 
 
         [Fact(DisplayName = nameof(FileResource_InvalidResourceNameBlows))]
-        [Trait(Traits.Age, Traits.Regression)]
-        [Trait(Traits.Style, Traits.Unit)]
+        
+        
         public void FileResource_InvalidResourceNameBlows() {
             b.Info.Flow();
 
@@ -140,8 +140,8 @@
 
 
         [Fact(DisplayName = nameof(TestData_GenericString_Valid))]
-        [Trait(Traits.Age, Traits.Regression)]
-        [Trait(Traits.Style, Traits.Unit)]
+        
+        
         public void TestData_GenericString_Valid() {
             string res1 = SampleTestData.GENERIC_STRING1;
             string res2 = SampleTestData.GENERNIC_STRING2;
@@ -154,8 +154,8 @@
 
 
         [Fact(DisplayName = nameof(TestData_URL_GetsCorrectNumber))]
-        [Trait(Traits.Age, Traits.Regression)]
-        [Trait(Traits.Style, Traits.Unit)]
+        
+        
         public void TestData_URL_GetsCorrectNumber() {
             b.Info.Flow();
 

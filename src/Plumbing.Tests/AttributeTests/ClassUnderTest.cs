@@ -4,38 +4,39 @@ using Plisky.Test;
 using Xunit;
 
 namespace Plisky.PliskyLibTests.AttributeTests {
-    public class ClassUnderTest {
-        protected Bilge b = new Bilge();
-        public Action MethodCallback;
 
-        [Trait("name", "value")]
-        public void Trait() {
-        }
+    public class ClassUnderTest {
+        public Action MethodCallback;
+        protected Bilge b = new Bilge();
+
+        [Bug(123)]
+        public void Bug() { }
+
+        [Build(BuildType.Any)]
+        public void Build() { }
 
         [Category("name")]
         public void Category() {
-        }
-
-        [Unit]
-        public void Unit() {
-        }
-
-        [Integration]
-        public void Integration() {
         }
 
         [Fresh]
         public void Fresh() {
         }
 
+        [Integration]
+        public void Integration() {
+        }
+
         [Isolated]
         public void Isolated() {
         }
 
-        [Build(BuildType.Any)]
-        public void Build() { }
+        [Trait("name", "value")]
+        public void Trait() {
+        }
 
-        [Bug(123)]
-        public void Bug() { }
+        [Unit]
+        public void Unit() {
+        }
     }
 }

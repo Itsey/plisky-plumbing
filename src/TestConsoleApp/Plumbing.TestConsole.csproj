@@ -37,12 +37,11 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Plisky.Diagnostics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b10b71488634d122, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\Plisky.Diagnostics.3.1.5\lib\net462\Plisky.Diagnostics.dll</HintPath>
+    <Reference Include="Plisky.Diagnostics, Version=3.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Plisky.Diagnostics.3.1.11\lib\net452\Plisky.Diagnostics.dll</HintPath>
     </Reference>
-    <Reference Include="Plisky.Diagnostics.Listeners, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b10b71488634d122, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\Plisky.Listeners.3.1.3\lib\net462\Plisky.Diagnostics.Listeners.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Plisky.Diagnostics.Listeners, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Plisky.Listeners.3.1.11\lib\net461\Plisky.Diagnostics.Listeners.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

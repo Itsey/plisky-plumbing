@@ -38,7 +38,7 @@
 
 
         [Fact(DisplayName = nameof(Bug_IfBilgePassed_NullRefException))]
-        [Trait(Traits.Style, Traits.Regression)]
+        
         public void Bug_IfBilgePassed_NullRefException() {
             b.Info.Flow();
             var clas = new CommandArgumentSupport();
@@ -52,7 +52,7 @@
         }
 
         [Fact(DisplayName = nameof(GenericVersion_WorksTheSame))]
-        [Trait(Traits.Style, Traits.Regression)]
+        
         public void GenericVersion_WorksTheSame() {
             b.Info.Flow();
             var clas = new CommandArgumentSupport();
@@ -71,7 +71,7 @@
         }
 
         [Fact(DisplayName = nameof(Bug_IfPostfixSpecified_ItMustBeUsed))]
-        [Trait(Traits.Style, Traits.Regression)]
+        
         public void Bug_IfPostfixSpecified_ItMustBeUsed() {
             b.Info.Flow();
             var clas = new CommandArgumentSupport();
@@ -98,7 +98,7 @@
 
 
         [Fact(DisplayName = nameof(Required_ThrowsIfNotPresent))]
-        [Trait(Traits.Style, Traits.Regression)]
+        
         public void Required_ThrowsIfNotPresent() {
             b.Info.Flow();
 
@@ -168,7 +168,7 @@
 
 
         [Theory(DisplayName = nameof(DateTime_BasicParse_Works))]
-        [Trait(Traits.Style, Traits.Regression)]
+        
         [InlineData(2018, 11, 22)]
         [InlineData(2000, 1, 1)]
         [InlineData(1945, 11, 11)]
@@ -196,7 +196,7 @@
 
 
         [Fact(DisplayName = nameof(IntegerParameter_TooLarge_ReturnsCorrectError))]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void IntegerParameter_TooLarge_ReturnsCorrectError() {
             var clas = new CommandArgumentSupport();
             clas.ArgumentPostfix = ":";
@@ -218,7 +218,7 @@
         }
 
         [Fact(DisplayName = nameof(TestIntAndLogMaxValues))]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void TestIntAndLogMaxValues() {
             CommandArgumentSupport clas = new CommandArgumentSupport();
             clas.ArgumentPostfix = ":";
@@ -304,7 +304,7 @@
 
 
         [Fact(DisplayName = nameof(Array_Separator_IsConfigured))]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void Array_Separator_IsConfigured() {
 
             var clas = new CommandArgumentSupport {
@@ -335,7 +335,7 @@
         }
 
         [Fact(DisplayName = nameof(BasicTest_GetAndSetProperties))]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void BasicTest_GetAndSetProperties() {
             var clas = new CommandArgumentSupport();
             Assert.Equal(string.Empty, clas.ArgumentPostfix);
@@ -356,7 +356,7 @@
         }
 
         [Fact]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void BasicTest_BooleanParameters() {
             b.Info.Log("Starting  Testing boolean behaviour");
 
@@ -406,7 +406,7 @@
         }
 
         [Fact]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void BasicTest_NumberStringAndBoolParams() {
             b.Info.Log("Starting test for SimpleArguments");
 
@@ -436,7 +436,7 @@
         }
 
         [Fact]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void BasicTest_ArgumentPrefix() {
             b.Info.Log("Starting  Testing Argument prefix behaviour");
 
@@ -475,7 +475,7 @@
 
 
         [Fact(DisplayName = nameof(BasicTest_DefaultArguments))]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void BasicTest_DefaultArguments() {
             var c2 = new SampleCommandLine_C2();
             VerifySampleCommandLine2_InitialSate(c2);
@@ -497,7 +497,7 @@
         }
 
         [Fact]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void BasicTest_GenerateShortHelp() {
             var clas = new CommandArgumentSupport();
             var c2 = new SampleCommandLine_C2();
@@ -508,7 +508,7 @@
         }
 
         [Fact(DisplayName = nameof(BasicTest_MultipleArgumentsSameValue))]
-        [Trait(Traits.Style, Traits.Regression)] // Legacy Tests, replace when working on them.
+         // Legacy Tests, replace when working on them.
         public void BasicTest_MultipleArgumentsSameValue() {
             var clas = new CommandArgumentSupport();
             clas.ArgumentPrefix = "/";

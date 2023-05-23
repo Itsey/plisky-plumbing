@@ -1,11 +1,6 @@
-﻿
+﻿namespace Plisky.Test {
 
-namespace Plisky.Test {
-
-    
     public class TimedHubTests {
-
-
 #if false
 
         [Fact][Trait("xunit","regression")]

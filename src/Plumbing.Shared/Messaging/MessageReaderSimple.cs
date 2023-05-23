@@ -3,8 +3,8 @@
     using System;
 
     internal class MessageReaderSimple : HubMessageBase {
-        private Action<string> opener;
         private string keyMatch;
+        private Action<string> opener;
 
         public MessageReaderSimple(string targetMessage, Action<string> addOpener) {
             keyMatch = targetMessage;
@@ -20,12 +20,12 @@
             return opener((string)onThis);
         }*/
 
-        internal void OpenNote(string onThis) {
-            opener(onThis);
-        }
-
         internal override bool ContainsThisAction(object testSubject) {
             return object.ReferenceEquals(opener, testSubject);
+        }
+
+        internal void OpenNote(string onThis) {
+            opener(onThis);
         }
     }
 }

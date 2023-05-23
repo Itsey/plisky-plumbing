@@ -11,25 +11,6 @@
     public static class CryptoHelper {
         private const int KEYLENGTH = 24;
 
-        /// <summary>
-        /// This will use the key identity as a seed to generate a key which is used to encrypt the data, this can be a way of obsfuscating the actual
-        /// key by using an int value called something else to pretend to be the key. It is not very secure at all but it is harder to work out
-        /// whats actually going on.
-        /// </summary>
-        /// <param name="keyIdentity">The identity to seed the key generator with</param>
-        /// <returns>A Key which can be used for encrypting data</returns>
-        public static byte[] GenerateKeyFromIdentity(int keyIdentity) {
-            Random r = new Random(keyIdentity);
-            byte[] key = new byte[KEYLENGTH];
-            r.NextBytes(key);
-            return key;
-        }
-
-        public static byte[] GetIV() {
-            byte[] iv = { 1, 4, 7, 3, 4, 7, 8, 0 };
-            return iv;
-        }
-
         public static string DecryptValue(byte[] key, string data) {
             byte[] clearData = Convert.FromBase64String(data);
             //clearData = System.Text.Encoding.UTF8.GetBytes(data);
@@ -77,6 +58,25 @@
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// This will use the key identity as a seed to generate a key which is used to encrypt the data, this can be a way of obsfuscating the actual
+        /// key by using an int value called something else to pretend to be the key. It is not very secure at all but it is harder to work out
+        /// whats actually going on.
+        /// </summary>
+        /// <param name="keyIdentity">The identity to seed the key generator with</param>
+        /// <returns>A Key which can be used for encrypting data</returns>
+        public static byte[] GenerateKeyFromIdentity(int keyIdentity) {
+            Random r = new Random(keyIdentity);
+            byte[] key = new byte[KEYLENGTH];
+            r.NextBytes(key);
+            return key;
+        }
+
+        public static byte[] GetIV() {
+            byte[] iv = { 1, 4, 7, 3, 4, 7, 8, 0 };
+            return iv;
         }
     }
 }

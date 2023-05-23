@@ -23,6 +23,31 @@ steps:
     restoreSolution: '$(solution)'
     restoreDirectory: '$(build.sourcesDirectory)\packages\'
 
+- task: PowerShell@2
+  displayName: 'CI Versioning'
+  condition: not(eq(variables['Build.Reason'],'PullRequest'))
+  inputs:
+      targetType: 'inline'
+      script: |
+            # Versioning Powershell - If this is a CI commit then apply the versioning.
+            c:\Files\BuildTools\PliskyVersioner\PliskyTool.exe UpdateFiles -NO -Root=$(build.sourcesDirectory)\src\ `-VS=c:\Files\BuildTools\VersionStore\plisky-plumbing.vstore -Increment `-MM=$(build.sourcesDirectory)\src\_Dependencies\automation\AutoVersion.txt
+            c:\Files\BuildTools\PliskyVersioner\PliskyTool.exe Passive `-VS=c:\Files\BuildTools\VersionStore\plisky-plumbing.vstore -O=Azdo:buildVersionNumber          
+            
+- task: PowerShell@2
+  displayName: 'PR Versioning'
+  condition: eq(variables['Build.Reason'],'PullRequest')
+  inputs:
+      targetType: 'inline'
+      script: |
+            # Versioning Powershell - Queue Next Increment, but do not actually version the files.  
+            c:\Files\BuildTools\PliskyVersioner\PliskyTool.exe Override `-VS=c:\Files\BuildTools\VersionStore\plisky-plumbing.vstore `-Q=..+.0
+      
+- task: PowerShell@2
+  inputs:
+      targetType: 'inline'
+      script: |
+          Write-Host "CI Build for $(buildVersionNumber) - Active."
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'

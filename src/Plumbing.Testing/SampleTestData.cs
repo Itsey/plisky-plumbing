@@ -2,9 +2,36 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+
     public class SampleTestData {
+        /// <summary>
+        /// Generic string used in unit testing, when any old token string will do.  This one is lower case with no spaces
+        /// </summary>
+        public const string GENERIC_STRING1 = "arflebarflegloop";
+
+        /// <summary>
+        /// Third Generic string used in unit testing, when any old token string will do.  This is a sentence with a full stop.
+        /// </summary>
+        public const string GENERIC_STRING3 = "Spontralification of the spire.";
+
+        /// <summary>
+        /// Second Generic string used in unit testing, when any old token string will do. This one has spaces and is pascal cased.
+        /// </summary>
+        public const string GENERNIC_STRING2 = "Bilge And Flimflam";
+
         private readonly Random r = new Random();
-        
+
+        private int m_limitStringsTo = 2000;
+
+        /// <summary>
+        /// The maximum length which random strings are returned for any method which is called without
+        /// specifying the maximum
+        /// </summary>
+        public int LimitStringsTo {
+            get { return m_limitStringsTo; }
+            set { m_limitStringsTo = value; }
+        }
+
         /// <summary>
         /// Provides access to a Random class stored within the unit test helper.  No benefit to using it over a normal one
         /// just saves having to create them or store them.
@@ -15,25 +42,8 @@
             }
         }
 
-
-        /// <summary>
-        /// Generic string used in unit testing, when any old token string will do.  This one is lower case with no spaces
-        /// </summary>
-        public const string GENERIC_STRING1 = "arflebarflegloop";
-
-        /// <summary>
-        /// Second Generic string used in unit testing, when any old token string will do. This one has spaces and is pascal cased.
-        /// </summary>
-        public const string GENERNIC_STRING2 = "Bilge And Flimflam";
-
-        /// <summary>
-        /// Third Generic string used in unit testing, when any old token string will do.  This is a sentence with a full stop.
-        /// </summary>
-        public const string GENERIC_STRING3 = "Spontralification of the spire.";
-
-
-
         #region hard coded data
+
         private string[] hardcodedUrls = new string[] {
             "https://www.example.com/bear/attraction.php",
         "http://bite.example.com/arm.php",
@@ -96,27 +106,8 @@
         "https://example.com/babies.php",
         "http://www.example.com/"
         };
-        #endregion
-        public IEnumerable<string> GetTestURLs(int howMany=-1) {
 
-            howMany = howMany < 0 ? hardcodedUrls.Length : howMany;            
-
-            for(int i=0; i<howMany; i++) {
-                yield return hardcodedUrls[r.Next(hardcodedUrls.Length - 1)];
-            }
-        }
-
-
-        private int m_limitStringsTo = 2000;
-
-        /// <summary>
-        /// The maximum length which random strings are returned for any method which is called without
-        /// specifying the maximum
-        /// </summary>
-        public int LimitStringsTo {
-            get { return m_limitStringsTo; }
-            set { m_limitStringsTo = value; }
-        }
+        #endregion hard coded data
 
         /// <summary>
         /// Returns a generated filename safe string between the lengths of 3 and 30 characters.
@@ -144,55 +135,6 @@
 
         public string GenerateString(int minLength, int maxLength, bool makeFileNameSafe, bool useNumbers) {
             return GenerateSpecificRandomString(minLength, maxLength, makeFileNameSafe, useNumbers);
-        }
-
-        private string GenerateSpecificRandomString(int minLength, int maxLength, bool allowPunctuation, bool allowNumbers) {
-
-            #region entry code
-
-            if (minLength < 0) {
-                throw new ArgumentOutOfRangeException("minLength", "minLength must be 0 or greater");
-            }
-            if (minLength > maxLength) {
-                throw new ArgumentOutOfRangeException("minLength", "minLength must be less than maxLength");
-            }
-            if (maxLength == 0) {
-                return string.Empty;
-            }
-
-            #endregion
-
-            string sampleRange = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            if (allowPunctuation) {
-                sampleRange += ",.<>;':@#/~?+_-=!\"£$%^&*()`¬|\\";
-            }
-            if (allowNumbers) {
-                sampleRange += "1234567890";
-            }
-
-            char[] possibleCharacters = sampleRange.ToCharArray();
-
-            int characters = r.Next(minLength, maxLength);
-
-            var result = new StringBuilder(characters);   // I seriously doubt this is faster.
-
-            for (; characters > 0; characters--) {
-                result.Append(possibleCharacters[r.Next(0, possibleCharacters.Length)]);
-            }
-
-            return result.ToString();
-        }
-
-        private string GenerateRandomString(int minLength, int maxLength) {
-            int characters = RandomStore.Next(minLength, maxLength);
-
-            var result = new StringBuilder(characters);   // I seriously doubt this is faster.
-
-            for (; characters > 0; characters--) {
-                result.Append((char)RandomStore.Next(15, 125));
-            }
-
-            return result.ToString();
         }
 
         /// <summary>
@@ -241,6 +183,63 @@
             }
 
             return GenerateRandomString(minimumLength, maximumLength);
+        }
+
+        public IEnumerable<string> GetTestURLs(int howMany = -1) {
+            howMany = howMany < 0 ? hardcodedUrls.Length : howMany;
+
+            for (int i = 0; i < howMany; i++) {
+                yield return hardcodedUrls[r.Next(hardcodedUrls.Length - 1)];
+            }
+        }
+
+        private string GenerateRandomString(int minLength, int maxLength) {
+            int characters = RandomStore.Next(minLength, maxLength);
+
+            var result = new StringBuilder(characters);   // I seriously doubt this is faster.
+
+            for (; characters > 0; characters--) {
+                result.Append((char)RandomStore.Next(15, 125));
+            }
+
+            return result.ToString();
+        }
+
+        private string GenerateSpecificRandomString(int minLength, int maxLength, bool allowPunctuation, bool allowNumbers) {
+
+            #region entry code
+
+            if (minLength < 0) {
+                throw new ArgumentOutOfRangeException("minLength", "minLength must be 0 or greater");
+            }
+            if (minLength > maxLength) {
+                throw new ArgumentOutOfRangeException("minLength", "minLength must be less than maxLength");
+            }
+            if (maxLength == 0) {
+                return string.Empty;
+            }
+
+            #endregion entry code
+
+            string sampleRange = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            if (allowPunctuation) {
+                sampleRange += ",.<>;':@#/~?+_-=!\"£$%^&*()`¬|\\";
+            }
+            if (allowNumbers) {
+                sampleRange += "1234567890";
+            }
+
+            char[] possibleCharacters = sampleRange.ToCharArray();
+
+            int characters = r.Next(minLength, maxLength);
+
+            var result = new StringBuilder(characters);   // I seriously doubt this is faster.
+
+            for (; characters > 0; characters--) {
+                result.Append(possibleCharacters[r.Next(0, possibleCharacters.Length)]);
+            }
+
+            return result.ToString();
         }
     }
 }

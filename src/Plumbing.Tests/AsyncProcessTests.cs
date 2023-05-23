@@ -5,9 +5,7 @@
     using System.Text;
     using Xunit;
 
-
     public class AsyncProcessTests {
-
         [Fact][Trait("xunit","regression")]
         public void RunHelpAsync() {
             //Assert.Fail();

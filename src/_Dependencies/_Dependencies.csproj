@@ -68,9 +68,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Plisky.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=b10b71488634d122, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\Plisky.Diagnostics.2.8.22\lib\net462\Plisky.Diagnostics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -95,7 +92,6 @@
   <ItemGroup>
     <None Include="automation\ManualyQueueVersionIncrement.cmd" />
     <None Include="automation\GitReleaseSync.cmd" />
-    <None Include="packages.config" />
     <None Include="Packaging\PliskyTesting.nuspec">
       <SubType>Designer</SubType>
     </None>

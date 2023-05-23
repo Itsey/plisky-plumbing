@@ -1,13 +1,12 @@
 ﻿namespace Plisky.Plumbing {
 
-    using Plisky.Diagnostics;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using Plisky.Diagnostics;
 
     /// <summary>
     /// CommandArgumentSupport provides assistance with using command line arguments and is designed to work in conjunction with the
@@ -23,14 +22,6 @@
         private string argumentPrefix = "-";
 
         /// <summary>
-        /// Returns the name(s) of arguments that errored (rather than were not matched at all) and a brief description
-        /// of why the error occured.
-        /// </summary>
-        public string[] ListArgumentsWithErrors() {
-            return argumentErrorsDuringLastParse.ToArray();
-        }
-
-        /// <summary>
         /// Creates a new instance of the CommandArgumentSupport class.
         /// </summary>
         public CommandArgumentSupport() {
@@ -39,18 +30,10 @@
         }
 
         /// <summary>
-        /// FancyPants Generic Overload, by request, but its just a slower version of passing it in.
+        /// Set when the arguments have a specific post fix before the value.  Typically this is a colon, however there is no default for this
+        /// as it is not necessary for many types of argument.
         /// </summary>
-        /// <typeparam name="T">The argument type to use</typeparam>
-        /// <param name="args">The args with the parameters</param>
-        /// <returns>A new instance of the arguments type, populated with values</returns>
-        public T ProcessArguments<T>(string[] args) where T : new() {
-            T result = (T)Activator.CreateInstance(typeof(T));
-            ProcessArguments(result, args);
-            return result;
-        }
-
-
+        public string ArgumentPostfix { get; set; }
 
         /// <summary>
         /// ArgumentPrefix determines the prefixed text that should be on the front of each argument specifier.  This is commonly a forwards
@@ -67,12 +50,6 @@
         }
 
         /// <summary>
-        /// Set when the arguments have a specific post fix before the value.  Typically this is a colon, however there is no default for this
-        /// as it is not necessary for many types of argument.
-        /// </summary>
-        public string ArgumentPostfix { get; set; }
-
-        /// <summary>
         /// ArgumentPrefixOptional determines whether the ArgumentPrefix string must be on the front of a parameter for the match to be valid
         /// or whether the match will occur whether the prefix is there or not.  If this is set to false then an exact match must occur including
         /// any prefix that is specified.
@@ -83,6 +60,164 @@
         /// The date time format used to parse date times - default. dd-MM-yyyy.
         /// </summary>
         public string DateTimeParseFormat { get; set; }
+
+        /// <summary>
+        /// Adds an example to the help text that is generated.  Each example should have a one line syntactically correct option and a secondary
+        /// description option
+        /// </summary>
+        /// <param name="example">The syntactic example</param>
+        /// <param name="description">The description</param>
+        public void AddExample(string example, string description) {
+            Examples.Add(new Tuple<string, string>(example, description));
+        }
+
+        /// <summary>
+        /// Generates the longer form of help which is typically shown when the program is called with no arguments.  The FullDescription
+        /// text is used for outputting the content of this help screen.
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">Thrown when ArgumentVals is null</exception>
+        /// <exception cref="System.ArgumentException">Thrown when the argumentVals has no attributes or no fields.</exception>
+        /// <param name="commandLineArgumentClass">The class with the [CommandLineArguments] attribute used to generate the help.</param>
+        /// <param name="appName">The application name</param>
+        /// <returns>A string of short form comments</returns>
+        public string GenerateHelp(object commandLineArgumentClass, string appName) {
+            b.Info.Flow();
+
+            #region entry code
+
+            if (commandLineArgumentClass == null) { throw new ArgumentNullException("commandLineArgumentClass", "The argumentVals class can not be null for a call to ProcessArguments"); }
+
+            // validate that the first parameter has the CommandLineArgumentsAttribute set.
+            object[] ats = commandLineArgumentClass.GetType().GetCustomAttributes(typeof(CommandLineArgumentsAttribute), true);
+            bool cmdLineArgsAttFound = false;
+            if (ats.Length > 0) {
+                foreach (object o in ats) {
+                    if (o is CommandLineArgumentsAttribute) { cmdLineArgsAttFound = true; break; }
+                }
+            }
+
+            if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentVals class must have CommandLineArgumentsAttribute specified", "commandLineArgumentClass"); }
+
+            #endregion entry code
+
+            b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
+
+            var argumentClass = commandLineArgumentClass.GetType();
+
+            var getMembersToPopulate = GetMembersFromArgumentClassAndVerify(argumentClass);
+
+            // We now have a list of all of the fields that we are expecting to find command line argument
+            // information on.  We run through this trying to find which argument for which field.
+            var fams = new List<FieldArgumentMapping>();
+
+            // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
+            // to the parameters that are passed in.
+
+            PopulateFieldMappings(getMembersToPopulate, fams);
+
+            var sb = new StringBuilder();
+            sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
+            sb.Append(appName + " ");
+
+            foreach (var fam in fams) {
+                if (fam.ParameterMatchesCount > 0) {
+                    sb.Append(fam.ParameterMatches.First() + " ");
+                }
+            }
+            sb.Append(Environment.NewLine + Environment.NewLine);
+
+            foreach (var fam in fams) {
+                if (fam.ParameterMatchesCount > 0) {
+                    sb.Append(fam.ParameterMatches.First() + " " + fam.LongDescription + Environment.NewLine);
+                }
+            }
+            AppendExamples(sb);
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Generates the short form of help which is typically shown when the program is called with no arguments.  The short help is generated
+        /// by specifying the Description attribute on the decoration of the command line arguments class.
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">Thrown when ArgumentVals is null</exception>
+        /// <exception cref="System.ArgumentException">Thrown when no fields are found.</exception>
+        /// <param name="argumentValues">The class with the [CommandLineArguments] attribute used to generate the help.</param>
+        /// <param name="appName">The application name to write out into the help.</param>
+        /// <returns>A string of short form comments, with newlines in to format correctly.</returns>
+        public string GenerateShortHelp(object argumentValues, string appName) {
+            b.Info.Flow();
+
+            #region entry code
+
+            if (argumentValues == null) { throw new ArgumentNullException("argumentValues", "The argumentVals class can not be null for a call to ProcessArguments"); }
+
+            // validate that the first parameter has the CommandLineArgumentsAttribute set.
+            object[] ats = argumentValues.GetType().GetCustomAttributes(typeof(CommandLineArgumentsAttribute), true);
+            bool cmdLineArgsAttFound = false;
+            if (ats.Length > 0) {
+                foreach (object o in ats) {
+                    if (o is CommandLineArgumentsAttribute) { cmdLineArgsAttFound = true; break; }
+                }
+            }
+
+            if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentValues class must have CommandLineArgumentsAttribute specified", "argumentValues"); }
+
+            #endregion entry code
+
+            b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
+
+            var argumentClass = argumentValues.GetType();
+            var membersToCheckForHelp = GetMembersFromArgumentClassAndVerify(argumentClass);
+
+            // We now have a list of all of the fields that we are expecting to find command line argument
+            // information on.  We run through this trying to find which argument for which field.
+            var fams = new List<FieldArgumentMapping>();
+
+            // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
+            // to the parameters that are passed in.
+
+            PopulateFieldMappings(membersToCheckForHelp, fams);
+
+            var sb = new StringBuilder();
+            sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
+            sb.Append(appName + " ");
+
+            foreach (var fam in fams) {
+                if (fam.ParameterMatchesCount > 0) {
+                    sb.Append(fam.ParameterMatches.First() + " ");
+                }
+            }
+            sb.Append(Environment.NewLine + Environment.NewLine);
+
+            foreach (var fam in fams) {
+                if (fam.ParameterMatchesCount > 0) {
+                    sb.Append(fam.ParameterMatches.First() + " " + fam.ShortDescription + Environment.NewLine);
+                }
+            }
+
+            AppendExamples(sb, true);
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Returns the name(s) of arguments that errored (rather than were not matched at all) and a brief description
+        /// of why the error occured.
+        /// </summary>
+        public string[] ListArgumentsWithErrors() {
+            return argumentErrorsDuringLastParse.ToArray();
+        }
+
+        /// <summary>
+        /// FancyPants Generic Overload, by request, but its just a slower version of passing it in.
+        /// </summary>
+        /// <typeparam name="T">The argument type to use</typeparam>
+        /// <param name="args">The args with the parameters</param>
+        /// <returns>A new instance of the arguments type, populated with values</returns>
+        public T ProcessArguments<T>(string[] args) where T : new() {
+            T result = (T)Activator.CreateInstance(typeof(T));
+            ProcessArguments(result, args);
+            return result;
+        }
 
         /// <summary>
         /// ProcessArguments will process the command line arguments and pass the values into the class passed as argumentVals, assuming
@@ -113,7 +248,7 @@
 
                 if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentVals class must have CommandLineArgumentsAttribute specified", "argumentValuesClassInstance"); }
 
-                #endregion
+                #endregion validation
 
                 b.Info.Log($"ProcessArguments Prefix: {argumentPrefix}, PostFix:{ArgumentPostfix}");
 
@@ -182,11 +317,127 @@
                             }
                         }
                     }
-
-
                 }
             } finally {
                 b.Info.X();
+            }
+        }
+
+        private static bool StringToBool(string theValue) {
+            bool tbool;
+
+            string argWorkingString = theValue.ToLower();
+            if ((argWorkingString == "y") || (argWorkingString == "yes") || (argWorkingString == "t")) {
+                tbool = true;
+            } else if ((argWorkingString == "n") || (argWorkingString == "no" || (argWorkingString == "f"))) {
+                tbool = false;
+            } else {
+                tbool = bool.Parse(theValue);
+            }
+            return tbool;
+        }
+
+        private void AppendExamples(StringBuilder sb, bool firstOnly = false) {
+            if (Examples.Any()) {
+                if (!firstOnly) {
+                    sb.AppendLine();
+                    sb.AppendLine("*** EXAMPLES ***");
+                    sb.AppendLine();
+                }
+                for (int i = 0; i < Examples.Count(); i++) {
+                    sb.AppendLine("Example: " + Examples[i].Item1);
+                    sb.AppendLine(Examples[i].Item2);
+                    sb.AppendLine();
+                    if (firstOnly) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Assigns a value which is specified in a string to a reflected field, parsing the value into the type of the field that is expected, if the
+        /// value in the string can not be parsed into the value that the field is expecting correctly then an ArgumentException is thrown.
+        /// </summary>
+        /// <remarks>If the FieldInfo type is boolean then the string value supports True/Yes/Y/T as values.</remarks>
+        /// <remarks>This method should not be called with theValue parameter being null, if it is theValue is converted to an empty string</remarks>
+        /// <exception cref="System.ArgumentException">Thrown if the value can not be assigned to the field</exception>
+        /// <param name="theField">The reflected FieldInfo type describing the field that is to be filled/</param>
+        /// <param name="theObject">The object which is to have the value passed into it</param>
+        /// <param name="theValue">The string representation of the value</param>
+        private void AssignValueToField(FieldInfo theField, object theObject, object theValue) {
+
+            #region entry code
+
+            if (theValue == null) { theValue = string.Empty; }
+
+            #endregion entry code
+
+            try {
+                b.Verbose.Log("AssignValueToField called for field type " + theField.ToString() + " assigning value " + theValue);
+
+                theField.SetValue(theObject, theValue);
+            } catch (OverflowException ofx) {
+                b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
+                throw new ArgumentException("The value could not be parsed to a " + theField.FieldType.ToString(), "theValue", ofx);
+            } catch (FormatException fex) {
+                // Do this to make it consistant with the error from SetValue
+                b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
+                throw new ArgumentException("The value could not be parsed to a " + theField.FieldType.ToString(), "theValue", fex);
+            }
+        }
+
+        /// <summary>
+        /// This is the default assignment which attempts to put the value in as an object
+        /// </summary>
+        /// <param name="fam">Mapping fo field to argument</param>
+        /// <param name="theObject">The object containing the field</param>
+        /// <param name="argumentValueToParse">The value to set it to.</param>
+        private void AssignValueToMember(FieldArgumentMapping fam, object theObject, string argumentValueToParse) {
+            Type t = null;
+            var f = fam.TargetField as FieldInfo;
+            if (f != null) {
+                t = f.FieldType;
+            }
+            var x = fam.TargetField as PropertyInfo;
+            if (x != null) {
+                t = x.PropertyType;
+            }
+
+            object o = GetValue(t, argumentValueToParse, fam.ArraySeparatorChar);
+            DirectAssginValue(fam, theObject, o);
+        }
+
+        private void AssignValueToProperty(PropertyInfo prop, object theObject, object theValue) {
+
+            #region entry code
+
+            if (theValue == null) { theValue = string.Empty; }
+            if (!prop.CanWrite) { throw new ArithmeticException("The property must be writable"); }
+
+            #endregion entry code
+
+            b.Verbose.Log("AssignValueToField called for property type " + prop.ToString() + " assigning value " + theValue);
+            prop.SetValue(theObject, theValue, null);
+        }
+
+        /// <summary>
+        /// Massage the argument values to remove the argument postfix from them if it is specified.
+        /// </summary>
+        /// <param name="arg">The argument values themselves</param>
+        /// <returns>The argument values minus any postfix.</returns>
+        private string ConvertArgumentToRemovePostfixes(string arg) {
+            if ((ArgumentPostfix != null) && (ArgumentPostfix.Length > 0) && (arg.StartsWith(ArgumentPostfix))) {
+                return arg.Substring(ArgumentPostfix.Length);
+            }
+            return arg;
+        }
+
+        private void DirectAssginValue(FieldArgumentMapping fam, object theObject, object argumentValueToParse) {
+            if (fam.TargetField.MemberType == MemberTypes.Field) {
+                AssignValueToField((FieldInfo)fam.TargetField, theObject, argumentValueToParse);
+            } else {
+                AssignValueToProperty((PropertyInfo)fam.TargetField, theObject, argumentValueToParse);
             }
         }
 
@@ -209,8 +460,6 @@
             }
             return result;
         }
-
-
 
         private object GetValue(Type memberType, string theValue, string arraySeparatorChar) {
             try {
@@ -241,8 +490,6 @@
                 }
 
                 if (memberType.IsArray) {
-
-
                     if (theValue.StartsWith(arraySeparatorChar)) {
                         theValue = theValue.Substring(1);
                     }
@@ -262,7 +509,6 @@
                     } else {
                         result = s;
                     }
-
                 }
                 return result;
             } catch (OverflowException ofx) {
@@ -273,108 +519,6 @@
                 b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
                 throw new ArgumentException("The value could not be parsed to a " + memberType.ToString(), nameof(theValue), fex);
             }
-        }
-
-        /// <summary>
-        /// This is the default assignment which attempts to put the value in as an object
-        /// </summary>
-        /// <param name="fam">Mapping fo field to argument</param>
-        /// <param name="theObject">The object containing the field</param>
-        /// <param name="argumentValueToParse">The value to set it to.</param>
-        private void AssignValueToMember(FieldArgumentMapping fam, object theObject, string argumentValueToParse) {
-
-            Type t = null;
-            var f = fam.TargetField as FieldInfo;
-            if (f != null) {
-                t = f.FieldType;
-            }
-            var x = fam.TargetField as PropertyInfo;
-            if (x != null) {
-                t = x.PropertyType;
-            }
-
-            object o = GetValue(t, argumentValueToParse, fam.ArraySeparatorChar);
-            DirectAssginValue(fam, theObject, o);
-        }
-
-        private void DirectAssginValue(FieldArgumentMapping fam, object theObject, object argumentValueToParse) {
-            if (fam.TargetField.MemberType == MemberTypes.Field) {
-                AssignValueToField((FieldInfo)fam.TargetField, theObject, argumentValueToParse);
-            } else {
-                AssignValueToProperty((PropertyInfo)fam.TargetField, theObject, argumentValueToParse);
-            }
-        }
-
-        private void AssignValueToProperty(PropertyInfo prop, object theObject, object theValue) {
-            #region entry code
-
-            if (theValue == null) { theValue = string.Empty; }
-            if (!prop.CanWrite) { throw new ArithmeticException("The property must be writable"); }
-
-            #endregion
-
-
-            b.Verbose.Log("AssignValueToField called for property type " + prop.ToString() + " assigning value " + theValue);
-            prop.SetValue(theObject, theValue, null);
-
-        }
-
-        /// <summary>
-        /// Assigns a value which is specified in a string to a reflected field, parsing the value into the type of the field that is expected, if the
-        /// value in the string can not be parsed into the value that the field is expecting correctly then an ArgumentException is thrown.
-        /// </summary>
-        /// <remarks>If the FieldInfo type is boolean then the string value supports True/Yes/Y/T as values.</remarks>
-        /// <remarks>This method should not be called with theValue parameter being null, if it is theValue is converted to an empty string</remarks>
-        /// <exception cref="System.ArgumentException">Thrown if the value can not be assigned to the field</exception>
-        /// <param name="theField">The reflected FieldInfo type describing the field that is to be filled/</param>
-        /// <param name="theObject">The object which is to have the value passed into it</param>
-        /// <param name="theValue">The string representation of the value</param>
-        private void AssignValueToField(FieldInfo theField, object theObject, object theValue) {
-
-            #region entry code
-
-            if (theValue == null) { theValue = string.Empty; }
-
-            #endregion
-
-            try {
-                b.Verbose.Log("AssignValueToField called for field type " + theField.ToString() + " assigning value " + theValue);
-
-                theField.SetValue(theObject, theValue);
-            } catch (OverflowException ofx) {
-                b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
-                throw new ArgumentException("The value could not be parsed to a " + theField.FieldType.ToString(), "theValue", ofx);
-            } catch (FormatException fex) {
-                // Do this to make it consistant with the error from SetValue
-                b.Warning.Log("Error parsing the argument that was passed, unable to convert the data into a boolean.");
-                throw new ArgumentException("The value could not be parsed to a " + theField.FieldType.ToString(), "theValue", fex);
-            }
-        }
-
-        private static bool StringToBool(string theValue) {
-            bool tbool;
-
-            string argWorkingString = theValue.ToLower();
-            if ((argWorkingString == "y") || (argWorkingString == "yes") || (argWorkingString == "t")) {
-                tbool = true;
-            } else if ((argWorkingString == "n") || (argWorkingString == "no" || (argWorkingString == "f"))) {
-                tbool = false;
-            } else {
-                tbool = bool.Parse(theValue);
-            }
-            return tbool;
-        }
-
-        /// <summary>
-        /// Massage the argument values to remove the argument postfix from them if it is specified.
-        /// </summary>
-        /// <param name="arg">The argument values themselves</param>
-        /// <returns>The argument values minus any postfix.</returns>
-        private string ConvertArgumentToRemovePostfixes(string arg) {
-            if ((ArgumentPostfix != null) && (ArgumentPostfix.Length > 0) && (arg.StartsWith(ArgumentPostfix))) {
-                return arg.Substring(ArgumentPostfix.Length);
-            }
-            return arg;
         }
 
         /// <summary>
@@ -392,7 +536,7 @@
             //b.Assert.True(members != null, "The array of fieldInfos can not be null");
             //b.Assert.True(fim != null, "the list of fieldArgumentMappings can not be null");
 
-            #endregion
+            #endregion entry code
 
             // Look at each of the fields in the class in turn, identifying the attributes and using them to determine how to
             // map parameters to the values.
@@ -404,12 +548,10 @@
 
                 var custAttribs = (CommandLineArgumentBaseAttribute[])f.GetCustomAttributes(typeof(CommandLineArgumentBaseAttribute), true);
                 foreach (var claba in custAttribs) {
-
                     nextMapping.ShortDescription = claba.Description;
                     nextMapping.LongDescription = claba.FullDescription;
 
                     if (claba is CommandLineArgAttribute argAtt) {
-
                         nextMapping.IsDefaultSingleArgument = argAtt.IsSingleParameterDefault;
                         if (!string.IsNullOrEmpty(argAtt.ArraySeparatorChar)) {
                             nextMapping.ArraySeparatorChar = argAtt.ArraySeparatorChar;
@@ -434,162 +576,6 @@
                 }
 
                 fim.Add(nextMapping);
-            }
-        }
-
-        /// <summary>
-        /// Adds an example to the help text that is generated.  Each example should have a one line syntactically correct option and a secondary
-        /// description option
-        /// </summary>
-        /// <param name="example">The syntactic example</param>
-        /// <param name="description">The description</param>
-        public void AddExample(string example, string description) {
-            Examples.Add(new Tuple<string, string>(example, description));
-        }
-        /// <summary>
-        /// Generates the short form of help which is typically shown when the program is called with no arguments.  The short help is generated
-        /// by specifying the Description attribute on the decoration of the command line arguments class.
-        /// </summary>
-        /// <exception cref="System.ArgumentNullException">Thrown when ArgumentVals is null</exception>
-        /// <exception cref="System.ArgumentException">Thrown when no fields are found.</exception>
-        /// <param name="argumentValues">The class with the [CommandLineArguments] attribute used to generate the help.</param>
-        /// <param name="appName">The application name to write out into the help.</param>
-        /// <returns>A string of short form comments, with newlines in to format correctly.</returns>
-        public string GenerateShortHelp(object argumentValues, string appName) {
-            b.Info.Flow();
-            #region entry code
-
-            if (argumentValues == null) { throw new ArgumentNullException("argumentValues", "The argumentVals class can not be null for a call to ProcessArguments"); }
-
-            // validate that the first parameter has the CommandLineArgumentsAttribute set.
-            object[] ats = argumentValues.GetType().GetCustomAttributes(typeof(CommandLineArgumentsAttribute), true);
-            bool cmdLineArgsAttFound = false;
-            if (ats.Length > 0) {
-                foreach (object o in ats) {
-                    if (o is CommandLineArgumentsAttribute) { cmdLineArgsAttFound = true; break; }
-                }
-            }
-
-            if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentValues class must have CommandLineArgumentsAttribute specified", "argumentValues"); }
-
-            #endregion
-
-            b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
-
-            var argumentClass = argumentValues.GetType();
-            var membersToCheckForHelp = GetMembersFromArgumentClassAndVerify(argumentClass);
-
-            // We now have a list of all of the fields that we are expecting to find command line argument
-            // information on.  We run through this trying to find which argument for which field.
-            var fams = new List<FieldArgumentMapping>();
-
-            // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
-            // to the parameters that are passed in.
-
-            PopulateFieldMappings(membersToCheckForHelp, fams);
-
-            var sb = new StringBuilder();
-            sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
-            sb.Append(appName + " ");
-
-            foreach (var fam in fams) {
-                if (fam.ParameterMatchesCount > 0) {
-                    sb.Append(fam.ParameterMatches.First() + " ");
-                }
-            }
-            sb.Append(Environment.NewLine + Environment.NewLine);
-
-            foreach (var fam in fams) {
-                if (fam.ParameterMatchesCount > 0) {
-                    sb.Append(fam.ParameterMatches.First() + " " + fam.ShortDescription + Environment.NewLine);
-                }
-            }
-
-            AppendExamples(sb,true);
-            return sb.ToString();
-
-        }
-
-        /// <summary>
-        /// Generates the longer form of help which is typically shown when the program is called with no arguments.  The FullDescription
-        /// text is used for outputting the content of this help screen.
-        /// </summary>
-        /// <exception cref="System.ArgumentNullException">Thrown when ArgumentVals is null</exception>
-        /// <exception cref="System.ArgumentException">Thrown when the argumentVals has no attributes or no fields.</exception>
-        /// <param name="commandLineArgumentClass">The class with the [CommandLineArguments] attribute used to generate the help.</param>
-        /// <param name="appName">The application name</param>
-        /// <returns>A string of short form comments</returns>
-        public string GenerateHelp(object commandLineArgumentClass, string appName) {
-            b.Info.Flow();
-
-
-            #region entry code
-
-            if (commandLineArgumentClass == null) { throw new ArgumentNullException("commandLineArgumentClass", "The argumentVals class can not be null for a call to ProcessArguments"); }
-
-            // validate that the first parameter has the CommandLineArgumentsAttribute set.
-            object[] ats = commandLineArgumentClass.GetType().GetCustomAttributes(typeof(CommandLineArgumentsAttribute), true);
-            bool cmdLineArgsAttFound = false;
-            if (ats.Length > 0) {
-                foreach (object o in ats) {
-                    if (o is CommandLineArgumentsAttribute) { cmdLineArgsAttFound = true; break; }
-                }
-            }
-
-            if (!cmdLineArgsAttFound) { throw new ArgumentException("The argumentVals class must have CommandLineArgumentsAttribute specified", "commandLineArgumentClass"); }
-
-            #endregion
-
-            b.Info.Log("Initial entry code passed, about to inspect the argument vals class");
-
-            var argumentClass = commandLineArgumentClass.GetType();
-
-            var getMembersToPopulate = GetMembersFromArgumentClassAndVerify(argumentClass);
-
-            // We now have a list of all of the fields that we are expecting to find command line argument
-            // information on.  We run through this trying to find which argument for which field.
-            var fams = new List<FieldArgumentMapping>();
-
-            // Look at all of the arguments on each of the fields within the target class, this will allow us to map the arguments
-            // to the parameters that are passed in.
-
-            PopulateFieldMappings(getMembersToPopulate, fams);
-
-            var sb = new StringBuilder();
-            sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
-            sb.Append(appName + " ");
-
-            foreach (var fam in fams) {
-                if (fam.ParameterMatchesCount > 0) {
-                    sb.Append(fam.ParameterMatches.First() + " ");
-                }
-            }
-            sb.Append(Environment.NewLine + Environment.NewLine);
-
-            foreach (var fam in fams) {
-                if (fam.ParameterMatchesCount > 0) {
-                    sb.Append(fam.ParameterMatches.First() + " " + fam.LongDescription + Environment.NewLine);
-                }
-            }
-            AppendExamples(sb);
-            return sb.ToString();
-        }
-
-        private void AppendExamples(StringBuilder sb, bool firstOnly=false) {
-            if (Examples.Any()) {
-                if (!firstOnly) {
-                    sb.AppendLine();
-                    sb.AppendLine("*** EXAMPLES ***");
-                    sb.AppendLine();
-                }
-                for (int i = 0; i < Examples.Count(); i++) {
-                    sb.AppendLine("Example: " + Examples[i].Item1);
-                    sb.AppendLine(Examples[i].Item2);
-                    sb.AppendLine();
-                    if (firstOnly) {
-                        break;
-                    }
-                }
             }
         }
     }

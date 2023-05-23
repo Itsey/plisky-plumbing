@@ -14,6 +14,10 @@
             openerReference = new WeakReference(addOpener);
         }
 
+        internal override bool ContainsThisAction(object testSubject) {
+            return object.ReferenceEquals(openerReference.Target, testSubject);
+        }
+
         internal override void OpenNote() {
             Action<T1> reciever = (Action<T1>)openerReference.Target;
             if (reciever != null) {
@@ -38,10 +42,6 @@
 
         internal override bool Valid() {
             return openerReference.IsAlive;
-        }
-
-        internal override bool ContainsThisAction(object testSubject) {
-            return object.ReferenceEquals(openerReference.Target, testSubject);
         }
     }
 }

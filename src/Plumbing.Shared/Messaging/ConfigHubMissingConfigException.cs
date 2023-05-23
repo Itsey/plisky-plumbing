@@ -3,30 +3,36 @@
     using System;
 
     [Serializable]
-    public class ConfigHubMissingConfigException : Exception {
+    public class ConfigHubConfigurationFailureException : Exception {
 
-        public ConfigHubMissingConfigException() { }
+        public ConfigHubConfigurationFailureException() {
+        }
 
-        public ConfigHubMissingConfigException(string message) : base(message) { }
+        public ConfigHubConfigurationFailureException(string message) : base(message) {
+        }
 
-        public ConfigHubMissingConfigException(string message, Exception inner) : base(message, inner) { }
+        public ConfigHubConfigurationFailureException(string message, Exception inner) : base(message, inner) {
+        }
 
-        protected ConfigHubMissingConfigException(
+        protected ConfigHubConfigurationFailureException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context)
             : base(info, context) { }
     }
 
     [Serializable]
-    public class ConfigHubConfigurationFailureException : Exception {
+    public class ConfigHubMissingConfigException : Exception {
 
-        public ConfigHubConfigurationFailureException() { }
+        public ConfigHubMissingConfigException() {
+        }
 
-        public ConfigHubConfigurationFailureException(string message) : base(message) { }
+        public ConfigHubMissingConfigException(string message) : base(message) {
+        }
 
-        public ConfigHubConfigurationFailureException(string message, Exception inner) : base(message, inner) { }
+        public ConfigHubMissingConfigException(string message, Exception inner) : base(message, inner) {
+        }
 
-        protected ConfigHubConfigurationFailureException(
+        protected ConfigHubMissingConfigException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context)
             : base(info, context) { }

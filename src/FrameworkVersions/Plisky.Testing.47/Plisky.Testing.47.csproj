@@ -51,10 +51,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Plisky.Diagnostics">
-      <Version>3.1.5</Version>
+      <Version>3.1.11</Version>
+    </PackageReference>
+    <PackageReference Include="Plisky.Listeners">
+      <Version>3.1.11</Version>
     </PackageReference>
     <PackageReference Include="xunit.core">
-      <Version>2.4.1</Version>
+      <Version>2.4.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\..\Plumbing.Testing\Plumbing.Testing.projitems" Label="Shared" />

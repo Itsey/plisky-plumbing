@@ -1,6 +1,7 @@
 ﻿namespace Plisky.Test {
-    using Plisky.Plumbing;
+
     using System;
+    using Plisky.Plumbing;
 
     // Special named variables in classes to allow for the use cases where people have different coding conventions and ensuring
     // that this does not affect the usability of the args parser.
@@ -49,17 +50,15 @@
         public long NumberParam2 { get; set; }
     }
 
-
     [CommandLineArguments]
     public class SampleCommandLine_C3A {
 
-        [CommandLineArg("StrArray",ArraySeparatorChar =";")]
+        [CommandLineArg("StrArray", ArraySeparatorChar = ";")]
         public string[] StrArray { get; set; }
     }
 
     [CommandLineArguments]
     public class SampleCommandLine_C3 {
-        
 
         [CommandLineArg("IntArray")]
         public int[] NumArray { get; set; }
@@ -68,26 +67,22 @@
         public string[] StrArray { get; set; }
     }
 
-
     [CommandLineArguments]
     public class SampleCommandLine_C4 {
 
         [CommandLineArg("dt1")]
         public DateTime datey1 { get; set; }
-
     }
 
     [CommandLineArguments]
     public class SampleCommandLine_C5 {
 
-        [CommandLineArg("first",IsRequired =true)]
+        [CommandLineArg("first", IsRequired = true)]
         public string first { get; set; }
 
         [CommandLineArg("second", IsRequired = true)]
         public int second { get; set; }
-
     }
-
 
     [CommandLineArguments]
     public class SampleCommandLine_C6 {

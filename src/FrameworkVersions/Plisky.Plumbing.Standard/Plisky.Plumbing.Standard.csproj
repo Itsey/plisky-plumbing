@@ -30,8 +30,10 @@
     <None Remove="Plisky.Plumbing.xml" />
   </ItemGroup>
 
+
   <ItemGroup>
-    <PackageReference Include="Plisky.Diagnostics" Version="3.1.5" />
+    <PackageReference Include="Plisky.Diagnostics" Version="3.1.11" />
+    <PackageReference Include="Plisky.Listeners" Version="3.1.11" />
   </ItemGroup>
 
 </Project>

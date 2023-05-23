@@ -1,12 +1,12 @@
 ﻿namespace Plisky.Plumbing {
-    using Plisky.Diagnostics;
+
     using System;
     using System.Collections.Generic;
     using System.Configuration;
-    using System.Diagnostics;
     using System.IO;
     using System.Reflection;
     using System.Xml.Linq;
+    using Plisky.Diagnostics;
 
     /// <summary>
     /// A class responsible for managing access to configuration information that may be required by an application.  Providers can place information into
@@ -16,7 +16,6 @@
         protected List<string> fallbackRegistrationWarnings = new List<string>();
         private Bilge b = new Bilge("Plisky-ConfigHub");
         private static string CONFIGHUB_EXTENSION = ".chConfig";
-
 
         public const string DATETIMESETTINGNAME = "defaultdatetimevalue";
         public const string DEFAULTMACHINENAME = "defaultmachinename";
@@ -39,7 +38,7 @@
             return CryptoProvider.DecryptValue(s);
         }
 
-        #endregion
+        #endregion private bits
 
         #region static instance stuff
 
@@ -70,12 +69,11 @@
             }
         }
 
-        #endregion
+        #endregion static instance stuff
 
         public ConfigHub() {
             b.Info.Log("ConfigHub Instance Online.");
         }
-
 
         /// <summary>
         /// Adds a fallback handler to look up the settings from App.Config based on the settings name.  The default app config behaviour is that
@@ -93,7 +91,7 @@
                 const int MARKERIDLEN = 2;  // MARKERIDENTIFIER.Length
                 const int MARKERIDLENDOUBLED = 4;  // MARKERIDENTIFIER.Length ;
 
-                #endregion
+                #endregion marker constants
 
                 string vmatch;
                 vmatch = ConfigurationManager.AppSettings[pName];
@@ -111,17 +109,13 @@
                 return vmatch;
             });
 #else
-        b.Warning.Log("AppConfigFallback not suportted under net core");
+            b.Warning.Log("AppConfigFallback not suportted under net core");
 #endif
         }
 
-
-
-
-
         /// <summary>
         /// Adds a fall back handler to look up settings in xml files based on the machine name in a specific driectory. The behaviour is to find files
-        /// that are machinename.chcfg to resolve the settings names.  If an app setting is set to Environment name then environmentname.chcfg will 
+        /// that are machinename.chcfg to resolve the settings names.  If an app setting is set to Environment name then environmentname.chcfg will
         /// be looked for instead.
         /// </summary>
         /// <param name="directory">The directory to search [APP] can be used as the app directory and [APP]\subdir works too. Null uses current directory.  Environment variables are expanded</param>
@@ -129,7 +123,6 @@
         public void AddDirectoryFallbackProvider(string directory, string fileName = null) {
             b.Info.Flow($"Dir[{directory}], filename [{fileName ?? "null"}]");
             string actualDir = GetDirectoryName(directory);
-
 
             if (fileName == null) {
                 SetupMachineName();
@@ -147,7 +140,6 @@
 
             if (File.Exists(machineBasedFilename)) {
                 RegisterFallbackProvider((setName) => {
-
                     b.Verbose.Log($"Directory Fallback - Setting:{setName}", $"fallback provider file: {machineBasedFilename}");
                     var x = XDocument.Load(machineBasedFilename);
                     return GetSettingsFromCustomXmlFile(x, setName);
@@ -176,7 +168,6 @@
             }
 
             result = ActualExpandForEnvironmentVariables(result);
-
 
             b.Verbose.Log($"Result [{result}]");
             return result;
@@ -380,14 +371,17 @@
         /// <param name="mustBePresent">Boolean, defaults to false.  Set to true if an exception should be thrown if no value can be found.</param>
         /// <returns>A string based value indicating the setting</returns>
         public string GetSetting(string settingName, bool mustBePresent = false, bool isEncrypted = false) {
-#region validation
+
+            #region validation
+
             if (settingName == null) {
                 throw new ArgumentNullException(nameof(settingName), "You must provide a setting name to get a setting");
             }
             if (string.IsNullOrWhiteSpace(settingName)) {
                 throw new ArgumentOutOfRangeException(nameof(settingName), "You must provide a setting name to get a settting");
             }
-#endregion
+
+            #endregion validation
 
             settingName = settingName.ToLowerInvariant();
             b.Info.Flow($"{settingName},{mustBePresent}");
@@ -399,7 +393,6 @@
             }
 
             if (val == null) {
-
                 b.Verbose.Log($"Setting Value Is Null, Trying Fallback List {fallbackList1.Count} fallbacks registered.");
 
                 foreach (var v in fallbackList1) {

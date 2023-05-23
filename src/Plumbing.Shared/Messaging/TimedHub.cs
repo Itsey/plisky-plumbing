@@ -1,16 +1,15 @@
 ﻿namespace Plisky.Plumbing {
 
-
     using System;
     using System.Collections.Generic;
     using System.Threading;
 
     public class TimedHub : Hub {
-        private object lockCollection = new object();
-        private Timer tmr;
-        private List<Tuple<TimePeriodTrigger, HubMessageBase>> timeEventsWaiting = new List<Tuple<TimePeriodTrigger, HubMessageBase>>();
-        protected int executing = 0;
         protected int CallBackTime = 60;
+        protected int executing = 0;
+        private object lockCollection = new object();
+        private List<Tuple<TimePeriodTrigger, HubMessageBase>> timeEventsWaiting = new List<Tuple<TimePeriodTrigger, HubMessageBase>>();
+        private Timer tmr;
 
         public virtual Action<TimePeriodTrigger> LookFor(TimePeriodTrigger tpt, Action<TimePeriodTrigger> openMessage) {
             b.Info.Log("Lookfor Timer Event Started");
@@ -25,6 +24,26 @@
 
             timeEventsWaiting.Add(new Tuple<TimePeriodTrigger, HubMessageBase>(tpt, msg));
             return openMessage;
+        }
+
+        protected virtual DateTime GetDateTime() {
+            return DateTime.Now;
+        }
+
+        private void InitialiseTimerIfNeccesary() {
+            lock (lockCollection) {
+                if (tmr == null) {
+                    tmr = new Timer(TimerCallback, null, CallBackTime, CallBackTime);
+                }
+            }
+        }
+
+        private void StopTimerIfNecessary() {
+            lock (lockCollection) {
+                if (timeEventsWaiting.Count == 0) {
+                    tmr = null;
+                }
+            }
         }
 
         private void TimerCallback(object state) {
@@ -54,26 +73,6 @@
                             v.Item1.LastTimeExecuted = current;
                         }
                     }
-                }
-            }
-        }
-
-        protected virtual DateTime GetDateTime() {
-            return DateTime.Now;
-        }
-
-        private void StopTimerIfNecessary() {
-            lock (lockCollection) {
-                if (timeEventsWaiting.Count == 0) {
-                    tmr = null;
-                }
-            }
-        }
-
-        private void InitialiseTimerIfNeccesary() {
-            lock (lockCollection) {
-                if (tmr == null) {
-                    tmr = new Timer(TimerCallback, null, CallBackTime, CallBackTime);
                 }
             }
         }
