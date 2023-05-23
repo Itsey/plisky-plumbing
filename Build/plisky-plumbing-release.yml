@@ -51,7 +51,7 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'custom'
-    packagesToPack: '**/PliskyPlumbing.nuspec;'
+    packagesToPack: '**/PliskyListeners.nuspec;'
     versioningScheme: 'off'
     arguments: pack $(build.sourcesDirectory)\src\_Dependencies\Packaging\PliskyListeners.nuspec -NonInteractive -OutputDirectory $(Build.ArtifactStagingDirectory) -Properties Configuration=Release -Symbols -Verbosity Detailed -SymbolPackageFormat snupkg
     includeSymbols: true
