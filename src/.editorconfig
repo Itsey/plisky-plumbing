@@ -4,6 +4,19 @@ root = true
 # Don't use tabs for indentation.
 [*]
 indent_style = space
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+tab_width = 4
+indent_size = 4
+end_of_line = crlf
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+dotnet_style_prefer_auto_properties = true:silent
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+dotnet_style_prefer_conditional_expression_over_assignment = true:silent
+dotnet_style_prefer_conditional_expression_over_return = true:silent
 
 # Code files
 [*.{cs,csx}]
@@ -51,14 +64,14 @@ csharp_style_var_when_type_is_apparent                          = true : warning
 csharp_style_var_elsewhere                                      = true : warning
 
 # Prefer method-like constructs to have a block body
-csharp_style_expression_bodied_methods                          = false : none
-csharp_style_expression_bodied_constructors                     = false : none
-csharp_style_expression_bodied_operators                        = false : none
+csharp_style_expression_bodied_methods                          = false:none
+csharp_style_expression_bodied_constructors                     = false:none
+csharp_style_expression_bodied_operators                        = false:none
 
 # Prefer property-like constructs to have an expression-body
-csharp_style_expression_bodied_properties                       = true : none
-csharp_style_expression_bodied_indexers                         = true : none
-csharp_style_expression_bodied_accessors                        = true : none
+csharp_style_expression_bodied_properties                       = true:none
+csharp_style_expression_bodied_indexers                         = true:none
+csharp_style_expression_bodied_accessors                        = true:none
 
 # Suggest more modern language features when available
 csharp_style_pattern_matching_over_is_with_cast_check           = true : suggestion
@@ -88,23 +101,23 @@ dotnet_naming_style.all_variables.required_prefix                  = [a-zA-z]
 dotnet_naming_rule.all_methods_pascalcased.symbols              = all_methods
 dotnet_naming_symbols.all_methods.applicable_kinds              = method
 dotnet_naming_symbols.all_methods.applicable_accessibilities    = *
-dotnet_naming_rule.all_methods_pascalcased.style                = customPascalStyle
-dotnet_naming_rule.all_methods_pascalcased.severity             = error
+dotnet_naming_rule.all_methods_pascalcased.style = customPascalStyle
+dotnet_naming_rule.all_methods_pascalcased.severity = error
 
 #Variables Be PascalCased
 dotnet_naming_rule.all_variables_camel.symbols                  = all_variables
 dotnet_naming_symbols.all_variables.applicable_kinds            = local, parameter
 dotnet_naming_symbols.all_variables.applicable_accessibilities  = *
-dotnet_naming_rule.all_variables_camel.style                    = customCamelCaseStyle
-dotnet_naming_rule.all_variables_camel.severity                 = error
+dotnet_naming_rule.all_variables_camel.style = customCamelCaseStyle
+dotnet_naming_rule.all_variables_camel.severity = error
 
 
 #Properties Be camelCased
 dotnet_naming_rule.all_properties_pascalcased.symbols           = all_properties
 dotnet_naming_symbols.all_properties.applicable_kinds           = property
 dotnet_naming_symbols.all_properties.applicable_accessibilities = *
-dotnet_naming_rule.all_properties_pascalcased.style             = customPascalStyle
-dotnet_naming_rule.all_properties_pascalcased.severity          = error
+dotnet_naming_rule.all_properties_pascalcased.style = customPascalStyle
+dotnet_naming_rule.all_properties_pascalcased.severity = error
 
 
 #Constants be SHOUTEY
@@ -112,8 +125,8 @@ dotnet_naming_rule.all_constants_upper.symbols                  = all_constants
 dotnet_naming_symbols.all_constants.required_modifiers          = const
 dotnet_naming_symbols.all_constants.applicable_kinds            = field, local
 dotnet_naming_symbols.all_constants.applicable_accessibilities  = *
-dotnet_naming_rule.all_constants_upper.style                    = customFullUppercaseStyle
-dotnet_naming_rule.all_constants_upper.severity                 = error
+dotnet_naming_rule.all_constants_upper.style = customFullUppercaseStyle
+dotnet_naming_rule.all_constants_upper.severity = error
 
 
 # prefix_interface_interface_with_i - Interfaces must be PascalCase and the first character of an interface must be an 'I'
@@ -124,6 +137,9 @@ dotnet_naming_rule.interface_types_must_be_prefixed_with_i.severity = error
 dotnet_naming_rule.interface_types_must_be_prefixed_with_i.symbols = interface_types
 dotnet_naming_rule.interface_types_must_be_prefixed_with_i.style = prefix_interface_interface_with_i
 
+
+#SA1116: Parameters go down a line
+dotnet_diagnostic.SA1116.severity = silent
 
 # SA1101: Prefix local calls with this
 dotnet_diagnostic.SA1101.severity = silent
@@ -148,6 +164,7 @@ dotnet_diagnostic.SA1501.severity = silent
 
 # SA1505: Opening braces should not be followed by blank line
 dotnet_diagnostic.SA1505.severity = silent
+dotnet_diagnostic.SA1513.severity = silent
 dotnet_diagnostic.SA1633.severity=silent
 dotnet_diagnostic.SA1634.severity=silent
 dotnet_diagnostic.SA1635.severity=silent
@@ -167,6 +184,19 @@ dotnet_diagnostic.SA1128.severity=silent
 dotnet_diagnostic.SA1401.severity=silent
 dotnet_diagnostic.SA1403.severity=error
 dotnet_diagnostic.SA1306.severity=silent
-
+dotnet_diagnostic.SA1200.severity=silent
+# SA1124 do not use regions
+dotnet_diagnostic.SA1124.severity=silent
 # SA1503: Braces should not be omitted
 dotnet_diagnostic.SA1503.severity = error
+# SA1516: Elements must have blank lines
+dotnet_diagnostic.SA1516.severity=silent
+
+csharp_indent_labels = one_less_than_current
+csharp_using_directive_placement = outside_namespace:silent
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_prefer_braces = true:silent
+csharp_style_namespace_declarations = block_scoped:silent
+csharp_style_expression_bodied_lambdas = true:silent
+csharp_style_expression_bodied_local_functions = false:silent
+csharp_space_around_binary_operators = before_and_after

@@ -1,18 +1,17 @@
-﻿
-namespace Plisky.Test {
+﻿namespace Plisky.Test {
+
+    using System;
     using Plisky.Diagnostics;
     using Plisky.Plumbing;
-    using System;
     using Xunit;
     using Xunit.Abstractions;
 
     public class CommandLineSupport_UseCases {
-        private Bilge b = new Bilge();
         private readonly ITestOutputHelper output;
+        private Bilge b = new Bilge();
 
         public CommandLineSupport_UseCases(ITestOutputHelper output) {
             this.output = output;
-
         }
 
         #region Additional test attributes
@@ -37,9 +36,7 @@ namespace Plisky.Test {
         // public void MyTestCleanup() { }
         //
 
-        #endregion
-
-
+        #endregion Additional test attributes
 
         [Fact(DisplayName = nameof(Sean_DateTime_UseCase))]
         [Trait("age", "fresh")]
@@ -61,50 +58,61 @@ namespace Plisky.Test {
 
             Assert.Equal(first, suc.from);
             Assert.Equal(to, suc.to);
-
-        }
-
-
-        /// <summary>
-        /// Used so that when we change the definition of SampleCommandLine_C1 we dont break all of the unit tests in a strange way.
-        /// </summary>
-        /// <param name="sc">A SampleCommandLine_C1 class</param>
-        private static void VerifySampleCommandLine_InitialState(SampleCommandLine_C1 sc) {
-            Assert.Equal(string.Empty, sc.NameParameterOne);
-            Assert.Equal(string.Empty, sc.NameParameterTwo);
-
-            Assert.False(sc.OptionParameterOne, "Boolean parameter one invalid start state");
-            Assert.False(sc.OptionParameterTwo, "Boolean argument two invalid start state");
-
-            Assert.Equal(0, sc.NumberParameterOne);
-            Assert.Equal(0, sc.NumberParameterTwo);
-        }
-
-        [Fact(DisplayName = nameof(TFSUseCaseRemainderCheck))]
-        
-        public void TFSUseCaseRemainderCheck() {
-            var tcc = new Kev_TFS_UseCase();
-            var clas = new CommandArgumentSupport();
-
-            string[] expectedArgs = new string[] {
-                "/BUILDNAME:TFSSupport_DevDesktopPack_Main_Certified_20090423.8",
-                "/ATTACHMENT:\"c:\\temp\\list.txt\"",
-                "/Remainder:True",
-                "RemainderTwo"
-            };
-
-            clas.ArgumentPrefix = "/";
-            clas.ArgumentPostfix = ":";
-
-            clas.ProcessArguments(tcc, expectedArgs);
-
-            Assert.Equal(2, tcc.Remainder.Length);
-            Assert.Equal("/Remainder:True", tcc.Remainder[0]);
-            Assert.Equal("RemainderTwo", tcc.Remainder[1]);
         }
 
         [Fact]
-        
+        public void TestingKevsUseCase2() {
+            var tcc = new Kev_TFS_UseCase();
+            var clas = new CommandArgumentSupport();
+            string longHelp = clas.GenerateHelp(tcc, "Bugger");
+            output.WriteLine(longHelp);
+            Assert.True(longHelp.Contains("Bugger"), "The application name was not present in long help");
+        }
+
+        [Fact]
+        public void TestingKevsUseCase3() {
+            var tcc = new Kev_TFS_UseCase();
+            var clas = new CommandArgumentSupport();
+
+            string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
+            output.WriteLine(shortHelp);
+            Assert.True(shortHelp.Contains("Bugger"), "the application name was not present in long help");
+            Assert.True(shortHelp.Contains("Pass the build"), "one of the descriptions did not make it into short help");
+            Assert.True(shortHelp.Contains("Pass a filename"), "one of the descriptions did not make it into short help");
+        }
+
+        [Fact]
+        [Trait(Traits.Style, Traits.Fresh)]
+        public void TestingKevsUseCase4() {
+            var tcc = new Kev_TFS_UseCase();
+            var clas = new CommandArgumentSupport();
+            for (int i = 1; i <= 5; i++) {
+                clas.AddExample($"Example{i}", $"Details{i}");
+            }
+            string longHelp = clas.GenerateHelp(tcc, "Bugger");
+            output.WriteLine(longHelp);
+            for (int i = 1; i <= 5; i++) {
+                Assert.True(longHelp.Contains($"Example{i}"), $"The #{i} Example was not in long help");
+                Assert.True(longHelp.Contains($"Details{i}"), $"The #{i} Example detail was not in long help");
+            }
+        }
+
+        [Fact]
+        [Trait(Traits.Style, Traits.Fresh)]
+        public void TestingKevsUseCase5() {
+            var tcc = new Kev_TFS_UseCase();
+            var clas = new CommandArgumentSupport();
+            for (int i = 1; i <= 5; i++) {
+                clas.AddExample($"Example{i}", $"Details{i}");
+            }
+            string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
+            output.WriteLine(shortHelp);
+
+            Assert.True(shortHelp.Contains($"Example{1}"), $"The #{1} Example was not in long help");
+            Assert.True(shortHelp.Contains($"Details{1}"), $"The #{1} Example detail was not in long help");
+        }
+
+        [Fact]
         public void TFSUseCaseOptionalPrefix() {
             var tcc1 = new Kev_TFS_UseCase();
             var tcc2 = new Kev_TFS_UseCase();
@@ -134,8 +142,29 @@ namespace Plisky.Test {
             Assert.Equal(tcc1.Attachment, tcc2.Attachment);
         }
 
+        [Fact(DisplayName = nameof(TFSUseCaseRemainderCheck))]
+        public void TFSUseCaseRemainderCheck() {
+            var tcc = new Kev_TFS_UseCase();
+            var clas = new CommandArgumentSupport();
+
+            string[] expectedArgs = new string[] {
+                "/BUILDNAME:TFSSupport_DevDesktopPack_Main_Certified_20090423.8",
+                "/ATTACHMENT:\"c:\\temp\\list.txt\"",
+                "/Remainder:True",
+                "RemainderTwo"
+            };
+
+            clas.ArgumentPrefix = "/";
+            clas.ArgumentPostfix = ":";
+
+            clas.ProcessArguments(tcc, expectedArgs);
+
+            Assert.Equal(2, tcc.Remainder.Length);
+            Assert.Equal("/Remainder:True", tcc.Remainder[0]);
+            Assert.Equal("RemainderTwo", tcc.Remainder[1]);
+        }
+
         [Fact]
-        
         public void TFSUseCaseUsesProperties() {
             var tcc = new Kev_TFS_UseCase();
             var clas = new CommandArgumentSupport();
@@ -156,64 +185,6 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        
-        public void TestingKevsUseCase2() {
-            var tcc = new Kev_TFS_UseCase();
-            var clas = new CommandArgumentSupport();
-            string longHelp = clas.GenerateHelp(tcc, "Bugger");
-            output.WriteLine(longHelp);
-            Assert.True(longHelp.Contains("Bugger"), "The application name was not present in long help");
-        }
-
-        [Fact]
-        
-        public void TestingKevsUseCase3() {
-            var tcc = new Kev_TFS_UseCase();
-            var clas = new CommandArgumentSupport();
-
-            string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
-            output.WriteLine(shortHelp);
-            Assert.True(shortHelp.Contains("Bugger"), "the application name was not present in long help");
-            Assert.True(shortHelp.Contains("Pass the build"), "one of the descriptions did not make it into short help");
-            Assert.True(shortHelp.Contains("Pass a filename"), "one of the descriptions did not make it into short help");
-        }
-
-        [Fact]
-        [Trait(Traits.Style, Traits.Fresh)]
-        public void TestingKevsUseCase4() {
-            var tcc = new Kev_TFS_UseCase();
-            var clas = new CommandArgumentSupport();
-            for (int i = 1; i <= 5; i++) {
-                clas.AddExample($"Example{i}", $"Details{i}");
-            }
-            string longHelp = clas.GenerateHelp(tcc, "Bugger");
-            output.WriteLine(longHelp);
-            for (int i = 1; i <= 5; i++) {
-                Assert.True(longHelp.Contains($"Example{i}"), $"The #{i} Example was not in long help");
-                Assert.True(longHelp.Contains($"Details{i}"), $"The #{i} Example detail was not in long help");
-            }
-
-        }
-
-        [Fact]
-        [Trait(Traits.Style, Traits.Fresh)]
-        public void TestingKevsUseCase5() {
-            var tcc = new Kev_TFS_UseCase();
-            var clas = new CommandArgumentSupport();
-            for (int i = 1; i <= 5; i++) {
-                clas.AddExample($"Example{i}", $"Details{i}");
-            }
-            string shortHelp = clas.GenerateShortHelp(tcc, "Bugger");
-            output.WriteLine(shortHelp);
-
-            Assert.True(shortHelp.Contains($"Example{1}"), $"The #{1} Example was not in long help");
-            Assert.True(shortHelp.Contains($"Details{1}"), $"The #{1} Example detail was not in long help");
-
-
-        }
-
-        [Fact]
-        
         public void UseCase1_BasicFilenameParameter() {
             b.Info.Log("Starting Usecase1 Basic testing");
 
@@ -223,7 +194,7 @@ namespace Plisky.Test {
             const string FILENAME2 = "Test2.xslt";
             const string FILENAME3 = "Test.xml";
 
-            #endregion
+            #endregion string constants used to avoid types
 
             UC1_BasicFilenameParameters uc1Class = new UC1_BasicFilenameParameters();
 
@@ -234,7 +205,7 @@ namespace Plisky.Test {
             Assert.True(uc1Class.OutputFilename.Length == 0, "The initial state of output filename is wrong");
             Assert.False(uc1Class.OverwriteOutput, "The initial state of overwrite is wrong");
 
-            #endregion
+            #endregion verify the initial state of the class
 
             string[] expectedArguments = new string[] { "/X1:" + FILENAME1, "/x2:" + FILENAME2, "/o:" + FILENAME3, "/Y" };
 
@@ -252,7 +223,6 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        
         public void UseCase2_OptionalParameterDefaultFilenames() {
             b.Info.Log("Starting UseCase2 Testing");
 
@@ -260,7 +230,7 @@ namespace Plisky.Test {
 
             string[] fileNames = new string[] { "file1.xml", "file2arflebarfleglooopmakethestringmuchlongerifwecan.xml", "c:\\temp\\files\\file3.xml", "\\s816244\\c$\\afile\\file4.xml", "file://testingfile/file5.xml" };
 
-            #endregion
+            #endregion predefined string values used to avoid typos
 
             UC2_OptionPlusDefaultFilenames uc2Class = new UC2_OptionPlusDefaultFilenames();
 
@@ -270,7 +240,7 @@ namespace Plisky.Test {
             Assert.True(uc2Class.Filenames.Length == 0, "The initial state of the default array is wrong");
             Assert.True(uc2Class.Overwrite == false, "the initial state of the overwrite flag is false");
 
-            #endregion
+            #endregion verify the initial state of the class
 
             string[] expectedArguments = new string[] { fileNames[0], fileNames[1], fileNames[2], fileNames[3], fileNames[4], "/O" };
             b.Info.Log("About to perform the actual test case");
@@ -292,7 +262,6 @@ namespace Plisky.Test {
         }
 
         [Fact]
-        
         public void UseCase3_TFSBuildToolSampleArguments() {
             b.Info.Log("Starting UseCase3 - TBuildtool Sample UseCase");
 
@@ -318,6 +287,21 @@ namespace Plisky.Test {
             Assert.Equal("BuildTasks_CERTIFIED", parsedArgs.buildDefinition);
             Assert.Equal("http://appsd1011:8080", parsedArgs.tfs);
             Assert.Equal("Acme", parsedArgs.teamProject);
+        }
+
+        /// <summary>
+        /// Used so that when we change the definition of SampleCommandLine_C1 we dont break all of the unit tests in a strange way.
+        /// </summary>
+        /// <param name="sc">A SampleCommandLine_C1 class</param>
+        private static void VerifySampleCommandLine_InitialState(SampleCommandLine_C1 sc) {
+            Assert.Equal(string.Empty, sc.NameParameterOne);
+            Assert.Equal(string.Empty, sc.NameParameterTwo);
+
+            Assert.False(sc.OptionParameterOne, "Boolean parameter one invalid start state");
+            Assert.False(sc.OptionParameterTwo, "Boolean argument two invalid start state");
+
+            Assert.Equal(0, sc.NumberParameterOne);
+            Assert.Equal(0, sc.NumberParameterTwo);
         }
     }
 }
