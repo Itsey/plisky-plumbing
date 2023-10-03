@@ -21,7 +21,7 @@ stages:
           targetType: 'inline'        
           script: |
             # Versioning Powershell.   Use -Trace=verbose for diagnostics
-            c:\Files\BuildTools\PliskyVersioner\PliskyTool.exe UpdateFiles `-Root=$(build.sourcesDirectory)\src\ `-VS=c:\Files\BuildTools\VersionStore\plisky-plumbing.vstore -Increment `-MM=$(build.sourcesDirectory)\src\_Dependencies\automation\AutoVersion.txt
+            c:\Files\BuildTools\PliskyVersioner\PliskyTool.exe UpdateFiles `-Root=$(build.sourcesDirectory)\src\ `-VS=c:\Files\BuildTools\VersionStore\plisky-plumbing.vstore -Increment `-MM=$(build.sourcesDirectory)\src\_Dependencies\automation\autoversion_plumbing.txt
             c:\Files\BuildTools\PliskyVersioner\PliskyTool.exe Passive `-VS=c:\Files\BuildTools\VersionStore\plisky-plumbing.vstore -O=Azdo:buildversionnumber
 
       - task: PowerShell@2
