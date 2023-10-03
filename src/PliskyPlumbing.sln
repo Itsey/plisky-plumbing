@@ -44,6 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		..\Build\plisky-plumbing-ci.yml = ..\Build\plisky-plumbing-ci.yml
+		..\Build\plisky-plumbing-prerelease.yml = ..\Build\plisky-plumbing-prerelease.yml
 		..\Build\plisky-plumbing-release.yml = ..\Build\plisky-plumbing-release.yml
 		..\Build\plisky-testing-ci.yml = ..\Build\plisky-testing-ci.yml
 		..\Build\plisky-testing-release.yml = ..\Build\plisky-testing-release.yml
