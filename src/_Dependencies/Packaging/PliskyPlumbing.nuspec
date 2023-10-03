@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plisky.Plumbing</id>
-    <version>1.8.1</version>
+    <version>XXX-VERSION-XXX</version>
     <title>Plisky Infrastructure Plumbing Library</title>
     <authors>Jim</authors>
     <owners>Jim</owners>
@@ -31,7 +31,7 @@
                    ALL Others
                       See Read The Docs.
                   </releaseNotes>
-    <copyright>Copyright 2022</copyright>
+    <copyright>Copyright 2023</copyright>
     <tags>plisky plumbing hub messaging command line commandline</tags>
     <dependencies>
       <dependency id="Plisky.Diagnostics" version="3.1"/>
