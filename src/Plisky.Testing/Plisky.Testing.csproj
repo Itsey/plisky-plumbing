@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net6.0;net7.0;net452;net472;net48;</TargetFrameworks>
+    <AssemblyName>Plisky.Testing</AssemblyName>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <AssemblyVersion>0.0.0</AssemblyVersion>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <Import Project="..\Plumbing.Testing\Plumbing.Testing.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="Plisky.Diagnostics" Version="3.2.0" />
+    <PackageReference Include="xunit" Version="2.5.2" />
+  </ItemGroup>
+
+</Project>

@@ -82,7 +82,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="oldFeature.cs" />
     <Compile Include="versions\CommonPliskyTesting.cs" />
     <Compile Include="versions\CommonPlumbing.cs" />
   </ItemGroup>
@@ -91,16 +90,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="automation\ManualyQueueVersionIncrement.cmd" />
-    <None Include="automation\GitReleaseSync.cmd" />
     <None Include="Packaging\PliskyTesting.nuspec">
       <SubType>Designer</SubType>
     </None>
     <None Include="Packaging\PliskyPlumbing.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <None Include="plisky_publickey.snk" />
     <None Include="TestData\BilgeTestData.xlsx" />
-    <None Include="versioningrules.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FileReferences\" />
