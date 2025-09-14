@@ -136,12 +136,11 @@
                 string argumentText = argument.ToLowerInvariant();
 
                 if ((!string.IsNullOrEmpty(activePostfix) && (argument.IndexOf(activePostfix) >= 0))) {
-                    // The postfix indicates the lenght of the argument.
+                    // The postfix indicates the length of the argument.
                     argumentText = argument.Substring(0, argument.IndexOf(activePostfix)).ToLowerInvariant();
-                } else {
-                    if (argument.Length >= s.Length) {
-                        argumentText = argument.Substring(0, s.Length).ToLowerInvariant();
-                    }
+                } else if (argument.Length == s.Length) { 
+                    // matches for single char arguments like /Y
+                    argumentText = argument.Substring(0, s.Length).ToLowerInvariant();
                 }
 
                 if (string.CompareOrdinal(argumentText, thingToCompare) == 0) {
