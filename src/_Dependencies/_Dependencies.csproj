@@ -57,6 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="automation\AutoVersion_Testing.txt" />
-    <Content Include="automation\AutoVersion_Plumbing.txt" />
+    <Content Include="automation\autoversion.txt" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,3 @@
+﻿**/src/**/Plisky.Plumbing.csproj|StdAssembly
+**/src/**/Plisky.Plumbing.csproj|StdInformational
+**/src/**/Plisky.Plumbing.csproj|StdFile

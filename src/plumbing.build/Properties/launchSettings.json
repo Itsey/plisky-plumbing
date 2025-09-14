@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "plumbing.build": {
+      "commandName": "Project",
+      "commandLineArgs": "\r\n"
+    },
+    "Profile 1": {
+      "commandName": "Project",
+      "commandLineArgs": "ArrangeStep"
+    }
+  }
+}

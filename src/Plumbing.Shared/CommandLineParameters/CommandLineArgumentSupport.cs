@@ -1,13 +1,13 @@
-﻿namespace Plisky.Plumbing {
+﻿
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using Plisky.Diagnostics;
 
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
-    using Plisky.Diagnostics;
-
+namespace Plisky.Plumbing {
     /// <summary>
     /// CommandArgumentSupport provides assistance with using command line arguments and is designed to work in conjunction with the
     /// CmdLineArgAttribute class which should be used to decorate a class with command line attributes.  This decorated class can be
@@ -15,11 +15,10 @@
     /// </summary>
     /// <remarks> Developed in conjunction with Nemingalator, therefore may not be suitable for reuse</remarks>
     public class CommandArgumentSupport {
-        protected Bilge b = new Bilge("Plisky-CLAS");
+        protected Bilge b = new("Plisky-CLAS");
 
-        private readonly List<string> argumentErrorsDuringLastParse = new List<string>();
-        private List<Tuple<string, string>> Examples { get; set; } = new List<Tuple<string, string>>();
-        private string argumentPrefix = "-";
+        private readonly List<string> argumentErrorsDuringLastParse = [];
+        private List<Tuple<string, string>> Examples { get; set; } = [];
 
         /// <summary>
         /// Creates a new instance of the CommandArgumentSupport class.
@@ -40,14 +39,14 @@
         /// slash however the default is a hyphen in line with the Microsoft powershell standards.
         /// </summary>
         public string ArgumentPrefix {
-            get { return argumentPrefix; }
+            get;
             set {
                 if (value == null) {
-                    argumentPrefix = string.Empty;
+                    field = string.Empty;
                 }
-                argumentPrefix = value;
+                field = value;
             }
-        }
+        } = "-";
 
         /// <summary>
         /// ArgumentPrefixOptional determines whether the ArgumentPrefix string must be on the front of a parameter for the match to be valid
@@ -116,19 +115,19 @@
             PopulateFieldMappings(getMembersToPopulate, fams);
 
             var sb = new StringBuilder();
-            sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
-            sb.Append(appName + " ");
+            _ = sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
+            _ = sb.Append(appName + " ");
 
             foreach (var fam in fams) {
                 if (fam.ParameterMatchesCount > 0) {
-                    sb.Append(fam.ParameterMatches.First() + " ");
+                    _ = sb.Append(fam.ParameterMatches.First() + " ");
                 }
             }
-            sb.Append(Environment.NewLine + Environment.NewLine);
+            _ = sb.Append(Environment.NewLine + Environment.NewLine);
 
             foreach (var fam in fams) {
                 if (fam.ParameterMatchesCount > 0) {
-                    sb.Append(fam.ParameterMatches.First() + " " + fam.LongDescription + Environment.NewLine);
+                    _ = sb.Append(fam.ParameterMatches.First() + " " + fam.LongDescription + Environment.NewLine);
                 }
             }
             AppendExamples(sb);
@@ -179,19 +178,19 @@
             PopulateFieldMappings(membersToCheckForHelp, fams);
 
             var sb = new StringBuilder();
-            sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
-            sb.Append(appName + " ");
+            _ = sb.Append("Parameter help for " + appName + Environment.NewLine + Environment.NewLine);
+            _ = sb.Append(appName + " ");
 
             foreach (var fam in fams) {
                 if (fam.ParameterMatchesCount > 0) {
-                    sb.Append(fam.ParameterMatches.First() + " ");
+                    _ = sb.Append(fam.ParameterMatches.First() + " ");
                 }
             }
-            sb.Append(Environment.NewLine + Environment.NewLine);
+            _ = sb.Append(Environment.NewLine + Environment.NewLine);
 
             foreach (var fam in fams) {
                 if (fam.ParameterMatchesCount > 0) {
-                    sb.Append(fam.ParameterMatches.First() + " " + fam.ShortDescription + Environment.NewLine);
+                    _ = sb.Append(fam.ParameterMatches.First() + " " + fam.ShortDescription + Environment.NewLine);
                 }
             }
 
@@ -214,7 +213,7 @@
         /// <param name="args">The args with the parameters</param>
         /// <returns>A new instance of the arguments type, populated with values</returns>
         public T ProcessArguments<T>(string[] args) where T : new() {
-            T result = (T)Activator.CreateInstance(typeof(T));
+            var result = (T)Activator.CreateInstance(typeof(T));
             ProcessArguments(result, args);
             return result;
         }
@@ -250,7 +249,7 @@
 
                 #endregion validation
 
-                b.Info.Log($"ProcessArguments Prefix: {argumentPrefix}, PostFix:{ArgumentPostfix}");
+                b.Info.Log($"ProcessArguments Prefix: {ArgumentPrefix}, PostFix:{ArgumentPostfix}");
 
                 argumentErrorsDuringLastParse.Clear();
 
@@ -327,12 +326,10 @@
             bool tbool;
 
             string argWorkingString = theValue.ToLower();
-            if ((argWorkingString == "y") || (argWorkingString == "yes") || (argWorkingString == "t")) {
+            if (argWorkingString is "y" or "yes" or "t") {
                 tbool = true;
-            } else if ((argWorkingString == "n") || (argWorkingString == "no" || (argWorkingString == "f"))) {
-                tbool = false;
             } else {
-                tbool = bool.Parse(theValue);
+                tbool = argWorkingString != "n" && argWorkingString != "no" && argWorkingString != "f" && bool.Parse(theValue);
             }
             return tbool;
         }
@@ -340,14 +337,14 @@
         private void AppendExamples(StringBuilder sb, bool firstOnly = false) {
             if (Examples.Any()) {
                 if (!firstOnly) {
-                    sb.AppendLine();
-                    sb.AppendLine("*** EXAMPLES ***");
-                    sb.AppendLine();
+                    _ = sb.AppendLine();
+                    _ = sb.AppendLine("*** EXAMPLES ***");
+                    _ = sb.AppendLine();
                 }
                 for (int i = 0; i < Examples.Count(); i++) {
-                    sb.AppendLine("Example: " + Examples[i].Item1);
-                    sb.AppendLine(Examples[i].Item2);
-                    sb.AppendLine();
+                    _ = sb.AppendLine("Example: " + Examples[i].Item1);
+                    _ = sb.AppendLine(Examples[i].Item2);
+                    _ = sb.AppendLine();
                     if (firstOnly) {
                         break;
                     }
@@ -369,7 +366,7 @@
 
             #region entry code
 
-            if (theValue == null) { theValue = string.Empty; }
+            theValue ??= string.Empty;
 
             #endregion entry code
 
@@ -394,7 +391,7 @@
         /// <param name="theObject">The object containing the field</param>
         /// <param name="argumentValueToParse">The value to set it to.</param>
         private void AssignValueToMember(FieldArgumentMapping fam, object theObject, string argumentValueToParse) {
-            Type t = null;
+            Type? t = null;
             var f = fam.TargetField as FieldInfo;
             if (f != null) {
                 t = f.FieldType;
@@ -412,7 +409,7 @@
 
             #region entry code
 
-            if (theValue == null) { theValue = string.Empty; }
+            theValue ??= string.Empty;
             if (!prop.CanWrite) { throw new ArithmeticException("The property must be writable"); }
 
             #endregion entry code
@@ -427,10 +424,9 @@
         /// <param name="arg">The argument values themselves</param>
         /// <returns>The argument values minus any postfix.</returns>
         private string ConvertArgumentToRemovePostfixes(string arg) {
-            if ((ArgumentPostfix != null) && (ArgumentPostfix.Length > 0) && (arg.StartsWith(ArgumentPostfix))) {
-                return arg.Substring(ArgumentPostfix.Length);
-            }
-            return arg;
+            return (ArgumentPostfix != null) && (ArgumentPostfix.Length > 0) && arg.StartsWith(ArgumentPostfix)
+                ? arg.Substring(ArgumentPostfix.Length)
+                : arg;
         }
 
         private void DirectAssginValue(FieldArgumentMapping fam, object theObject, object argumentValueToParse) {
@@ -442,8 +438,8 @@
         }
 
         private List<MemberInfo> GetMembersFromArgumentClassAndVerify(Type argumentClass) {
-            FieldInfo[] allFieldsFromClass = argumentClass.GetFields();
-            PropertyInfo[] allPropertiesFromClass = argumentClass.GetProperties();
+            var allFieldsFromClass = argumentClass.GetFields();
+            var allPropertiesFromClass = argumentClass.GetProperties();
 
             var result = new List<MemberInfo>();
             result.AddRange(allFieldsFromClass);
@@ -482,8 +478,8 @@
                 }
 
                 if (memberType == typeof(DateTime)) {
-                    string format = this.DateTimeParseFormat;
-                    if (DateTime.TryParseExact(theValue, format, null, DateTimeStyles.None, out DateTime parsedOk)) {
+                    string format = DateTimeParseFormat;
+                    if (DateTime.TryParseExact(theValue, format, null, DateTimeStyles.None, out var parsedOk)) {
                         result = parsedOk;
                         return result;
                     }
@@ -540,7 +536,7 @@
 
             // Look at each of the fields in the class in turn, identifying the attributes and using them to determine how to
             // map parameters to the values.
-            foreach (MemberInfo f in members) {
+            foreach (var f in members) {
                 // Each field in the class will be mapped to a FieldArgumenMapping allowing us to describe how tof ill it.
                 var nextMapping = new FieldArgumentMapping(b) {
                     TargetField = f
@@ -557,10 +553,10 @@
                             nextMapping.ArraySeparatorChar = argAtt.ArraySeparatorChar;
                         }
 
-                        if (this.argumentPrefix.Length > 0) {
+                        if (ArgumentPrefix.Length > 0) {
                             // there is an argument prefix therefore add this to the argument.
-                            nextMapping.AddParameterMatch(this.argumentPrefix + argAtt.ArgumentIdentifier);
-                            if (this.ArgumentPrefixOptional) {
+                            nextMapping.AddParameterMatch(ArgumentPrefix + argAtt.ArgumentIdentifier);
+                            if (ArgumentPrefixOptional) {
                                 nextMapping.AddParameterMatch(argAtt.ArgumentIdentifier);
                             }
                         } else {

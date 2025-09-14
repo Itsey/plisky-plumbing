@@ -174,13 +174,18 @@
         /// </summary>
         /// <param name="target1">First object for comparison</param>
         /// <param name="target2">Second object for comparison</param>
-        /// <returns>True if they are the same</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This confuses the interface considerably and its only a unit test helper therefore performance not important")]
-        public bool ReflectionBasedCompare(object target1, object target2) {
+        /// <returns>True if they are the same</returns>        
+        public bool ReflectionBasedCompare(object? target1, object? target2) {
             // Either they are both null or neither are
             if ((target1 == null) && (target2 == null)) { return true; }
             if ((target1 == null) && (target2 != null)) { return false; }
             if ((target2 == null) && (target1 != null)) { return false; }
+
+            b.Assert.NotNull(target1, "Target1 is null");
+            b.Assert.NotNull(target1!.GetType(), "Target1 Type is null");
+            b.Assert.NotNull(target2, "Target1 is null");
+            b.Assert.NotNull(target2!.GetType(), "Target1 Type is null");
+
             // Now they must be of the same type
             var t = target1.GetType();
             if (t != target2.GetType()) { return false; }
@@ -200,6 +205,7 @@
             foreach (var pi in t.GetProperties()) {
                 if (pi.GetIndexParameters().Length == 0) {
                     // Non indexed properties
+
 
                     object v1 = pi.GetValue(target1, null);
                     object v2 = pi.GetValue(target2, null);
@@ -508,16 +514,17 @@
         }
 #endif
 
-        private object CloneObjectImplementation(object source) {
+        private object? CloneObjectImplementation(object? source) {
             if (source == null) { return null; }
 
-            var srcType = source.GetType();
+            var srcType = source.GetType();          
+
             var flgs = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-            object result;
+            object? result;
 
             if (srcType == typeof(string)) {
                 // String must be checked for ahead of class even though its less likely.
-                return string.Copy(source as string);
+                return (string)source;
             }
 
             if (srcType.IsArray) {
@@ -533,12 +540,14 @@
 
             if (srcType.IsClass) {
                 result = Activator.CreateInstance(srcType);
-                foreach (var f in srcType.GetFields(flgs)) {
-                    object actualField = f.GetValue(source);
-                    if (actualField == null) {
-                        f.SetValue(result, null);
-                    } else {
-                        f.SetValue(result, CloneObjectImplementation(actualField));
+                if (result != null) {
+                    foreach (var f in srcType.GetFields(flgs)) {
+                        object actualField = f.GetValue(source);
+                        if (actualField == null) {
+                            f.SetValue(result, null);
+                        } else {
+                            f.SetValue(result, CloneObjectImplementation(actualField));
+                        }
                     }
                 }
                 return result;
@@ -548,7 +557,7 @@
                 return source;
             }
 
-            throw new NotImplementedException();
+            throw new NotImplementedException("The type mapping could not be completed for this type. This is a missing feature in UnitTestHelper");
         }
 
         public T CloneObject<T>(T source) {

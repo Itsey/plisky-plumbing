@@ -1,20 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net6.0;net8.0;net9.0;net452;net472;net48;</TargetFrameworks>
     <AssemblyName>Plisky.Plumbing</AssemblyName>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
-    <InformationalVersion>0.0</InformationalVersion>
+    <InformationalVersion>0.0.0.0</InformationalVersion>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Version>0.0.0.0</Version>
   </PropertyGroup>
-
   <PropertyGroup>
     <Summary>Plisky.Plumbing utility and support classes including feature support and messaging hub.</Summary>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>        
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <ReleaseNotesFile>..\_Dependencies\SupportingFiles\release-notes.md</ReleaseNotesFile>
     <PackageId>Plisky.Plumbing</PackageId>
     <Authors>https://github.com/Itsey</Authors>
@@ -32,7 +32,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\_Dependencies\Packaging\heart-icon.png" Pack="true" PackagePath="" />
+    <None Include="..\_Dependencies\Packaging\plumb-icon.png" Pack="true" PackagePath="" />
     <None Include="..\_Dependencies\Packaging\readme.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <Target Name="AddReleaseNotesToPackage" BeforeTargets="GenerateNuspec">
@@ -41,11 +41,8 @@
       <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\..\_Dependencies\Packaging\changelog.md"))</PackageReleaseNotes>
     </PropertyGroup>
   </Target>
-  
-
   <Import Project="..\Plumbing.Shared\Plumbing.Shared.projitems" Label="Shared" />
-
   <ItemGroup>
-    <PackageReference Include="Plisky.Diagnostics" Version="3.2.5"  />
+    <PackageReference Include="Plisky.Diagnostics" Version="3.2.5" />
   </ItemGroup>
 </Project>
