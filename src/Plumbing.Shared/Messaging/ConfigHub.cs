@@ -15,19 +15,19 @@
     public partial class ConfigHub {
         protected List<string> fallbackRegistrationWarnings = new List<string>();
         private Bilge b = new Bilge("Plisky-ConfigHub");
-        private static string CONFIGHUB_EXTENSION = ".chConfig";
+        private const string CONFIGHUB_EXTENSION = ".chConfig";
 
         public const string DATETIMESETTINGNAME = "defaultdatetimevalue";
         public const string DEFAULTMACHINENAME = "defaultmachinename";
         public IDecryptStuff CryptoProvider { get; set; }
-
-        private static string thisMachineName;
+        private static bool dontBotherCheckingMachineNameAgain = false;
+        private static string thisMachineName= DEFAULTMACHINENAME;
         private Dictionary<string, Func<string, string>> fallbackByMachineList = new Dictionary<string, Func<string, string>>();
 
         private Dictionary<string, Delegate> fl = new Dictionary<string, Delegate>();
         private Dictionary<string, Func<string>> functionList = new Dictionary<string, Func<string>>();
 
-        private List<Func<string, string>> fallbackList1 = new List<Func<string, string>>();
+        private List<Func<string, string?>> fallbackList1 = new();
 
         #region private bits
 
@@ -270,7 +270,7 @@
         }
 
         private void SetupMachineName() {
-            if (thisMachineName == null) {
+            if ((thisMachineName == DEFAULTMACHINENAME)&&(dontBotherCheckingMachineNameAgain==false)) {
                 lock (lockme) {
                     try {
                         b.Verbose.Log("MachineName Cache Refreshed.");
@@ -279,6 +279,7 @@
                         // Probably access denied
                         b.Verbose.Log("Access Denied to Machinename, falling back to default", DEFAULTMACHINENAME);
                         thisMachineName = DEFAULTMACHINENAME;
+                        dontBotherCheckingMachineNameAgain = true;
                     }
                 }
             }
@@ -289,8 +290,10 @@
         /// </summary>
         /// <remarks>Fallback providers are called after no setting value has been found.</remarks>
         /// <param name="getAllSettings"></param>
-        public void RegisterFallbackProvider(Func<string, string> getAllSettings) {
-            fallbackList1.Add(getAllSettings);
+        public void RegisterFallbackProvider(Func<string, string?> getAllSettings) {
+            if (getAllSettings != null) {
+                fallbackList1.Add(getAllSettings);
+            }
         }
 
         /// <summary>

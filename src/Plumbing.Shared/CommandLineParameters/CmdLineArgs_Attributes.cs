@@ -10,7 +10,7 @@
     /// <remarks>This attribute can target Fields or Properties, is allowed multiple times and is inherited.</remarks>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public sealed class CommandLineArgAttribute : CommandLineArgumentBaseAttribute {
-        private string m_argumentDescriptor = string.Empty;
+        private string argumentDescriptor = string.Empty;
 
         /// <summary>
         /// The CmdLineArgAttribute is applied to a field or a property within a class to indicate that it can be initialised from
@@ -24,7 +24,7 @@
             if (argumentIdentifier == null) { throw new ArgumentNullException(nameof(argumentIdentifier), "The identifier for a parameter can not be null, for default parameters use default=true"); }
             if (argumentIdentifier.Length == 0) { throw new ArgumentOutOfRangeException(nameof(argumentIdentifier), "The identifier for a parameter can not have a length of zero.  For default parameters use Default=true"); }
 
-            m_argumentDescriptor = argumentIdentifier;
+            argumentDescriptor = argumentIdentifier;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@
         /// </summary>
         /// <remarks>The ArgumentIdentifier can not be null or empty.</remarks>
         public string ArgumentIdentifier {
-            get { return m_argumentDescriptor; }
+            get { return argumentDescriptor; }
         }
 
         /// <summary>
@@ -72,9 +72,9 @@
     public abstract class CommandLineArgumentBaseAttribute : Attribute {
         private const int MAXLENGTH_SHORTDESCRIPTION = 80;
 
-        private string m_description = string.Empty;
+        private string description = string.Empty;
 
-        private string m_fullDescription = string.Empty;
+        private string fullDescription = string.Empty;
 
         /// <summary>
         /// Describes the command line option to the user of the tool, in a way in which it can be displayed on the screen, this should
@@ -82,17 +82,17 @@
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when Description is set to a length greater than 80 Charcters.</exception>
         public string Description {
-            get { return m_description; }
+            get { return description; }
 
             set {
                 if (value == null) {
-                    m_description = string.Empty;
+                    description = string.Empty;
                     return;
                 }
                 if (value.Length > MAXLENGTH_SHORTDESCRIPTION) {
                     throw new ArgumentOutOfRangeException("Description", "The description must be a short comment limited to " + MAXLENGTH_SHORTDESCRIPTION.ToString() + " characters.");
                 }
-                m_description = value;
+                description = value;
             }
         }
 
@@ -101,13 +101,13 @@
         /// help about a specific command. This should be a fully fledged description of the command and can occupy many lines.
         /// </summary>
         public string FullDescription {
-            get { return m_fullDescription; }
+            get { return fullDescription; }
             set {
                 if (value == null) {
-                    m_fullDescription = string.Empty;
+                    fullDescription = string.Empty;
                     return;
                 }
-                m_fullDescription = value;
+                fullDescription = value;
             }
         }
     }

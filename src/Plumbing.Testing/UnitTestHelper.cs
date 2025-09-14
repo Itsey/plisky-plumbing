@@ -10,7 +10,7 @@
     /// Class designed to support the adoption of unit tests and provide helper functions for typical common elements.
     /// </summary>
     public sealed class UnitTestHelper {
-        private List<string> m_storedFilenames = new List<string>();
+        private List<string> storedFilenames = new List<string>();
         private Bilge b = new Bilge("Plisky-UnitTestHelper");
 
         /// <summary>
@@ -157,7 +157,7 @@
         /// <returns></returns>
         public string NewTemporaryFileName(bool deleteOnCreate = false) {
             string result = Path.GetTempFileName();
-            m_storedFilenames.Add(result);
+            storedFilenames.Add(result);
             if (deleteOnCreate) {
                 File.Delete(result);
             }
@@ -165,7 +165,7 @@
         }
 
         public void RegisterTemporaryFilename(string tmp) {
-            m_storedFilenames.Add(tmp);
+            storedFilenames.Add(tmp);
         }
 
         /// <summary>
@@ -293,7 +293,7 @@
         public void ClearUpTestFiles() {
             string nextFile = null;
             try {
-                foreach (string s in m_storedFilenames) {
+                foreach (string s in storedFilenames) {
                     nextFile = s;
                     File.Delete(nextFile);
                 }

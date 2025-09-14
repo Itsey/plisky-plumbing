@@ -13,47 +13,47 @@
     /// </summary>
     [DebuggerDisplay("{FieldArgumentMappingDebug()}")]
     internal class FieldArgumentMapping {
-        public string ArraySeparatorChar = ",";
+        public string ArraySeparatorChar { get; set; } = ",";
 
         /// <summary>
         /// The target reflected field that is to be populated if there is a match.
         /// </summary>
-        public MemberInfo TargetField;
+        public MemberInfo TargetField { get; set; }
 
         /// <summary>
         /// Determines whether this field has already been matched and therefoer should not be checked again.
         /// </summary>
-        internal bool HasBeenMatchedToArgument;
+        internal bool HasBeenMatchedToArgument { get; set; }
 
         /// <summary>
         /// Determines whether this parameter is the match for a single unnamed argument, this alows you to pass across filenames and so on
         /// without a prefix.  Once this has been matched to the first non prefixed arguments then all of the rest will go into the
         /// unmatched store.
         /// </summary>
-        internal bool IsDefaultSingleArgument;
+        internal bool IsDefaultSingleArgument { get; set; }
 
         /// <summary>
         /// This is the full help string that will be printed when a full help request is made.  This should be descriptive and contain
         /// as much information descriving the paramter as possible.
         /// </summary>
-        internal string LongDescription = string.Empty;
+        internal string LongDescription { get; set; } = string.Empty;
 
         /// <summary>
         /// If the mapping represents the default match case then all of the arguments that have not been assigned to the other matches
         /// will be put into
         /// </summary>
-        internal bool MatchesAllUnmatchedArguments;
+        internal bool MatchesAllUnmatchedArguments { get; set; }
 
         /// <summary>
         /// This is the short description which describes the parameter.  This should be around 50 characters in length to allow it to fit on
         /// the screen when /? is passed to the command line application.
         /// </summary>
-        internal string ShortDescription = string.Empty;
+        internal string ShortDescription { get; set; } = string.Empty;
 
         private Bilge b;
 
         // TODO : Awful awful design
-        private string m_lastArgVal;
+        private string lastArgVal;
 
         private List<string> parameterMatches = new List<string>();
 
@@ -101,7 +101,7 @@
         }
 
         internal string LastArgumentValue() {
-            return m_lastArgVal;
+            return lastArgVal;
         }
 
         /// <summary>
@@ -147,21 +147,21 @@
                 if (string.CompareOrdinal(argumentText, thingToCompare) == 0) {
                     // Match made on the argument.
 
-                    m_lastArgVal = argument.Substring(s.Length);
+                    lastArgVal = argument.Substring(s.Length);
 
                     if (TargetField.MemberType == MemberTypes.Field) {
                         var fi = (FieldInfo)TargetField;
-                        if ((fi.FieldType == typeof(bool)) && (m_lastArgVal.Length == 0)) {
+                        if ((fi.FieldType == typeof(bool)) && (lastArgVal.Length == 0)) {
                             // This allows things like /Y to specify true and the absence of it to specify false.
-                            m_lastArgVal = "True";
+                            lastArgVal = "True";
                         }
                         HasBeenMatchedToArgument = true;
                         return true;
                     } else {
                         var pi = (PropertyInfo)TargetField;
-                        if ((pi.PropertyType == typeof(bool)) && (m_lastArgVal.Length == 0)) {
+                        if ((pi.PropertyType == typeof(bool)) && (lastArgVal.Length == 0)) {
                             // This allows things like /Y to specify true and the absence of it to specify false.
-                            m_lastArgVal = "True";
+                            lastArgVal = "True";
                         }
                         HasBeenMatchedToArgument = true;
                         return true;
@@ -169,7 +169,7 @@
                 } else {
                     if (IsDefaultSingleArgument) {
                         // If this represents the default single argument then we should match against it.
-                        m_lastArgVal = argument;
+                        lastArgVal = argument;
                         HasBeenMatchedToArgument = true;
                         return true;
                     }

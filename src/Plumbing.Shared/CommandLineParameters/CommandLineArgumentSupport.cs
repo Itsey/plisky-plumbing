@@ -18,7 +18,7 @@
         protected Bilge b = new Bilge("Plisky-CLAS");
 
         private readonly List<string> argumentErrorsDuringLastParse = new List<string>();
-        private readonly List<Tuple<string, string>> Examples = new List<Tuple<string, string>>();
+        private List<Tuple<string, string>> Examples { get; set; } = new List<Tuple<string, string>>();
         private string argumentPrefix = "-";
 
         /// <summary>

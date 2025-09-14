@@ -10,20 +10,20 @@
     public class SaltyPassword {
         public const int MINIMUM_PASSWORD_LENGTH = 5;
         public const string VALID_PASSWORD_CHARACTERS = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890_+-=[]{}\\/?!.,£$%^&*()";
-        public PasswordSalt Salt;
+        public PasswordSalt Salt { get; set; }
         protected Bilge b = new Bilge("plisky-plumbing-spw");
 
         private static bool hashB64Enc = true;
-        private SecureString m_password;
+        private SecureString secureStoredValue;
 
         /// <summary>
         /// Createa new salty password
         /// </summary>
         /// <param name="password">The password to use</param>
         /// <param name="pws">The salt to use</param>
-        public SaltyPassword(SecureString password, PasswordSalt pws) {
-            this.Password = password;
-            this.Salt.IntegerSalt = pws.IntegerSalt;
+        public SaltyPassword(SecureString password, PasswordSalt pws) : this() {
+            Password = password;
+            Salt = pws;
         }
 
         /// <summary>
@@ -31,17 +31,15 @@
         /// </summary>
         /// <param name="password">The password to use</param>
         /// <param name="pws">The salt to use</param>
-        public SaltyPassword(SecureString password, int pws) {
-            this.Password = password;
-            this.Salt.IntegerSalt = pws;
+        public SaltyPassword(SecureString password, int pws) : this(password, new PasswordSalt() { IntegerSalt = pws }) {
         }
 
         /// <summary>
         /// Createa new empty salty password
         /// </summary>
         private SaltyPassword() {
-            this.Password = new SecureString();
-            this.Salt = new PasswordSalt();
+            Password = new SecureString();
+            Salt = new PasswordSalt();
         }
 
         public static bool HashesAreB64Encoded {
@@ -50,10 +48,10 @@
         }
 
         public SecureString Password {
-            get { return m_password; }
+            get { return secureStoredValue; }
             set {
                 if (value == null) { throw new ArgumentNullException("The password can not be null"); }
-                m_password = value;
+                secureStoredValue = value;
             }
         }
 
@@ -62,7 +60,7 @@
         /// </summary>
         public string PasswordSaltHash {
             get {
-                return SaltyPassword.ComputeSaltedHash(m_password, Salt);
+                return SaltyPassword.ComputeSaltedHash(secureStoredValue, Salt);
             }
         }
 

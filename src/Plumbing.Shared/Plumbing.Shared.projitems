@@ -13,7 +13,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\CmdLineArgs_Attributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\CommandLineArgumentSupport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandLineParameters\FieldToArgumentMapping.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Diagnostics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureSupport\BaseFeatureOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureSupport\Feature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureSupport\FeatureLocalJsonProvider.cs" />

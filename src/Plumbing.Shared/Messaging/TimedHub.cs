@@ -5,7 +5,7 @@
     using System.Threading;
 
     public class TimedHub : Hub {
-        protected int CallBackTime = 60;
+        protected int CallBackTime { get; set; } = 60;
         protected int executing = 0;
         private object lockCollection = new object();
         private List<Tuple<TimePeriodTrigger, HubMessageBase>> timeEventsWaiting = new List<Tuple<TimePeriodTrigger, HubMessageBase>>();

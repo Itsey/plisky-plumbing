@@ -3,6 +3,8 @@ using System.Security.Cryptography;
 
 namespace Plisky.Plumbing {
 
+#pragma warning disable IDE1006
+
     [StructLayout(LayoutKind.Explicit)]
     public struct PasswordSalt {
         // Crapola.  REally need a byte array here.
@@ -43,4 +45,5 @@ namespace Plisky.Plumbing {
             return this.IntegerSalt == ((PasswordSalt)obj).IntegerSalt;
         }
     }
+#pragma warning restore IDE1006
 }

@@ -8,7 +8,7 @@ using Xunit.Sdk;
 namespace Plisky.PliskyLibTests.AttributeTests {
 
     public class AttributeTests {
-        public Action MethodCallback;
+        public Action MethodCallback { get; set; }
         protected Bilge b = new Bilge();
 
         [Fact]
